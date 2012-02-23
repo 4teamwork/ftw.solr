@@ -10,6 +10,8 @@
     <i18n:registerTranslations directory="locales" />
     <cmf:registerDirectory name="ftw_solr" />
 
+    <include package=".browser" />
+
     <adapter name="site_section" factory=".indexers.site_section" />
 
     <genericsetup:registerProfile
