@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<layers>
+  <layer name="ftw.solr" interface="ftw.solr.interfaces.IFtwSolrLayer" />
+</layers>

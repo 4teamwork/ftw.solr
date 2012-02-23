@@ -1,0 +1,23 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:cmf="http://namespaces.zope.org/cmf"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="ftw.solr">
+
+    <i18n:registerTranslations directory="locales" />
+    <cmf:registerDirectory name="ftw_solr" />
+
+    <adapter name="site_section" factory=".indexers.site_section" />
+
+    <genericsetup:registerProfile
+        name="default"
+        title="ftw.solr"
+        directory="profiles/default"
+        description="Installs the ftw.solr package"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+  
+</configure>

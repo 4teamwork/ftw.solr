@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<object name="portal_skins">
+  <object name="ftw_solr" meta_type="Filesystem Directory View"
+    directory="ftw.solr:skins/ftw_solr"/>
+  <skin-path name="*">
+    <layer name="ftw_solr" insert-after="custom"/>
+  </skin-path>
+</object>
