@@ -1,0 +1,15 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:monkey="http://namespaces.plone.org/monkey"
+    i18n_domain="ftw.solr">
+
+    <include package="collective.monkeypatcher" />
+
+    <monkey:patch
+        description="Prevent optimizeQueryParameters to manipulate the request."
+        module="collective.solr.dispatcher"
+        original="optimizeQueryParameters"
+        replacement=".mangler.optimizeQueryParameters"
+        />
+
+</configure>

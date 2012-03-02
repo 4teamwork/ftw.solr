@@ -24,6 +24,7 @@ setup(name='ftw.solr',
       install_requires=[
           'setuptools',
           'collective.solr',
+          'collective.monkeypatcher',
       ],
       entry_points="""
       # -*- Entry points: -*-
