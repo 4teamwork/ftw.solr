@@ -61,9 +61,7 @@ def quote_bad_chars(s):
 multispace = u'\u3000'.encode('utf-8')
 for char in ('?', '-', '+', '*', multispace):
     q = q.replace(char, ' ')
-r = q.split()
-r = " AND ".join(r)
-r = quote_bad_chars(r)+'*'
+r = quote_bad_chars(q)+'*'
 searchterms = url_quote_plus(r)
 
 site_encoding = context.plone_utils.getSiteEncoding()
