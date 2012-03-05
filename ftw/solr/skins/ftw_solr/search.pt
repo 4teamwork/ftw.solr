@@ -112,9 +112,6 @@
             <dd>
 				<span tal:condition="snippets"
 				      tal:replace="structure python:' '.join([' '.join(snippet) for snippet in snippets[result.UID].values()])" />
-                <span tal:replace="python:plone_view.cropText(result.Description, desc_length, desc_ellipsis)">
-                    Cropped description
-                </span>
 
             <span class="documentByLine"
                   tal:define="isAnon context/@@plone_portal_state/anonymous;"
