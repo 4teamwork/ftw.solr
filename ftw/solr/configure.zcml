@@ -15,6 +15,7 @@
     <include package=".browser" />
 
     <adapter name="site_section" factory=".indexers.site_section" />
+    <adapter name="creator_fullname" factory=".indexers.creator_fullname" />
 
     <genericsetup:registerProfile
         name="default"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-02-23 09:53+0000\n"
+"POT-Creation-Date: 2012-03-06 13:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,23 +14,30 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: solr\n"
 
+#: ./ftw/solr/browser/facets.pt:15
+msgid "Remove this search limit..."
+msgstr ""
+
+msgid "creator_fullname"
+msgstr ""
+
 #. Default: "Advanced Search…"
-#: ./ftw/solr/skins/ftw_solr/livesearch_reply.py:86
+#: ./ftw/solr/skins/ftw_solr/livesearch_reply.py:84
 msgid "label_advanced_search"
 msgstr ""
 
 #. Default: "No matching results found."
-#: ./ftw/solr/skins/ftw_solr/livesearch_reply.py:85
+#: ./ftw/solr/skins/ftw_solr/livesearch_reply.py:83
 msgid "label_no_results_found"
 msgstr ""
 
 #. Default: "Show all items"
-#: ./ftw/solr/skins/ftw_solr/livesearch_reply.py:87
+#: ./ftw/solr/skins/ftw_solr/livesearch_reply.py:85
 msgid "label_show_all"
 msgstr ""
 
 #. Default: "LiveSearch &#8595;"
-#: ./ftw/solr/skins/ftw_solr/livesearch_reply.py:84
+#: ./ftw/solr/skins/ftw_solr/livesearch_reply.py:82
 msgid "legend_livesearch"
 msgstr ""
 

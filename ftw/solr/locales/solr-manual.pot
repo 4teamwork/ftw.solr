@@ -20,3 +20,6 @@ msgstr ""
 
 msgid "site_section"
 msgstr ""
+
+msgid "creator_fullname"
+msgstr ""
