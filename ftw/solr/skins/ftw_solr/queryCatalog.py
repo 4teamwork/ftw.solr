@@ -98,7 +98,7 @@ for k in REQUEST.keys():
             query[k] = int(v)
         else:
             query[k] = v
-    elif k in ('fq', 'fl', 'facet', 'b_start', 'b_size') or k.startswith('facet.'):
+    elif k in ('fq', 'fl', 'facet', 'b_start', 'b_size', 'qt') or k.startswith('facet.'):
         query[k] = v
 
 for k, v in second_pass.items():

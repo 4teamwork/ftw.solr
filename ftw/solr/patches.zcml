@@ -12,4 +12,12 @@
         replacement=".mangler.optimizeQueryParameters"
         />
 
+    <monkey:patch
+        description="Allow more solr query parameters"
+        module="collective.solr.dispatcher"
+        original="extractQueryParameters"
+        replacement=".mangler.extractQueryParameters"
+        />
+
+
 </configure>
