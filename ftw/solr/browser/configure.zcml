@@ -13,6 +13,14 @@
         />
 
     <browser:page
+        for="OFS.interfaces.IFolder"
+        name="search-facets"
+        template="facets.pt"
+        class="collective.solr.browser.facets.SearchFacetsView"
+        permission="zope2.View"
+        layer="ftw.solr.interfaces.IFtwSolrLayer" />
+
+    <browser:page
         for="*"
         name="querycatalog"
         class=".querycatalog.QueryCatalogView"
