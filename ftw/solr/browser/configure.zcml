@@ -20,11 +20,4 @@
         permission="zope2.View"
         layer="ftw.solr.interfaces.IFtwSolrLayer" />
 
-    <browser:page
-        for="*"
-        name="querycatalog"
-        class=".querycatalog.QueryCatalogView"
-        allowed_attributes="querycatalog"
-        permission="zope2.View" />
-
 </configure>
