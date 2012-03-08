@@ -23,3 +23,24 @@ msgstr ""
 
 msgid "creator_fullname"
 msgstr ""
+
+msgid "modified"
+msgstr ""
+
+msgid "[NOW/DAY TO *]"
+msgstr ""
+
+msgid "[NOW/DAY-1DAY TO *]"
+msgstr ""
+
+msgid "[NOW/DAY-7DAYS TO *]"
+msgstr ""
+
+msgid "[NOW/DAY-1MONTH TO *]"
+msgstr ""
+
+msgid "[NOW/DAY-1YEAR TO *]"
+msgstr ""
+
+msgid "[* TO NOW/DAY-1YEAR]"
+msgstr ""

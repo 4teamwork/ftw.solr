@@ -16,7 +16,7 @@
         for="OFS.interfaces.IFolder"
         name="search-facets"
         template="facets.pt"
-        class="collective.solr.browser.facets.SearchFacetsView"
+        class=".facets.SearchFacetsView"
         permission="zope2.View"
         layer="ftw.solr.interfaces.IFtwSolrLayer" />
 
