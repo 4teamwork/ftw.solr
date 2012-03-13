@@ -18,6 +18,7 @@
         template="facets.pt"
         class=".facets.SearchFacetsView"
         permission="zope2.View"
+        allowed_attributes="facet_parameters"
         layer="ftw.solr.interfaces.IFtwSolrLayer" />
 
 </configure>

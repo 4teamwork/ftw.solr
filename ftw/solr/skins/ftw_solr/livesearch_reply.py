@@ -136,9 +136,10 @@ else:
         full_title, display_title, display_description = None, None, None
 
     if len(results)>limit:
+        facet_params = context.restrictedTraverse('@@search-facets/facet_parameters')()
         # add a more... row
         write('''<li class="LSRow">''')
-        write('<a href="%s" style="font-weight:normal">%s</a>' % ('search?SearchableText=' + searchterms, ts.translate(label_show_all, context=REQUEST)))
+        write('<a href="%s&%s" style="font-weight:normal">%s</a>' % ('search?SearchableText=' + searchterms, facet_params, ts.translate(label_show_all, context=REQUEST)))
         write('''</li>''')
     write('''</ul>''')
     write('''</div>''')

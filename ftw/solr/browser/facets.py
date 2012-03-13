@@ -6,7 +6,7 @@ from zope.i18n import translate
 from zope.i18nmessageid import Message
 
 from collective.solr.browser import facets
-from collective.solr.browser.facets import param
+from collective.solr.browser.facets import param, facetParameters
 from collective.solr.interfaces import IFacetTitleVocabularyFactory
 
 FACET_QUERY_POSITIONS = {
@@ -136,3 +136,11 @@ class SearchFacetsView(facets.SearchFacetsView):
                     query=urlencode(params, doseq=True)))
 
         return info
+
+    def facet_parameters(self):
+        """Return the facet parameters to be queried for as an url-encoded
+           string.
+        """
+        facets, dependencies = facetParameters(self.context, self.request)
+        return urlencode({'facet': 'true', 'facet.field': facets, },
+                         doseq=True)
