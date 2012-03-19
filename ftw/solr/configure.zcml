@@ -14,9 +14,18 @@
 
     <include package=".browser" />
 
+    <!-- Indexers -->
     <adapter name="site_section" factory=".indexers.site_section" />
     <adapter name="creator_fullname" factory=".indexers.creator_fullname" />
     <adapter name="SearchableText" factory=".indexers.searchable_text" />
+
+    <!-- Contentlisting adapters for solr response/flares -->
+    <adapter
+        factory="plone.app.contentlisting.contentlisting.ContentListing"
+        for="collective.solr.parser.SolrResponse" />
+    <adapter
+        factory="ftw.solr.contentlisting.SolrContentListingObject"
+        for="collective.solr.flare.PloneFlare" />
 
     <genericsetup:registerProfile
         name="default"

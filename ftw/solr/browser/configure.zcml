@@ -7,7 +7,7 @@
     <browser:viewlet
         name="plone.searchbox"
         manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
-        class="collective.solr.browser.facets.SearchBox"
+        class="ftw.solr.browser.search.SearchBoxViewlet"
         permission="zope2.View"
         layer="ftw.solr.interfaces.IFtwSolrLayer"
         />
@@ -20,5 +20,31 @@
         permission="zope2.View"
         allowed_attributes="facet_parameters"
         layer="ftw.solr.interfaces.IFtwSolrLayer" />
+
+    <browser:page
+        for="*"
+        name="search"
+        template="search.pt"
+        class=".search.SearchView"
+        permission="zope2.View"
+        layer="ftw.solr.interfaces.IFtwSolrLayer" />
+
+    <browser:page
+        name="search-results"
+        class=".search.SearchView"
+        permission="zope2.View"
+        for="Products.CMFCore.interfaces.IFolderish"
+        template="results.pt"
+        layer="ftw.solr.interfaces.IFtwSolrLayer" />
+
+    <browser:resource
+        name="search.js"
+        file="search.js"
+        layer="ftw.solr.interfaces.IFtwSolrLayer" />
+
+    <browser:resource
+        name="jquery.history.js"
+        file="jquery.history.js" />
+
 
 </configure>

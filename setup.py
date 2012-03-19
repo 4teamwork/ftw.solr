@@ -25,6 +25,8 @@ setup(name='ftw.solr',
           'setuptools',
           'collective.solr',
           'collective.monkeypatcher',
+          'plone.app.contentlisting',
+          'plone.app.search',
       ],
       entry_points="""
       # -*- Entry points: -*-
