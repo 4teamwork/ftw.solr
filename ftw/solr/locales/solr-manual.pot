@@ -30,7 +30,7 @@ msgstr ""
 msgid "[NOW/DAY TO *]"
 msgstr ""
 
-msgid "[NOW/DAY-1DAY TO *]"
+msgid "[NOW/DAY-1DAY TO NOW/DAY]"
 msgstr ""
 
 msgid "[NOW/DAY-7DAYS TO *]"

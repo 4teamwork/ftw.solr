@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-03-08 15:28+0000\n"
+"POT-Creation-Date: 2012-03-14 12:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,33 +12,33 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./ftw/solr/browser/facets.pt:19
+#: ./ftw/solr/browser/facets.pt:17
 msgid "Remove this search limit..."
 msgstr ""
 
 msgid "[* TO NOW/DAY-1YEAR]"
-msgstr "vor einem Jahr"
+msgstr "Vor einem Jahr"
 
 msgid "[NOW/DAY TO *]"
-msgstr "seit Heute"
+msgstr "Heute"
 
-msgid "[NOW/DAY-1DAY TO *]"
-msgstr "seit Gestern"
+msgid "[NOW/DAY-1DAY TO NOW/DAY]"
+msgstr "Gestern"
 
 msgid "[NOW/DAY-1MONTH TO *]"
-msgstr "seit einem Monat"
+msgstr "Letzten Monat"
 
 msgid "[NOW/DAY-1YEAR TO *]"
-msgstr "seit einem Jahr"
+msgstr "Letztes Jahr"
 
 msgid "[NOW/DAY-7DAYS TO *]"
-msgstr "seit einer Woche"
+msgstr "Letzte Woche"
 
 msgid "creator_fullname"
 msgstr "Ersteller"
 
 #. Default: "Filter"
-#: ./ftw/solr/browser/facets.pt:8
+#: ./ftw/solr/browser/facets.pt:6
 msgid "heading_search_facets"
 msgstr ""
 

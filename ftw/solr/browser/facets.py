@@ -11,7 +11,7 @@ from collective.solr.interfaces import IFacetTitleVocabularyFactory
 
 FACET_QUERY_POSITIONS = {
     '[NOW/DAY TO *]': 0,
-    '[NOW/DAY-1DAY TO *]': 1,
+    '[NOW/DAY-1DAY TO NOW/DAY]': 1,
     '[NOW/DAY-7DAYS TO *]': 2,
     '[NOW/DAY-1MONTH TO *]': 3,
     '[NOW/DAY-1YEAR TO *]': 4,
