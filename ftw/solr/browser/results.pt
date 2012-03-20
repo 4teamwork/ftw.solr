@@ -5,7 +5,7 @@
                 batch python: view.results(b_size=b_size, b_start=b_start);
                 normalizeString nocall:context/@@plone/normalizeString;">
 
-    <h1 class="documentFirstHeading">
+    <h1 class="documentFirstHeading" i18n:domain="plone">
         <span i18n:translate="heading_search_results">
             Search results
         </span>
