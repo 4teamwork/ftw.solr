@@ -1,7 +1,9 @@
 from plone.app.contentlisting import catalog
-from plone.app.contentlisting import contentlisting
 from plone.app.contentlisting.interfaces import IContentListingObject
+from plone.app.layout.icons.interfaces import IContentIcon
 from zope.interface import implements
+from zope.component import queryMultiAdapter
+from zope.component.hooks import getSite
 from DateTime import DateTime
 
 timezone = DateTime().timezone()
@@ -15,6 +17,7 @@ class SolrContentListingObject(catalog.CatalogContentListingObject):
         self._brain = flare
         self._cached_realobject = None
         self.request = flare.request
+        self.context = getSite()
 
     def __repr__(self):
         return "<ftw.solr.contentlisting." + \
@@ -26,3 +29,7 @@ class SolrContentListingObject(catalog.CatalogContentListingObject):
 
     def ExpirationDate(self, zone=timezone):
         return self._brain.expires.toZone(zone).ISO8601()
+
+    def getIcon(self):
+        return queryMultiAdapter((self.context, self.request,
+                                  self._brain), interface=IContentIcon)()
