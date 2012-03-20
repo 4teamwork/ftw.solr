@@ -8,7 +8,10 @@ jQuery(function ($) {
         var results_container = $('#search-results-wrapper');
         $.get('@@search-results', qs, function(data) {
             results_container.hide();
-            results_container.html(data);
+            var $data = $(data);
+            $('#portal-searchfacets').replaceWith($data.find('#portal-searchfacets'));
+            $('#search-results').replaceWith($data.find('#search-results'));
+            $('h1.documentFirstHeading').replaceWith($data.find('h1.documentFirstHeading'));
             results_container.fadeIn(200);
         });
     });
@@ -39,13 +42,14 @@ jQuery(function ($) {
         $('input#searchGadget').val($(this).val());
     });
 
-
+    // Handle search form submission
     $('form.searchPage').submit(function (e) {
         var url = '@@search?' + $(this).serialize();
         History.pushState(null, null, url);
         e.preventDefault();
     });
 
+    // Handle clicks in batch navigation and facets
     $('#portal-searchfacets a, #search-results .listingBar a').live('click', function (e) {
         History.pushState(null, null, jq(this).attr('href'));
         e.preventDefault();
