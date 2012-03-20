@@ -9,9 +9,9 @@ jQuery(function ($) {
         $.get('@@search-results', qs, function(data) {
             results_container.hide();
             var $data = $(data);
-            $('#portal-searchfacets').replaceWith($data.find('#portal-searchfacets'));
-            $('#search-results').replaceWith($data.find('#search-results'));
-            $('h1.documentFirstHeading').replaceWith($data.find('h1.documentFirstHeading'));
+            $('#portal-searchfacets').html($data.find('#portal-searchfacets').html());
+            $('#search-results').html($data.find('#search-results').html());
+            $('h1.documentFirstHeading').html($data.find('h1.documentFirstHeading').html());
             results_container.fadeIn(200);
         });
     });
