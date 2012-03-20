@@ -34,9 +34,6 @@
                       st python:request.get('SearchableText', '');
                       DateTime python:modules['DateTime'].DateTime;">
 
-        <input type="hidden" name="advanced_search" value="False" />
-        <input type="hidden" name="sort_on" value="" />
-
         <input class="searchPage"
                name="SearchableText"
                type="text"
