@@ -4,7 +4,7 @@ jQuery(function ($) {
 
     History.Adapter.bind(window, 'statechange', function() {
         var State = History.getState();
-        var qs = State.url.replace(/^.*\?/, '');
+        var qs = State.url.replace(/^.*\?/, '') + '&ajax=1';
         var results_container = $('#search-results-wrapper');
         $.get('@@search-results', qs, function(data) {
             results_container.hide();

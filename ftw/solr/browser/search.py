@@ -18,6 +18,11 @@ class SearchView(browser.Search):
         """Get properly wrapped search results from the catalog.
         'query' should be a dictionary of catalog parameters.
         """
+        # Disable theming for ajax requests
+        if 'ajax' in self.request.form:
+            del self.request.form['ajax']
+            self.request.response.setHeader('X-Theme-Disabled', 'True')
+
         if query is None:
             query = {}
 
