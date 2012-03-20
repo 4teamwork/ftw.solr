@@ -37,25 +37,22 @@
         <input type="hidden" name="advanced_search" value="False" />
         <input type="hidden" name="sort_on" value="" />
 
-        <fieldset id="search-field" i18n:domain="plone" class="noborder">
-            <input class="searchPage"
-                   name="SearchableText"
-                   type="text"
-                   size="25"
-                   title="Search Site"
-                   i18n:attributes="title title_search_title;"
-                   tal:attributes="value st;"
-                   />
-            <input class="searchPage searchButton allowMultiSubmit"
-                   type="submit"
-                   value="Search"
-                   i18n:attributes="value label_search;"/>
+        <input class="searchPage"
+               name="SearchableText"
+               type="text"
+               size="25"
+               title="Search Site"
+               i18n:attributes="title title_search_title;"
+               tal:attributes="value st;"
+               />
+        <input class="searchPage searchButton allowMultiSubmit"
+               type="submit"
+               value="Search"
+               i18n:attributes="value label_search;"/>
 
-            <div tal:define="view nocall: context/@@search-facets | nothing"
-                 tal:condition="python: view"
-                 tal:replace="structure view/hiddenfields" />
-
-        </fieldset>
+        <div tal:define="view nocall: context/@@search-facets | nothing"
+             tal:condition="python: view"
+             tal:replace="structure view/hiddenfields" />
 
         <tal:results tal:replace="structure context/@@search-results" />
 
