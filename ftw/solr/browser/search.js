@@ -38,7 +38,7 @@ jQuery(function ($) {
 
     // We need to update the site-wide search field (at the top right in
     // stock Plone) when the main search field is updated
-    $('#search-field input[name="SearchableText"]').keyup(function () {
+    $('#searchform input[name="SearchableText"]').keyup(function () {
         $('input#searchGadget').val($(this).val());
     });
 
