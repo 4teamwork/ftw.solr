@@ -3,5 +3,6 @@
     <version>1000</version>
     <dependencies>
         <dependency>profile-collective.solr:default</dependency>
+        <dependency>profile-plone.app.search:default</dependency>
     </dependencies>
 </metadata>
