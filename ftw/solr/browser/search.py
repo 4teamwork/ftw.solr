@@ -14,6 +14,20 @@ logger = getLogger('ftw.solr')
 
 class SearchView(browser.Search):
 
+    template = ViewPageTemplateFile('search.pt')
+    results_template = ViewPageTemplateFile('results.pt')
+
+    def __call__(self):
+        if 'ajax' in self.request.form:
+            del self.request.form['ajax']
+            # Disable theming for ajax requests
+            self.request.response.setHeader('X-Theme-Disabled', 'True')
+            return self.results_template()
+        return self.template()
+
+    def render_results(self):
+        return self.results_template()
+
     def results(self, query=None, batch=True, b_size=10, b_start=0):
         """Get properly wrapped search results from the catalog.
         'query' should be a dictionary of catalog parameters.

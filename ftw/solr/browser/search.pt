@@ -47,11 +47,11 @@
                value="Search"
                i18n:attributes="value label_search;"/>
 
-        <div tal:define="view nocall: context/@@search-facets | nothing"
-             tal:condition="python: view"
-             tal:replace="structure view/hiddenfields" />
+        <div tal:define="fview nocall: context/@@search-facets | nothing"
+             tal:condition="python: fview"
+             tal:replace="structure fview/hiddenfields" />
 
-        <tal:results tal:replace="structure context/@@search-results" />
+        <tal:results tal:replace="structure view/render_results" />
 
         <div class="visualClear"><!-- --></div>
     </form>

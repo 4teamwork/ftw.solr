@@ -24,17 +24,8 @@
     <browser:page
         for="*"
         name="search"
-        template="search.pt"
         class=".search.SearchView"
         permission="zope2.View"
-        layer="ftw.solr.interfaces.IFtwSolrLayer" />
-
-    <browser:page
-        name="search-results"
-        class=".search.SearchView"
-        permission="zope2.View"
-        for="Products.CMFCore.interfaces.IFolderish"
-        template="results.pt"
         layer="ftw.solr.interfaces.IFtwSolrLayer" />
 
     <browser:resource
