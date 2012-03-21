@@ -3,6 +3,7 @@
                 b_start request/b_start | b_start;
                 b_size python:10;
                 batch python: view.results(b_size=b_size, b_start=b_start);
+                snippets view/snippets;
                 normalizeString nocall:context/@@plone/normalizeString;">
 
     <h1 class="documentFirstHeading" i18n:domain="plone">
@@ -78,17 +79,15 @@
                             </span>
 
                           </span>
-                          <div tal:content="item/CroppedDescription">
-                            Cropped description
+
+                          <div tal:condition="python: item.UID in snippets"
+                               tal:content="structure python:snippets[item.UID]">
                           </div>
 
                           <cite class="documentLocation link-location"
                                 tal:define="breadcrumbs python: view.breadcrumbs(item);
                                             is_rtl context/@@plone_portal_state/is_rtl;"
                                 tal:condition='breadcrumbs'>
-                              <span i18n:translate="text_searchitem_location">
-                                  Located in
-                              </span>
                               <span tal:repeat="crumb breadcrumbs"
                                     tal:attributes="dir python:is_rtl and 'rtl' or 'ltr';">
                                   <tal:item tal:define="is_last repeat/crumb/end;

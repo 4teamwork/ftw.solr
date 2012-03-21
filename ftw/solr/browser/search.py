@@ -50,6 +50,21 @@ class SearchView(browser.Search):
             results = Batch(results, b_size, b_start)
         return results
 
+    def snippets(self):
+        """Return snippets with highlighted search terms in a dict with the
+           item's UID as key and the snippet text as value.
+        """
+        if not hasattr(self, 'solr_response'):
+            return {}
+        if hasattr(self.solr_response, 'highlighting'):
+            joined_snippets = {}
+            for uid, snippets in self.solr_response.highlighting.items():
+                joined_snippets[uid] = ' '.join([' '.join(snippet) for snippet
+                                                in snippets.values()]).strip()
+            return joined_snippets
+        return {}
+
+
 class SearchBoxViewlet(common.SearchBoxViewlet, FacetMixin):
 
     index = ViewPageTemplateFile('searchbox.pt')
