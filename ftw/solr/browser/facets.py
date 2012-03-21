@@ -32,6 +32,8 @@ class SearchFacetsView(facets.SearchFacetsView):
         fqueries = fcs.get('facet_queries', {})
         facets = {}
         for fquery, count in fqueries.items():
+            if count < 1:
+                continue
             facet_title, item_title = fquery.split(':', 1)
             if facet_title not in facets:
                 facets[facet_title] = {}
