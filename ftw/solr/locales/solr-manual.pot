@@ -44,3 +44,9 @@ msgstr ""
 
 msgid "[* TO NOW/DAY-1YEAR]"
 msgstr ""
+
+msgid "Search words"
+msgstr ""
+
+msgid "Show in search"
+msgstr ""

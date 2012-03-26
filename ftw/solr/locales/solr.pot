@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-03-14 12:59+0000\n"
+"POT-Creation-Date: 2012-03-26 05:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,12 @@ msgstr ""
 
 #: ./ftw/solr/browser/facets.pt:17
 msgid "Remove this search limit..."
+msgstr ""
+
+msgid "Search words"
+msgstr ""
+
+msgid "Show in search"
 msgstr ""
 
 msgid "[* TO NOW/DAY-1YEAR]"
