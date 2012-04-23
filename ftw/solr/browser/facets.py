@@ -130,7 +130,7 @@ class SearchFacetsView(facets.SearchFacetsView):
                 vocabulary = vfactory(self.context)
                 value = value[1:-1]
                 if value in vocabulary:
-                    value = vocabulary.getTerm(value).title
+                    value = vocabulary.getTerm(value.decode('utf8')).title
                 if isinstance(value, Message):
                     value = translate(value, context=self.request)
 
