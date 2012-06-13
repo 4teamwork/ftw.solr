@@ -45,13 +45,13 @@ jQuery(function ($) {
     // Handle search form submission
     $('form.searchPage').submit(function (e) {
         var url = '@@search?' + $(this).serialize();
-        History.pushState(null, null, decodeURIComponent(url));
+        History.pushState(null, null, url);
         e.preventDefault();
     });
 
     // Handle clicks in batch navigation and facets
     $('#portal-searchfacets a, #search-results .listingBar a').live('click', function (e) {
-        History.pushState(null, null, decodeURIComponent(jq(this).attr('href')));
+        History.pushState(null, null, jq(this).attr('href'));
         e.preventDefault();
     });
 
