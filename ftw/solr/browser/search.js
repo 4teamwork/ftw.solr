@@ -1,5 +1,13 @@
 jQuery(function ($) {
 
+    function getParameterByName(name) {
+        // Returns the value of the query string parameter with the given name.
+        // If there's a history hash get the parameter from there.
+        var search = History.getHash() ? History.getHash() : window.location.search;
+        var match = RegExp('[?&]' + name + '=([^&]*)').exec(search);
+        return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+    }
+
     var History = window.History;
 
     History.Adapter.bind(window, 'statechange', function() {
@@ -14,7 +22,9 @@ jQuery(function ($) {
             $('h1.documentFirstHeading').html($data.find('h1.documentFirstHeading').html());
             results_container.fadeIn(200);
             results_container.highlightSearchTerms({
-                includeOwnDomain: false
+                terms: [getParameterByName('SearchableText')],
+                useLocation: false,
+                useReferrer: false
             });
         });
     });
@@ -47,7 +57,7 @@ jQuery(function ($) {
 
     // Handle search form submission
     $('form.searchPage').submit(function (e) {
-        var url = '@@search?' + $(this).serialize();
+        var url = '?' + $(this).serialize();
         History.pushState(null, null, url);
         e.preventDefault();
     });
