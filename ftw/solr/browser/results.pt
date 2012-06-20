@@ -42,7 +42,7 @@
                         <dt tal:attributes="class item/ContentTypeClass">
                           <img tal:replace="structure item/getIcon" />
                           <a href="#"
-                             tal:attributes="href string:${item/getURL}${item/appendViewAction};
+                             tal:attributes="href string:${item/getURL}${item/appendViewAction}?searchterm=${request/SearchableText};
                                              class string:state-${item/review_state}"
                              tal:content="item/Title" />
                         </dt>
