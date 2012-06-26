@@ -44,7 +44,7 @@
                           <a href="#"
                              tal:attributes="href string:${item/getURL}${item/appendViewAction}?searchterm=${request/SearchableText};
                                              class string:state-${item/review_state}"
-                             tal:content="item/Title" />
+                             tal:content="python: item.Title() or item.getId()" />
                         </dt>
                         <dd>
                           <span class="discreet" i18n:domain="plone"
