@@ -1,3 +1,4 @@
+import re
 from zope.component import getMultiAdapter
 from zope.interface import Interface
 from plone.indexer import indexer
@@ -75,4 +76,8 @@ def searchable_text(obj, **kwargs):
             data.append(str(datum))
 
     data = ' '.join(data)
+
+    # Strip html tags
+    data = re.sub('<[^<]+?>', '', data)
+
     return data
