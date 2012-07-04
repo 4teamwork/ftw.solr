@@ -78,7 +78,7 @@ class LiveSearchReplyView(BrowserView):
             for type_ in group_by_types:
                 grouped_results[type_] = []
 
-            for result in results[:1000]:
+            for result in results[:self.settings.group_search_limit]:
                 if result.portal_type in grouped_results:
                     grouped_results[result.portal_type].append(result)
                 else:
