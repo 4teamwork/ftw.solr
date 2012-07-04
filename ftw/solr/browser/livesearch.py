@@ -1,18 +1,15 @@
 from Acquisition import aq_inner
 from zope.publisher.browser import BrowserView
 from zope.i18n import translate
-from zope.component import getMultiAdapter
+from zope.component import getMultiAdapter, getUtility
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as _
 from Products.CMFPlone.browser.navtree import getNavigationRoot
 from Products.CMFPlone.utils import safe_unicode
 from Products.PythonScripts.standard import url_quote_plus
 from Products.PythonScripts.standard import html_quote
-
-# SIMPLE CONFIGURATION
-USE_ICON = True
-MAX_TITLE = 29
-MAX_DESCRIPTION = 93
+from plone.registry.interfaces import IRegistry
+from ftw.solr.interfaces import ILiveSearchSettings
 
 
 legend_livesearch = _('legend_livesearch', default='LiveSearch &#8595;')
@@ -31,19 +28,24 @@ class LiveSearchReplyView(BrowserView):
     def __call__(self):
         context = aq_inner(self.context)
         q = self.request.form.get('q', None)
-        limit = int(self.request.form.get('limit', 10))
+        self.limit = int(self.request.form.get('limit', 10))
         path = self.request.form.get('path', None)
 
         plone_utils = getToolByName(context, 'plone_utils')
-        pretty_title_or_id = plone_utils.pretty_title_or_id
+        self.pretty_title_or_id = plone_utils.pretty_title_or_id
+        self.normalizeString = plone_utils.normalizeString
         plone_view = getMultiAdapter((context, self.request), name='plone')
+        self.getIcon = plone_view.getIcon
 
         pprops = getToolByName(context, 'portal_properties')
         sprops = getattr(pprops, 'site_properties', None)
-        useViewAction = []
+        self.useViewAction = []
         if sprops is not None:
-            useViewAction = sprops.getProperty('typesUseViewActionInListings',
+            self.useViewAction = sprops.getProperty('typesUseViewActionInListings',
                                                [])
+
+        registry = getUtility(IRegistry)
+        self.settings = registry.forInterface(ILiveSearchSettings)
 
         # XXX really if it contains + * ? or -
         # it will not be right since the catalog ignores all non-word
@@ -56,7 +58,7 @@ class LiveSearchReplyView(BrowserView):
         for char in ('?', '-', '+', '*', multispace):
             q = q.replace(char, ' ')
         r = quote_bad_chars(q)+'*'
-        searchterms = url_quote_plus(r)
+        self.searchterms = url_quote_plus(r)
 
         
         site_encoding = plone_utils.getSiteEncoding()
@@ -64,10 +66,29 @@ class LiveSearchReplyView(BrowserView):
             path = getNavigationRoot(context)
         catalog = getToolByName(context, 'portal_catalog')
         friendly_types = plone_utils.getUserFriendlyTypes()
-        results = catalog(SearchableText=r, portal_type=friendly_types,
-                          path=path, sort_limit=limit)
 
-        searchterm_query = '?searchterm=%s'%url_quote_plus(q)
+        self.facet_params = context.restrictedTraverse('@@search-facets/facet_parameters')()
+
+        if self.settings.grouping:
+            results = catalog(SearchableText=r, portal_type=friendly_types,
+                              path=path, sort_limit=self.settings.group_search_limit)
+
+            group_by_types = self.settings.group_by + ['other']
+            grouped_results = {}
+            for type_ in group_by_types:
+                grouped_results[type_] = []
+
+            for result in results[:1000]:
+                if result.portal_type in grouped_results:
+                    grouped_results[result.portal_type].append(result)
+                else:
+                    grouped_results['other'].append(result)
+
+        else:
+            results = catalog(SearchableText=r, portal_type=friendly_types,
+                              path=path, sort_limit=self.limit)
+
+        self.searchterm_query = '?searchterm=%s'%url_quote_plus(q)
         if not results:
             self.write('''<fieldset class="livesearchContainer">''')
             self.write('''<legend id="livesearchLegend">%s</legend>''' % (
@@ -87,42 +108,12 @@ class LiveSearchReplyView(BrowserView):
             self.write('''<legend id="livesearchLegend">%s</legend>''' % (
                 translate(legend_livesearch, context=self.request)))
             self.write('''<div class="LSIEFix">''')
-            self.write('''<ul class="LSTable">''')
 
-            for result in results[:limit]:
+            if self.settings.grouping:
+                self.write_grouped_results(grouped_results, group_by_types)
+            else:
+                self.write_results(results)
 
-                icon = plone_view.getIcon(result)
-                itemUrl = result.getURL()
-                if result.portal_type in useViewAction:
-                    itemUrl += '/view'
-                itemUrl = itemUrl + searchterm_query
-
-                self.write('''<li class="LSRow">''')
-                self.write(icon.html_tag() or '')
-                full_title = safe_unicode(pretty_title_or_id(result))
-                if len(full_title) > MAX_TITLE:
-                    display_title = ''.join((full_title[:MAX_TITLE], '...'))
-                else:
-                    display_title = full_title
-                full_title = full_title.replace('"', '&quot;')
-                klass = 'contenttype-%s' % plone_utils.normalizeString(result.portal_type)
-                self.write('''<a href="%s" title="%s" class="%s">%s</a>''' % (itemUrl, full_title, klass, display_title))
-                display_description = safe_unicode(result.Description)
-                if len(display_description) > MAX_DESCRIPTION:
-                    display_description = ''.join((display_description[:MAX_DESCRIPTION], '...'))
-                # need to quote it, to avoid injection of html containing javascript and other evil stuff
-                display_description = html_quote(display_description)
-                self.write('''<div class="LSDescr">%s</div>''' % (display_description))
-                self.write('''</li>''')
-                full_title, display_title, display_description = None, None, None
-
-            if len(results)>limit:
-                facet_params = context.restrictedTraverse('@@search-facets/facet_parameters')()
-                # add a more... row
-                self.write('''<li class="LSRow">''')
-                self.write('<a href="%s&%s" style="font-weight:normal">%s</a>' % ('search?SearchableText=' + searchterms, facet_params, translate(label_show_all, context=self.request)))
-                self.write('''</li>''')
-            self.write('''</ul>''')
             self.write('''</div>''')
             self.write('''</fieldset>''')
 
@@ -131,6 +122,84 @@ class LiveSearchReplyView(BrowserView):
 
     def write(self, s):
         self.output.append(safe_unicode(s))
+
+    def write_results(self, results):
+        self.write('''<ul class="LSTable">''')
+        for result in results[:self.limit]:
+            icon = self.getIcon(result)
+            itemUrl = result.getURL()
+            if result.portal_type in self.useViewAction:
+                itemUrl += '/view'
+            itemUrl = itemUrl + self.searchterm_query
+
+            self.write('''<li class="LSRow">''')
+            self.write(icon.html_tag() or '')
+            full_title = safe_unicode(self.pretty_title_or_id(result))
+            if len(full_title) > self.settings.max_title:
+                display_title = ''.join((full_title[:self.settings.max_title], '...'))
+            else:
+                display_title = full_title
+            full_title = full_title.replace('"', '&quot;')
+            klass = 'contenttype-%s' % self.normalizeString(result.portal_type)
+            self.write('''<a href="%s" title="%s" class="%s">%s</a>''' % (itemUrl, full_title, klass, display_title))
+            display_description = safe_unicode(result.Description)
+            if len(display_description) > self.settings.max_description:
+                display_description = ''.join((display_description[:self.settings.max_description], '...'))
+            # need to quote it, to avoid injection of html containing javascript and other evil stuff
+            display_description = html_quote(display_description)
+            self.write('''<div class="LSDescr">%s</div>''' % (display_description))
+            self.write('''</li>''')
+            full_title, display_title, display_description = None, None, None
+
+        if len(results)>self.limit:
+            # add a more... row
+            self.write('''<li class="LSRow">''')
+            self.write('<a href="%s&%s" style="font-weight:normal">%s</a>' % ('search?SearchableText=' + self.searchterms, self.facet_params, translate(label_show_all, context=self.request)))
+            self.write('''</li>''')
+        self.write('''</ul>''')
+
+
+    def write_grouped_results(self, grouped_results, group_by_types):
+        show_more = False
+        self.write('''<dl class="LSTable">''')
+        for ptype in group_by_types:
+            results = grouped_results[ptype]
+            if results:
+                self.write('''<dt class="LSGroup">%s</dt>''' % translate(ptype, domain="plone", context=self.request))
+                for result in results[:self.settings.group_limit]:
+                    icon = self.getIcon(result)
+                    itemUrl = result.getURL()
+                    if result.portal_type in self.useViewAction:
+                        itemUrl += '/view'
+                    itemUrl = itemUrl + self.searchterm_query
+                    
+                    self.write('''<dd class="LSRow">''')
+                    self.write(icon.html_tag() or '')
+                    full_title = safe_unicode(self.pretty_title_or_id(result))
+                    if len(full_title) > self.settings.max_title:
+                        display_title = ''.join((full_title[:self.settings.max_title], '...'))
+                    else:
+                        display_title = full_title
+                    full_title = full_title.replace('"', '&quot;')
+                    klass = 'contenttype-%s' % self.normalizeString(result.portal_type)
+                    self.write('''<a href="%s" title="%s" class="%s">%s</a>''' % (itemUrl, full_title, klass, display_title))
+                    display_description = safe_unicode(result.Description)
+                    if len(display_description) > self.settings.max_description:
+                        display_description = ''.join((display_description[:self.settings.max_description], '...'))
+                    # need to quote it, to avoid injection of html containing javascript and other evil stuff
+                    display_description = html_quote(display_description)
+                    self.write('''<div class="LSDescr">%s</div>''' % (display_description))
+                    self.write('''</dd>''')
+                if len(results) > self.settings.group_limit:
+                    show_more = True
+        
+        if show_more:
+            # add a more... row
+            self.write('''<dd class="LSRow LSShowMore">''')
+            self.write('<a href="%s&%s" style="font-weight:normal">%s</a>' % ('search?SearchableText=' + self.searchterms, self.facet_params, translate(label_show_all, context=self.request)))
+            self.write('''</dd>''')
+
+        self.write('''</dl>''')
 
 
 def quotestring(s):
