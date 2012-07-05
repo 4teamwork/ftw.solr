@@ -71,7 +71,8 @@ class LiveSearchReplyView(BrowserView):
 
         if self.settings.grouping:
             results = catalog(SearchableText=r, portal_type=friendly_types,
-                              path=path, sort_limit=self.settings.group_search_limit)
+                              qt='livesearch', path=path,
+                              sort_limit=self.settings.group_search_limit)
 
             group_by_types = self.settings.group_by + ['other']
             grouped_results = {}
