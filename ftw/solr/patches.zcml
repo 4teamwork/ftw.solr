@@ -19,5 +19,19 @@
         replacement=".mangler.extractQueryParameters"
         />
 
+    <monkey:patch
+        description="Treat search terms ending with a digit as simple"
+        module="collective.solr.mangler"
+        original="isSimpleTerm"
+        replacement=".utils.isSimpleTerm"
+        />
+
+    <monkey:patch
+        description="Treat search terms ending with a digit as simple"
+        module="collective.solr.mangler"
+        original="isSimpleSearch"
+        replacement=".utils.isSimpleSearch"
+        />
+
 
 </configure>
