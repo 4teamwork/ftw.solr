@@ -31,9 +31,10 @@ def creator_fullname(obj, **kwargs):
     return creator
 
 @indexer(Interface)
-def searchable_text(obj, **kwargs):
-    """A SearchableText indexer that does not include id, title and 
-       description.
+def snippet_text(obj, **kwargs):
+    """Text for snippets (aka highlighting) in search results.
+       Uses the SearchableText but excludes some fields that should not be
+       shown in search results.
     """
     text = obj.SearchableText()
     for fieldname in ['id', 'title', 'description', 'searchwords']:
