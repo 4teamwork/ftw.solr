@@ -22,6 +22,11 @@
         <div tal:define="facets nocall: context/@@search-facets | nothing"
              tal:condition="python: batch and facets"
              tal:replace="structure python: facets(results=view.solr_response)" />
+
+	<div tal:define="facets nocall: context/@@search-facets | nothing"
+	     tal:condition="python: not(batch and facets)"
+	     id="portal-searchfacets">
+	</div>
     </metal:searchfacets>
 
     <metal:searchresults define-macro="search_results">
