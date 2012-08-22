@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0a1'
+version = '1.0a2.dev0'
 
 setup(name='ftw.solr',
       version=version,
