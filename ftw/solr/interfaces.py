@@ -52,3 +52,8 @@ class ILiveSearchSettings(Interface):
         title=_(u'Maximum Description Length'),
         default=100,
     )
+
+
+class IZCMLSolrConnectionConfig(Interface):
+    """Solr connection settings configured through ZCML.
+    """

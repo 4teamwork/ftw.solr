@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<componentregistry>
+  <utilities>
+    <utility
+      interface="collective.solr.interfaces.ISolrConnectionManager"
+      factory="collective.solr.manager.SolrConnectionManager"
+      remove="True"/>
+    <utility
+      interface="collective.solr.interfaces.ISolrConnectionManager"
+      factory="ftw.solr.manager.SolrConnectionManager"/>
+  </utilities>
+</componentregistry>
