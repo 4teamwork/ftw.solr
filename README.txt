@@ -36,6 +36,18 @@ Ajax-ified search form
 The search form is fully ajax-ified which leads to faster search results when
 changing search criteria.
 
+Solr connection configuration in ZCML
+-------------------------------------
+
+The connections settings for Solr can be configured in ZCML and thus in 
+buildout. This makes it easier when copying databases between multiple Zope 
+instances with different Solr servers. Example::
+
+    zcml-additional =
+        <configure xmlns:solr="http://namespaces.plone.org/solr">
+            <solr:connection host="localhost" port="8983" base="/solr"/>
+       </configure>
+
 
 Solr Configuration
 ==================
