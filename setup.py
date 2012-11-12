@@ -6,7 +6,7 @@ version = '1.0a2.dev0'
 setup(name='ftw.solr',
       version=version,
       description="Solr integration for Plone using collective.solr",
-      long_description=open("README.txt").read() + "\n" +
+      long_description=open("README.rst").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       classifiers=[
         "Framework :: Plone",
