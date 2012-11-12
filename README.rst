@@ -1,7 +1,7 @@
 Introduction
 ============
 
-`ftw.solr` provides various customizations and enhancements on top of 
+`ftw.solr` provides various customizations and enhancements on top of
 `collective.solr` which integrates the Solr search engine with Plone.
 
 
@@ -11,23 +11,23 @@ Features
 Highlighting (aka Snippets)
 ---------------------------
 
-When displaying search results, Plone by default displays the title and the 
-description of an item. Solr, like Google and other search engines, can return a 
+When displaying search results, Plone by default displays the title and the
+description of an item. Solr, like Google and other search engines, can return a
 snippet of the text containing the words searched for. `ftw.solr` enables this
 feature in Plone.
 
 Live search grouping
 --------------------
 
-Search results in Plone's live search can be grouped by portal_type. This is 
+Search results in Plone's live search can be grouped by portal_type. This is
 the way search results are shown in Spotlight on Mac OS X.
 
 Facet queries
 -------------
 
-In addition to facet fields support provided by `collective.solr`, 
-`ftw.solr` adds support for facet queries. This type of faceting offers a lot 
-of flexibility. Instead of choosing a specific field to facet its values, multiple 
+In addition to facet fields support provided by `collective.solr`,
+`ftw.solr` adds support for facet queries. This type of faceting offers a lot
+of flexibility. Instead of choosing a specific field to facet its values, multiple
 Solr queries can be specified, that themselve become facets.
 
 Ajax-ified search form
@@ -39,8 +39,8 @@ changing search criteria.
 Solr connection configuration in ZCML
 -------------------------------------
 
-The connections settings for Solr can be configured in ZCML and thus in 
-buildout. This makes it easier when copying databases between multiple Zope 
+The connections settings for Solr can be configured in ZCML and thus in
+buildout. This makes it easier when copying databases between multiple Zope
 instances with different Solr servers. Example::
 
     zcml-additional =
@@ -57,7 +57,7 @@ Search Handlers
 
 `ftw.solr` requires two custom search handlers that must be configured on the Solr server.
 
-The ``livesearch`` request handler is used for live search and should limit the 
+The ``livesearch`` request handler is used for live search and should limit the
 returned fields to a minimum for maximum speed. Example::
 
     <requestHandler name="livesearch" class="solr.SearchHandler">
@@ -102,7 +102,7 @@ Example::
           <filter class="solr.LowerCaseFilterFactory"/>
       </analyzer>
     </fieldType>
- 
+
     <field name="snippetText" type="text_snippets" indexed="true"
            stored="true" required="false" multiValued="false"
            termVectors="true" termPositions="true"
@@ -112,13 +112,22 @@ Example::
 Installation
 ============
 
-Install `ftw.solr` by adding it to the list of eggs in your 
-buildout or by adding it as a dependency of your policy package. Then run 
+Install `ftw.solr` by adding it to the list of eggs in your
+buildout or by adding it as a dependency of your policy package. Then run
 buildout and restart your instance.
 
-Go to Site Setup of your Plone site and activate the `ftw.solr` add-on. Check 
-the Solr control panel provided by `collective.solr` for Solr-specific 
+Go to Site Setup of your Plone site and activate the `ftw.solr` add-on. Check
+the Solr control panel provided by `collective.solr` for Solr-specific
 configuration options.
+
+
+Links
+=====
+
+- Main github project repository: https://github.com/4teamwork/ftw.solr
+- Issue tracker: https://github.com/4teamwork/ftw.solr/issues
+- Package on pypi: http://pypi.python.org/pypi/ftw.solr
+- Continuous integration: https://jenkins.4teamwork.ch/search?q=ftw.solr
 
 
 Copyright
@@ -126,4 +135,4 @@ Copyright
 
 This package is copyright by `4teamwork <http://www.4teamwork.ch/>`_.
 
-`ftw.solr` is licensed under GNU General Public License, version 2.
+``ftw.solr`` is licensed under GNU General Public License, version 2.
