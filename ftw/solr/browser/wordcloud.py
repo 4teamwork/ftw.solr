@@ -40,11 +40,14 @@ class WordCloudView(BrowserView):
         size = int(100 * scale)
         return 'font-size: %s%%; border-bottom:0; text-decoration: none' % size
 
-    def get_solr_terms_handler_url():
+    def get_solr_terms_handler_url(self):
         """Construct the URL to the Solr 'terms' request handler.
         """
         manager = queryUtility(ISolrConnectionManager)
         conn = manager.getConnection()
+        if conn is None:
+            raise Exception("Couldn't get a Solr connection. Please make sure "
+                            "Solr is installed and activated.")
         url = "http://%s%s/terms" % (conn.host, conn.solrBase)
         return url
 
@@ -133,8 +136,8 @@ class WordCloudView(BrowserView):
         request_value = self.request.form.get(key)
         if request_value not in (None, ''):
             value = request_value
-        elif kwargs.get(key) is None:
-            value = default
+        else:
+            value = kwargs.get(key, default)
         self.options[key] = value
 
     def __call__(self, *args, **kwargs):
