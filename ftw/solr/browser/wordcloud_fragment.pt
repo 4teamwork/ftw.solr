@@ -1,0 +1,15 @@
+<div xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+     xmlns:tal="http://xml.zope.org/namespaces/tal"
+     xmlns:metal="http://xml.zope.org/namespaces/metal"
+     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+     lang="en"
+     i18n:domain="ftw.solr">
+
+    <div tal:define="terms view/get_weighted_terms">
+        <a tal:repeat="term terms" class="term"
+              tal:content="term/name"
+              tal:attributes="style term/style;
+                              href string:${view/search_url}${term/name}">
+        </a>
+    </div>
+</div>

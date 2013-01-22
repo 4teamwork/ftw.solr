@@ -31,6 +31,7 @@ setup(name='ftw.solr',
         'collective.monkeypatcher',
         'plone.app.contentlisting',
         'plone.app.search',
+        'requests',
         ],
 
       entry_points="""

@@ -35,6 +35,13 @@
         permission="zope2.View"
         layer="ftw.solr.interfaces.IFtwSolrLayer" />
 
+    <browser:page
+        for="*"
+        name="wordcloud"
+        class=".wordcloud.WordCloudView"
+        permission="zope2.View"
+        layer="ftw.solr.interfaces.IFtwSolrLayer" />
+
     <browser:resource
         name="search.js"
         file="search.js"
