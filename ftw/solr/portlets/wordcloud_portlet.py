@@ -6,6 +6,7 @@ from zope import schema
 from zope.component import getMultiAdapter
 from zope.formlib import form
 from zope.interface import implements
+from ftw.solr import _
 
 
 class IWordCloudPortlet(IPortletDataProvider):
@@ -17,26 +18,30 @@ class IWordCloudPortlet(IPortletDataProvider):
     """
 
     portlet_title = schema.TextLine(
-        title=u"Title",
-        description=u"Portlet title",
+        title=_(u'label_portlet_title', default=u"Title"),
+        description=_(u'help_portlet_title', default=u"Portlet title"),
         required=False,
         default=u"Word Cloud")
 
     num_words = schema.Int(
-        title=u"Number of words",
-        description=u"Maximum number of words to be displayed",
+        title=_(u'label_num_words', default=u"Number of words"),
+        description=_(u'help_num_words',
+                      default=u"Maximum number of words to be displayed"),
         required=True,
         default=10)
 
     num_sizes = schema.Int(
-        title=u"Number of sizes",
-        description=u"Number of different sizes to represent term weight",
+        title=_(u'label_num_sizes', u"Number of sizes"),
+        description=_(u'help_num_sizes',
+                      default=u"Number of different sizes to represent term "
+                               "weight"),
         required=True,
         default=5)
 
     scale_factor = schema.Float(
-        title=u"Scale factor",
-        description=u"Constant scaling factor to scale font size by",
+        title=_(u'label_scale_factor', default=u"Scale factor"),
+        description=_(u'help_scale_factor',
+                      default=u"Constant scaling factor to scale font size by"),
         required=True,
         default=2.0)
 

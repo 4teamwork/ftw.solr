@@ -1,0 +1,55 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2013-01-24 08:52+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#. Default: "Number of different sizes to represent term weight"
+#: ./ftw/solr/portlets/wordcloud_portlet.py:35
+msgid "help_num_sizes"
+msgstr "Anzahl unterschiedlicher Grössen für die Darstellug von Begriffen"
+
+#. Default: "Maximum number of words to be displayed"
+#: ./ftw/solr/portlets/wordcloud_portlet.py:28
+msgid "help_num_words"
+msgstr "Anzahl dargestellter Begriffe"
+
+#. Default: "Portlet title"
+#: ./ftw/solr/portlets/wordcloud_portlet.py:22
+msgid "help_portlet_title"
+msgstr "Portlet-Titel"
+
+#. Default: "Constant scaling factor to scale font size by"
+#: ./ftw/solr/portlets/wordcloud_portlet.py:43
+msgid "help_scale_factor"
+msgstr "Konstanter Faktor um den die Schriftgrösse skaliert wird"
+
+#. Default: "Number of sizes"
+#: ./ftw/solr/portlets/wordcloud_portlet.py:34
+msgid "label_num_sizes"
+msgstr "Anzahl Grössen"
+
+#. Default: "Number of words"
+#: ./ftw/solr/portlets/wordcloud_portlet.py:27
+msgid "label_num_words"
+msgstr "Anzahl Begriffe"
+
+#. Default: "Title"
+#: ./ftw/solr/portlets/wordcloud_portlet.py:21
+msgid "label_portlet_title"
+msgstr "Titel"
+
+#. Default: "Scale factor"
+#: ./ftw/solr/portlets/wordcloud_portlet.py:42
+msgid "label_scale_factor"
+msgstr "Skalierungsfaktor"
+
+
