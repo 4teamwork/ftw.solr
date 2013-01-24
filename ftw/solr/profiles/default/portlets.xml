@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<portlets>
+
+ <portlet
+   addview="ftw.solr.portlets.WordCloudPortlet"
+   title="Word Cloud portlet"
+   description="Displays the most frequent terms in documents indexed by Solr"
+   />
+
+</portlets>

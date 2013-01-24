@@ -4,6 +4,9 @@ Changelog
 1.0a2 (unreleased)
 ------------------
 
+- Added basic portlet to display Word Cloud.
+  [lgraf]
+
 - Added basic Word Cloud browser view.
   [lgraf]
 
