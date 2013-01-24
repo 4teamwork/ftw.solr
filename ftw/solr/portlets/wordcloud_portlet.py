@@ -34,6 +34,12 @@ class IWordCloudPortlet(IPortletDataProvider):
         required=True,
         default=5)
 
+    scale_factor = schema.Float(
+        title=u"Scale factor",
+        description=u"Constant scaling factor to scale font size by",
+        required=True,
+        default=2.0)
+
 
 class Assignment(base.Assignment):
     """Portlet assignment for the Word Cloud portlet.
@@ -44,10 +50,11 @@ class Assignment(base.Assignment):
 
     implements(IWordCloudPortlet)
 
-    def __init__(self, num_words, num_sizes, portlet_title):
+    def __init__(self, num_words, num_sizes, portlet_title, scale_factor):
         self.portlet_title = portlet_title
         self.num_words = num_words
         self.num_sizes = num_sizes
+        self.scale_factor = scale_factor
 
     @property
     def title(self):
@@ -85,9 +92,12 @@ class Renderer(base.Renderer):
 
         num_words = getattr(self.data, 'num_words', None)
         num_sizes = getattr(self.data, 'num_sizes', None)
+        scale_factor = getattr(self.data, 'scale_factor', None)
 
         kwargs = {'num_words': num_words,
-                  'num_sizes': num_sizes}
+                  'num_sizes': num_sizes,
+                  'scale_factor': scale_factor}
+
         return word_cloud_view(**kwargs)
 
 

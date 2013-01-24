@@ -4,6 +4,9 @@ Changelog
 1.0a2 (unreleased)
 ------------------
 
+- Added option to scale Word Cloud by a constant factor.
+  [lgraf]
+
 - Added basic portlet to display Word Cloud.
   [lgraf]
 

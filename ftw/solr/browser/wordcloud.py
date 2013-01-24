@@ -38,6 +38,10 @@ class WordCloudView(BrowserView):
 
         # Size in percent of inherited font size
         size = int(100 * scale)
+
+        # Scale by configurable constant factor
+        size *= self.options['scale_factor']
+
         return 'font-size: %s%%; border-bottom:0; text-decoration: none' % size
 
     def get_solr_terms_handler_url(self):
@@ -144,6 +148,7 @@ class WordCloudView(BrowserView):
         self.options = {}
         self._parse_option('num_words', kwargs, 10)
         self._parse_option('num_sizes', kwargs, 5)
+        self._parse_option('scale_factor', kwargs, 2.0)
         kwargs.update(self.options)
 
         if self.request.form.get('raw'):
