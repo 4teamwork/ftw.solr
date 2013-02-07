@@ -47,7 +47,9 @@
                         <dt tal:attributes="class item/ContentTypeClass">
                           <img tal:replace="structure item/getIcon" />
                           <a href="#"
-                             tal:attributes="href string:${item/getURL}${item/appendViewAction}?searchterm=${request/SearchableText};
+                             tal:define="searchTerm request/SearchableText|nothing;
+                                         searchTermQueryParam python:searchTerm and '?searchterm=%s' % searchTerm or '';"
+                             tal:attributes="href string:${item/getURL}${item/appendViewAction}${searchTermQueryParam};
                                              class string:state-${item/review_state}"
                              tal:content="python: item.Title() or item.getId()" />
                         </dt>
