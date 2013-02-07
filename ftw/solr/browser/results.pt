@@ -87,9 +87,14 @@
 
                           </span>
 
-                          <div tal:condition="python: item.UID in snippets"
-                               tal:content="structure python:snippets[item.UID]">
-                          </div>
+                          <tal:snippet tal:define="hasSnippet python:item.UID in snippets">
+                              <div tal:condition="hasSnippet"
+                                   tal:content="structure python:snippets[item.UID]">
+                              </div>
+                              <div tal:condition="not: hasSnippet"
+                                   tal:content="python:item.Description()">
+                              </div>
+                          </tal:snippet>
 
                           <cite class="documentLocation link-location"
                                 tal:define="breadcrumbs python: view.breadcrumbs(item);
