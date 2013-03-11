@@ -31,7 +31,7 @@ setup(name='ftw.solr',
 
       install_requires=[
         'setuptools',
-        'collective.solr',
+        'collective.solr >= 3.1',
         'collective.monkeypatcher',
         'plone.app.contentlisting',
         'plone.app.search',
