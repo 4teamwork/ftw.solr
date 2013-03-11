@@ -3,6 +3,10 @@ import os
 
 version = '1.0a2.dev0'
 
+tests_require = [
+    'plone.app.testing',
+    ]
+
 setup(name='ftw.solr',
       version=version,
       description="Solr integration for Plone using collective.solr",
@@ -32,6 +36,9 @@ setup(name='ftw.solr',
         'plone.app.contentlisting',
         'plone.app.search',
         ],
+
+      tests_require=tests_require,
+      extras_require=dict(tests=tests_require),
 
       entry_points="""
       # -*- Entry points: -*-
