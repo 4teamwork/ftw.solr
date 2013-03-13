@@ -4,7 +4,8 @@ Changelog
 1.0a2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Remove p.a.contentlisting ZCML registration since collective.solr>=3.1 does this now.
+  [jone]
 
 
 1.0a1 (2012-08-22)
