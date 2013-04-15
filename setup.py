@@ -35,6 +35,7 @@ setup(name='ftw.solr',
         'collective.monkeypatcher',
         'plone.app.contentlisting',
         'plone.app.search',
+        'requests',
         ],
 
       tests_require=tests_require,
