@@ -1,0 +1,16 @@
+<configure
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="ftw.solr">
+
+     <plone:portlet
+         name="ftw.solr.portlets.WordCloudPortlet"
+         interface=".wordcloud_portlet.IWordCloudPortlet"
+         assignment=".wordcloud_portlet.Assignment"
+         view_permission="zope2.View"
+         edit_permission="cmf.ManagePortal"
+         renderer=".wordcloud_portlet.Renderer"
+         addview=".wordcloud_portlet.AddForm"
+         editview=".wordcloud_portlet.EditForm"
+         />
+
+</configure>

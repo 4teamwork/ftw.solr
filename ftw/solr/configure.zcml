@@ -13,6 +13,7 @@
     <include file="patches.zcml" />
 
     <include package=".browser" />
+    <include package=".portlets" />
 
     <!-- Indexers -->
     <adapter name="site_section" factory=".indexers.site_section" />

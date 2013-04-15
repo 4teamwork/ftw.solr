@@ -1,0 +1,16 @@
+<dl class="portlet portletWordCloudPortlet"
+    i18n:domain="ftw.solr">
+
+    <dt tal:condition="view/header" class="portletHeader">
+        <span class="portletTopLeft"></span>
+        <tal:b content="view/header" />
+        <span class="portletTopRight"></span>
+    </dt>
+
+    <dd class="portletItem odd">
+        <ul class="wordcloud">
+            <div tal:content="structure view/render_cloud" /> 
+        </ul>
+    </dd>
+
+</dl>

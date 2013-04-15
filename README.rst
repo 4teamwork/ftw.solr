@@ -30,6 +30,15 @@ In addition to facet fields support provided by `collective.solr`,
 of flexibility. Instead of choosing a specific field to facet its values, multiple
 Solr queries can be specified, that themselve become facets.
 
+Word Cloud
+----------
+
+Assuming there is a correctly configured index 'wordCloudTerms', a Word Cloud
+showing the most common terms across documents can be displayed.
+
+The Word Cloud is implemented in a browser view that can either be displayed
+stand-alone by traversing to /@@wordcloud or rendered in a portlet.
+
 Ajax-ified search form
 ----------------------
 
@@ -89,6 +98,9 @@ The ``hlsearch`` request handler should contain the configuration for higlightin
 Field types and indexes
 -----------------------
 
+Highlighting
+~~~~~~~~~~~~
+
 Highlighting requires an index named ``snippetText`` with it's own field type which does not too much text analysis.
 Example::
 
@@ -107,6 +119,47 @@ Example::
            stored="true" required="false" multiValued="false"
            termVectors="true" termPositions="true"
            termOffsets="true"/>
+
+Word Cloud
+~~~~~~~~~~
+
+The Word Cloud feature requires an index named ``wordCloudTerms`` with it's own
+field type. It's basically a copy of SearchableText but with less analysis and
+filtering (no lowercasing, no character normalization, etc...).
+
+Field type example::
+
+    <fieldType name="cloud_terms" class="solr.TextField" positionIncrementGap="100">
+      <analyzer type="index">
+          <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+          <filter class="solr.StopFilterFactory" ignoreCase="true" words="${buildout:directory}/german_stop.txt" enablePositionIncrements="true"/>
+          <filter class="solr.WordDelimiterFilterFactory"
+                  splitOnCaseChange="1"
+                  splitOnNumerics="1"
+                  stemEnglishPossessive="1"
+                  generateWordParts="0"
+                  generateNumberParts="0"
+                  catenateWords="0"
+                  catenateNumbers="0"
+                  catenateAll="0"
+                  preserveOriginal="1"/>
+          <!-- Strip punctuation characters from beginning and end of terms -->
+          <filter class="solr.PatternReplaceFilterFactory" pattern="^(\p{Punct}*)(.*?)(\p{Punct}*)$" replacement="$2"/>
+          <!-- Filter everything that does not contain at least 3 regular letters -->
+          <filter class="solr.PatternReplaceFilterFactory" pattern="^([^a-zA-Z]*)([a-zA-Z]{0,2})([^a-zA-Z]*)$" replacement=""/>
+          <!-- Filter any term shorter than 3 characters (incl. empty string) -->
+          <filter class="solr.LengthFilterFactory" min="2" max="50"/>
+      </analyzer>
+    </fieldType>
+
+Index example::
+
+    <field name="wordCloudTerms" type="cloud_terms" indexed="true"
+           stored="true" required="false" multiValued="false"
+           termVectors="true" termPositions="true"
+           termOffsets="true"/>
+
+    <copyField source="SearchableText" dest="wordCloudTerms"/>
 
 
 Installation
