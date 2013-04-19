@@ -189,3 +189,7 @@ Copyright
 This package is copyright by `4teamwork <http://www.4teamwork.ch/>`_.
 
 ``ftw.solr`` is licensed under GNU General Public License, version 2.
+
+.. image:: https://cruel-carlota.pagodabox.com/db670f696bb6ffda9fbdbd5117669b04
+   :alt: githalytics.com
+   :target: http://githalytics.com/4teamwork/ftw.solr
