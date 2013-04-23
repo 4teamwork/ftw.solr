@@ -1,0 +1,24 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="ftw.billboard">
+
+  <genericsetup:upgradeStep
+      title="Update rolemap"
+      description=""
+      source="1000"
+      destination="1001"
+      handler="ftw.solr.upgrades.to1001.UpdateRolemap"
+      profile="ftw.solr:default"
+      />
+
+  <genericsetup:registerProfile
+      name="1001"
+      title="ftw.solr.upgrades.1001"
+      description=""
+      directory="profiles/1001"
+      for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+</configure>

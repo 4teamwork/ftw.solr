@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-01-24 08:52+0000\n"
+"POT-Creation-Date: 2013-04-23 07:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -11,6 +11,46 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+
+#: ./ftw/solr/interfaces.py:13
+msgid "Enable Grouping in LiveSearch"
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:39
+msgid "Group Limit"
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:32
+msgid "Group Search Limit"
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:20
+msgid "Groups"
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:14
+msgid "If enabled, livesearch results are grouped by portal type."
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:52
+msgid "Maximum Description Length"
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:47
+msgid "Maximum Title Length"
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:21
+msgid "Specify a list of portal types by which livesearch results are grouped. Groups are shown in the provided order. Results that do not match a portal type in the given list are shown at the bottom."
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:40
+msgid "The maximum number of search results per group."
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:33
+msgid "The maximum number of search results to consider forgrouping."
+msgstr ""
 
 #. Default: "Number of different sizes to represent term weight"
 #: ./ftw/solr/portlets/wordcloud_portlet.py:35
@@ -32,6 +72,21 @@ msgstr "Portlet-Titel"
 msgid "help_scale_factor"
 msgstr "Konstanter Faktor um den die Schriftgrösse skaliert wird"
 
+#. Default: "Specify words for which this item will show up as the first search result. Multiple words can be specified on new lines."
+#: ./ftw/solr/extender.py:36
+msgid "help_searchwords"
+msgstr "Zusätzliche Suchbegriffe, bei welchen dieser Artikel gefunden werden soll. Ein Begriff pro Zeile."
+
+#. Default: "Advanced Search…"
+#: ./ftw/solr/browser/livesearch.py:17
+msgid "label_advanced_search"
+msgstr ""
+
+#. Default: "No matching results found."
+#: ./ftw/solr/browser/livesearch.py:16
+msgid "label_no_results_found"
+msgstr ""
+
 #. Default: "Number of sizes"
 #: ./ftw/solr/portlets/wordcloud_portlet.py:34
 msgid "label_num_sizes"
@@ -52,4 +107,22 @@ msgstr "Titel"
 msgid "label_scale_factor"
 msgstr "Skalierungsfaktor"
 
+#. Default: "Search words"
+#: ./ftw/solr/extender.py:35
+msgid "label_searchwords"
+msgstr "Suchbegriffe"
 
+#. Default: "Show all items"
+#: ./ftw/solr/browser/livesearch.py:18
+msgid "label_show_all"
+msgstr ""
+
+#. Default: "Show in search"
+#: ./ftw/solr/extender.py:22
+msgid "label_showinsearch"
+msgstr "In der Suche zeigen"
+
+#. Default: "LiveSearch &#8595;"
+#: ./ftw/solr/browser/livesearch.py:15
+msgid "legend_livesearch"
+msgstr ""
