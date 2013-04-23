@@ -11,9 +11,11 @@
     <cmf:registerDirectory name="ftw_solr" />
 
     <include file="patches.zcml" />
+    <include file="permissions.zcml" />
 
     <include package=".browser" />
     <include package=".portlets" />
+    <include package=".upgrades" />
 
     <!-- Indexers -->
     <adapter name="site_section" factory=".indexers.site_section" />
@@ -35,5 +37,5 @@
         description="Installs the ftw.solr package"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
-  
+
 </configure>
