@@ -1,0 +1,9 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope">
+
+  <adapter
+      for="Products.ATContentTypes.interface.IATContentType"
+      name="collective.solr.SearchExtender"
+      factory=".extender.SearchExtender" />
+
+</configure>

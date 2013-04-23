@@ -4,6 +4,10 @@ Changelog
 1.0a2 (unreleased)
 ------------------
 
+- Overwrite search extender: Add write permissions, fixed translations and
+  allowed content types in textfield.
+  [Julian Infanger]
+
 - Added option to scale Word Cloud by a constant factor.
   [lgraf]
 
