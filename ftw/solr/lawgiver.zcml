@@ -1,0 +1,16 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:lawgiver="http://namespaces.zope.org/lawgiver"
+    i18n_domain="ftw.solr">
+
+    <include package="ftw.lawgiver" file="meta.zcml" />
+
+    <!-- Tell lawgiver that those permissions should not be managed in
+         workflows: -->
+    <lawgiver:map_permissions
+        action_group="__unmanaged__"
+        workflow="__unmanaged__"
+        permissions="ftw.solr: Edit search settings"
+        />
+
+</configure>
