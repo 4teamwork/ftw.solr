@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0a2 (unreleased)
+1.0.1 (2013-05-21)
 ------------------
 
 - Monkey patching c.solr.search.Search.buildQuery in order to escape slahes in paths.
