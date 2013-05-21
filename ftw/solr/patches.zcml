@@ -33,5 +33,11 @@
         replacement=".utils.isSimpleSearch"
         />
 
+    <monkey:patch
+        description="Escape values for path index queries"
+        class="collective.solr.search.Search"
+        original="buildQuery"
+        replacement=".search.buildQuery"
+        />
 
 </configure>

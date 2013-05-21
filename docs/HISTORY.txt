@@ -4,6 +4,9 @@ Changelog
 1.0a2 (unreleased)
 ------------------
 
+- Monkey patching c.solr.search.Search.buildQuery in order to escape slahes in paths.
+  [lgraf]
+
 - Overwrite search extender: Add write permissions, fixed translations and
   allowed content types in textfield.
   [Julian Infanger]
