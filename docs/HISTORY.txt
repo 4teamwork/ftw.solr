@@ -4,7 +4,9 @@ Changelog
 1.0.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed querytarget of livesearch for Plone 4.2 and later.
+  Use our @@livesearch_reply view instead of livesearch_reply.
+  [buchi]
 
 
 1.0.1 (2013-05-21)
