@@ -4,6 +4,7 @@
                 b_size python:10;
                 batch python: view.results(b_size=b_size, b_start=b_start);
                 snippets view/snippets;
+                suggestions view/suggestions;
                 normalizeString nocall:context/@@plone/normalizeString;">
 
     <h1 class="documentFirstHeading" i18n:domain="plone">
@@ -35,6 +36,13 @@
             <metal:noresults tal:condition="not: batch">
               <p i18n:domain="plone"><strong i18n:translate="description_no_results_found">No results were found.</strong></p>
             </metal:noresults>
+
+            <metal:suggestions tal:condition="suggestions">
+                <p i18n:translate="">Did you mean</p>
+                <tal:block tal:repeat="suggestion suggestions">
+                    <a tal:content="python:suggestion[0]" tal:define="querystring python:suggestion[1]" tal:attributes="href string:${request/ACTUAL_URL}?${querystring}"></a>
+                </tal:block>
+            </metal:suggestions>
 
             <metal:results tal:condition="batch"
                            tal:define="isAnon context/@@plone_portal_state/anonymous;

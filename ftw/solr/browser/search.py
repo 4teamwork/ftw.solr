@@ -78,6 +78,27 @@ class SearchView(browser.Search):
             return joined_snippets
         return {}
 
+    def suggestions(self):
+        """Get suggestions from spellcheck component.
+        """
+        suggested_terms = []
+        search_terms = [term.lower() for term in self.request.form.get('SearchableText', '').split()]
+        query_params = self.request.form.copy()
+        if hasattr(self.solr_response, 'spellcheck'):
+            suggestions = self.solr_response.spellcheck.get('suggestions', [])
+            for term in search_terms:
+                if term in suggestions:
+                    suggestion = suggestions[term]['suggestion']
+                    query_params['SearchableText'] = suggestion[0]['word']
+                    query_string = ''
+                    for k,v in query_params.items():
+                        if isinstance(v, list):
+                            query_string += '&'.join(['%s=%s' % (k,vv) for vv in v])
+                        else:
+                            query_string += '&%s=%s' % (k,v)
+                    suggested_terms.append((suggestion[0]['word'], query_string))
+        return suggested_terms
+
 
 class SearchBoxViewlet(common.SearchBoxViewlet, FacetMixin):
 
