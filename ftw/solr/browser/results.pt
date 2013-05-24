@@ -31,17 +31,22 @@
     </metal:searchfacets>
 
     <metal:searchresults define-macro="search_results">
-        <div id="search-results">
+        <div id="search-results" i18n:domain="ftw.solr">
 
             <metal:noresults tal:condition="not: batch">
               <p i18n:domain="plone"><strong i18n:translate="description_no_results_found">No results were found.</strong></p>
             </metal:noresults>
 
             <metal:suggestions tal:condition="suggestions">
-                <p i18n:translate="">Did you mean</p>
-                <tal:block tal:repeat="suggestion suggestions">
-                    <a tal:content="python:suggestion[0]" tal:define="querystring python:suggestion[1]" tal:attributes="href string:${request/ACTUAL_URL}?${querystring}"></a>
-                </tal:block>
+                <p i18n:translate="text_did_you_mean">Did you mean&hellip;
+                    <span i18n:name="suggestion">
+                        <tal:block tal:repeat="suggestion suggestions">
+                            <a tal:define="querystring python:suggestion[1]"
+                               tal:content="python:suggestion[0]"
+                               tal:attributes="href string:${request/ACTUAL_URL}?${querystring}"></a>
+                        </tal:block>
+                    </span>
+                </p>
             </metal:suggestions>
 
             <metal:results tal:condition="batch"
