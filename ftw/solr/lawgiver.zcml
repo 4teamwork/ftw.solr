@@ -7,9 +7,7 @@
 
     <!-- Tell lawgiver that those permissions should not be managed in
          workflows: -->
-    <lawgiver:map_permissions
-        action_group="__unmanaged__"
-        workflow="__unmanaged__"
+    <lawgiver:ignore
         permissions="ftw.solr: Edit search settings"
         />
 
