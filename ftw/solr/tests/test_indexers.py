@@ -25,6 +25,16 @@ class TestSnippetText(TestCase):
         wrapped = IndexableObjectWrapper(doc, portal.portal_catalog)
         self.assertNotIn('Document 1', wrapped.snippetText)
 
+    def test_searchwords_not_in_snippet_text(self):
+        portal = self.layer['portal']
+        setRoles(portal, TEST_USER_ID, ['Manager'])
+        doc = portal[portal.invokeFactory('Document', 'doc1',
+                                          title=u"Document 1",
+                                          searchwords=u"Spam\nEggs")]
+        wrapped = IndexableObjectWrapper(doc, portal.portal_catalog)
+        self.assertNotIn('Spam', wrapped.snippetText)
+        self.assertNotIn('Eggs', wrapped.snippetText)
+
     def test_body_text_in_snippet_text(self):
         portal = self.layer['portal']
         setRoles(portal, TEST_USER_ID, ['Manager'])
