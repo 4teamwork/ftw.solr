@@ -34,6 +34,16 @@ class TestSnippetText(TestCase):
         wrapped = IndexableObjectWrapper(doc, portal.portal_catalog)
         self.assertIn('Body Text', wrapped.snippetText)
 
+    def test_description_in_snippet_text(self):
+        portal = self.layer['portal']
+        setRoles(portal, TEST_USER_ID, ['Manager'])
+        doc = portal[portal.invokeFactory('Document', 'doc1',
+                                          title=u"Document 1",
+                                          description=u"Description for "
+                                                       "Document 1")]
+        wrapped = IndexableObjectWrapper(doc, portal.portal_catalog)
+        self.assertIn('Description for Document 1', wrapped.snippetText)
+
     def test_strip_html_tags(self):
         portal = self.layer['portal']
         setRoles(portal, TEST_USER_ID, ['Manager'])

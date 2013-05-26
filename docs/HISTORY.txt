@@ -8,6 +8,9 @@ Changelog
   Use our @@livesearch_reply view instead of livesearch_reply.
   [buchi]
 
+- Include description in snippetText.
+  [buchi]
+
 
 1.0.1 (2013-05-21)
 ------------------

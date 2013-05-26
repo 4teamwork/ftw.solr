@@ -30,6 +30,7 @@ def creator_fullname(obj, **kwargs):
         return member_info['fullname']
     return creator
 
+
 @indexer(Interface)
 def snippet_text(obj, **kwargs):
     """Text for snippets (aka highlighting) in search results.
@@ -37,7 +38,7 @@ def snippet_text(obj, **kwargs):
        shown in search results.
     """
     text = obj.SearchableText()
-    for fieldname in ['id', 'title', 'description', 'searchwords']:
+    for fieldname in ['id', 'title', 'searchwords']:
         field = obj.Schema().getField(fieldname)
         if field is None:
             continue
