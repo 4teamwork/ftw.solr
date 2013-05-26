@@ -65,3 +65,26 @@ class TestSnippetText(TestCase):
         self.assertIn('Body Text', wrapped.snippetText)
         self.assertNotIn('<p>', wrapped.snippetText)
         self.assertNotIn('</p>', wrapped.snippetText)
+
+    def test_searchable_text_indexer(self):
+        from plone.indexer.interfaces import IIndexer
+        from Products.ZCatalog.interfaces import IZCatalog
+        from zope.interface import implements, Interface, alsoProvides
+        from zope.component import provideAdapter, adapts
+        class IMarker(Interface):
+            pass
+        class SearchableText(object):
+            implements(IIndexer)
+            adapts(IMarker, IZCatalog)
+            def __init__(self, context, catalog):
+                pass
+            def __call__(self):
+                return "Spam and eggs"
+        provideAdapter(SearchableText, name="SearchableText")
+
+        portal = self.layer['portal']
+        setRoles(portal, TEST_USER_ID, ['Manager'])
+        doc = portal[portal.invokeFactory('Document', 'doc1')]
+        alsoProvides(doc, IMarker)
+        wrapped = IndexableObjectWrapper(doc, portal.portal_catalog)
+        self.assertIn('Spam and eggs', wrapped.snippetText)

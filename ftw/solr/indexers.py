@@ -1,8 +1,14 @@
 import re
-from zope.component import getMultiAdapter
-from zope.interface import Interface
 from plone.indexer import indexer
+from plone.indexer.interfaces import IIndexer
+from plone.indexer.wrapper import IndexableObjectWrapper
 from Products.CMFCore.utils import getToolByName
+from Products.PluginIndexes.common import safe_callable
+from Products.ZCatalog.interfaces import IZCatalog
+from zope.component import adapts
+from zope.component import getMultiAdapter
+from zope.interface import implements
+from zope.interface import Interface
 
 
 @indexer(Interface)
@@ -31,23 +37,34 @@ def creator_fullname(obj, **kwargs):
     return creator
 
 
-@indexer(Interface)
-def snippet_text(obj, **kwargs):
+class SnippetTextIndexer(object):
     """Text for snippets (aka highlighting) in search results.
        Uses the SearchableText but excludes some fields that should not be
        shown in search results.
     """
-    text = obj.SearchableText()
-    for fieldname in ['id', 'title', 'searchwords']:
-        field = obj.Schema().getField(fieldname)
-        if field is None:
-            continue
+    implements(IIndexer)
+    adapts(Interface, IZCatalog)
 
-        method = field.getIndexAccessor(obj)
-        value = method()
-        text = text.replace(value, '', 1)
+    def __init__(self, context, catalog):
+        self.context = context
+        self.catalog = catalog
 
-    # Strip html tags
-    text = re.sub('<[^<]+?>', '', text)
+    def __call__(self):
+        wrapped = IndexableObjectWrapper(self.context, self.catalog)
+        text = getattr(wrapped, 'SearchableText')
+        if safe_callable(text):
+            text = text()
 
-    return text
+        for fieldname in ['id', 'title', 'searchwords']:
+            field = self.context.Schema().getField(fieldname)
+            if field is None:
+                continue
+
+            method = field.getIndexAccessor(self.context)
+            value = method()
+            text = text.replace(value, '', 1)
+
+        # Strip html tags
+        text = re.sub('<[^<]+?>', '', text)
+
+        return text

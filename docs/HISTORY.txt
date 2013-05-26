@@ -11,6 +11,9 @@ Changelog
 - Include description in snippetText.
   [buchi]
 
+- If there's a SearchableText indexer, use it for snippetText generation.
+  [buchi]
+
 
 1.0.1 (2013-05-21)
 ------------------
