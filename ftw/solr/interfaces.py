@@ -54,6 +54,19 @@ class ILiveSearchSettings(Interface):
     )
 
 
+class ISearchSettings(Interface):
+
+    path_based_breadcrumbs = schema.Bool(
+        title=_(u'Use Path for Breadcrumbs'),
+        default=False,
+    )
+
+    max_breadcrumbs = schema.Int(
+        title=_(u'Max. Breadcrumbs'),
+        default=3,
+    )
+
+
 class IZCMLSolrConnectionConfig(Interface):
     """Solr connection settings configured through ZCML.
     """
