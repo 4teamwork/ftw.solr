@@ -27,7 +27,7 @@ class SearchExtender(object):
 
         extender.ExtentionTextField(
             'searchwords',
-            searchable=True,
+            searchable=False,
             schemata='settings',
             languageIndependent=False,
             write_permission='ftw.solr: Edit search settings',

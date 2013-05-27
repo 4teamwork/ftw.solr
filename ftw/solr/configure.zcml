@@ -23,7 +23,7 @@
     <!-- Indexers -->
     <adapter name="site_section" factory=".indexers.site_section" />
     <adapter name="creator_fullname" factory=".indexers.creator_fullname" />
-    <adapter name="snippetText" factory=".indexers.snippet_text" />
+    <adapter name="snippetText" factory=".indexers.SnippetTextIndexer" />
 
     <!-- Contentlisting adapters for solr response/flares -->
     <adapter

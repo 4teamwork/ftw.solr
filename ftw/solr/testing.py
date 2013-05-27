@@ -20,6 +20,9 @@ class SolrLayer(PloneSandboxLayer):
             '</configure>',
             context=configurationContext)
 
+        import ftw.solr
+        self.loadZCML(name="overrides.zcml", package=ftw.solr)
+
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'ftw.solr:default')
 
