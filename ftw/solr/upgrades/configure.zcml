@@ -21,4 +21,21 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <genericsetup:upgradeStep
+      title="Update registry"
+      description=""
+      source="1001"
+      destination="1002"
+      handler="ftw.solr.upgrades.to1002.Upgrades"
+      profile="ftw.solr:default"
+      />
+  <genericsetup:registerProfile
+      name="1002"
+      title="ftw.solr.upgrades.1002"
+      description=""
+      directory="profiles/1002"
+      for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
 </configure>
