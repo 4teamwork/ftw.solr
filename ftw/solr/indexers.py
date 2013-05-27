@@ -55,7 +55,7 @@ class SnippetTextIndexer(object):
         if safe_callable(text):
             text = text()
 
-        for fieldname in ['id', 'title', 'searchwords']:
+        for fieldname in ['id', 'title']:
             field = self.context.Schema().getField(fieldname)
             if field is None:
                 continue
