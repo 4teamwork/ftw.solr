@@ -21,6 +21,9 @@ Changelog
   breadcrumbs_view for each item.
   [buchi]
 
+- Added support for dexterity content types in snippetText indexer.
+  [buchi]
+
 
 1.0.1 (2013-05-21)
 ------------------
