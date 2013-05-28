@@ -88,3 +88,19 @@ class TestSnippetText(TestCase):
         alsoProvides(doc, IMarker)
         wrapped = IndexableObjectWrapper(doc, portal.portal_catalog)
         self.assertIn('Spam and eggs', wrapped.snippetText)
+
+    def test_non_archetypes_content(self):
+        from Products.CMFCore.interfaces import IContentish
+        from zope.interface import implements
+        class DummyType(object):
+            implements(IContentish)
+            def SearchableText(self_):
+                return "Dummy SearchableText"
+            def Title(self_):
+                return "Dummy"
+            def Schema(self_):
+                self.fail("Not an archetypes object.")
+        portal = self.layer['portal']
+        doc = DummyType()
+        wrapped = IndexableObjectWrapper(doc, portal.portal_catalog)
+        self.assertEquals(" SearchableText", wrapped.snippetText)
