@@ -1,8 +1,11 @@
 Changelog
 =========
 
-1.0.3 (unreleased)
-------------------
+1.1 (unreleased)
+----------------
+
+- Added spellchecking feature (aka "Did you mean ...").
+  [buchi]
 
 - Made respecting the navroot for searches configurable.
   Only if `ISearchSettings.respect_navroot` is set searches will be constrained

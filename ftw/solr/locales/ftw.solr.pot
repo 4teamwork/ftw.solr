@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-04-23 07:35+0000\n"
+"POT-Creation-Date: 2013-05-24 09:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -78,7 +78,7 @@ msgid "help_scale_factor"
 msgstr ""
 
 #. Default: "Specify words for which this item will show up as the first search result. Multiple words can be specified on new lines."
-#: ./ftw/solr/extender.py:36
+#: ./ftw/solr/extender.py:37
 msgid "help_searchwords"
 msgstr ""
 
@@ -113,7 +113,7 @@ msgid "label_scale_factor"
 msgstr ""
 
 #. Default: "Search words"
-#: ./ftw/solr/extender.py:35
+#: ./ftw/solr/extender.py:36
 msgid "label_searchwords"
 msgstr ""
 
@@ -130,5 +130,10 @@ msgstr ""
 #. Default: "LiveSearch &#8595;"
 #: ./ftw/solr/browser/livesearch.py:15
 msgid "legend_livesearch"
+msgstr ""
+
+#. Default: "Did you mean… ${suggestion}"
+#: ./ftw/solr/browser/results.pt:42
+msgid "text_did_you_mean"
 msgstr ""
 
