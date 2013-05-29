@@ -53,7 +53,7 @@ class SearchView(browser.Search):
         if query is None:
             results = []
         else:
-            query.update({'qt': 'hlsearch'});
+            query.update({'qt': 'hlsearch'})
             catalog = getToolByName(self.context, 'portal_catalog')
             try:
                 results = catalog(**query)
@@ -88,7 +88,8 @@ class SearchView(browser.Search):
         """Get suggestions from spellcheck component.
         """
         suggested_terms = []
-        search_terms = [term.lower() for term in self.request.form.get('SearchableText', '').split()]
+        search_terms = [term.lower() for term in self.request.form.get(
+            'SearchableText', '').split()]
         query_params = self.request.form.copy()
         if hasattr(self.solr_response, 'spellcheck'):
             suggestions = self.solr_response.spellcheck.get('suggestions', [])
@@ -97,12 +98,14 @@ class SearchView(browser.Search):
                     suggestion = suggestions[term]['suggestion']
                     query_params['SearchableText'] = suggestion[0]['word']
                     query_string = ''
-                    for k,v in query_params.items():
+                    for k, v in query_params.items():
                         if isinstance(v, list):
-                            query_string += '&'.join(['%s=%s' % (k,vv) for vv in v])
+                            query_string += '&'.join(['%s=%s' % (k, vv) for vv
+                                in v])
                         else:
-                            query_string += '&%s=%s' % (k,v)
-                    suggested_terms.append((suggestion[0]['word'], query_string))
+                            query_string += '&%s=%s' % (k, v)
+                    suggested_terms.append((suggestion[0]['word'],
+                                            query_string))
         return suggested_terms
 
     def breadcrumbs(self, item):
@@ -125,7 +128,8 @@ class SearchView(browser.Search):
                 })
         else:
             obj = item.getObject()
-            view = getMultiAdapter((obj, self.request), name='breadcrumbs_view')
+            view = getMultiAdapter((obj, self.request),
+                                   name='breadcrumbs_view')
             # cut off the item itself
             breadcrumbs = list(view.breadcrumbs())[:-1]
 
