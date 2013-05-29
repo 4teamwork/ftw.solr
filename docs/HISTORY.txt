@@ -1,11 +1,33 @@
 Changelog
 =========
 
-1.0.2 (unreleased)
+1.0.3 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+1.0.2 (2013-05-28)
 ------------------
 
 - Fixed querytarget of livesearch for Plone 4.2 and later.
   Use our @@livesearch_reply view instead of livesearch_reply.
+  [buchi]
+
+- Include description in snippetText.
+  [buchi]
+
+- If there's a SearchableText indexer, use it for snippetText generation.
+  [buchi]
+
+- Make length of breadcrumbs shown in search results configurable.
+  [buchi]
+
+- Added option to generate breadcrumbs from path rather than calling
+  breadcrumbs_view for each item.
+  [buchi]
+
+- Added support for dexterity content types in snippetText indexer.
   [buchi]
 
 
