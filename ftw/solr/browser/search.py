@@ -34,6 +34,22 @@ class SearchView(browser.Search):
     def render_results(self):
         return self.results_template()
 
+    def filter_query(self, query):
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(ISearchSettings)
+        original_query = query.copy()
+
+        query = super(SearchView, self).filter_query(query)
+        if settings.respect_navroot:
+            # If respect_navroot is enabled, return the filtered query unchanged
+            return query
+
+        # Otherwise, if there wasn't a path filter in the query before,
+        # remove the path filter that filter_query() put in.
+        if original_query.get('path') is None:
+            query.pop('path')
+        return query
+
     def results(self, query=None, batch=True, b_size=10, b_start=0):
         """Get properly wrapped search results from the catalog.
         'query' should be a dictionary of catalog parameters.

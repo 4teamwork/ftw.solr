@@ -92,3 +92,36 @@ class TestSearchView(TestCase):
         self.assertEquals(breadcrumbs[2]['Title'], 'path')
         self.assertEquals(breadcrumbs[3]['Title'], 'to')
         self.assertEquals(breadcrumbs[4]['Title'], 'an')
+
+    def test_filter_query_respecting_navroot(self):
+        portal = self.layer['portal']
+        request = self.layer['request']
+
+        # Setup browser layers
+        notify(BeforeTraverseEvent(portal, request))
+
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(ISearchSettings)
+        view = getMultiAdapter((portal, request), name=u'search')
+
+        # When respect_navroot is disabled...
+        settings.respect_navroot = False
+
+        query = view.filter_query({'SearchableText': 'ham'})
+        self.assertEquals(query.get('path'), None,
+            "No path filter should be added if there wasn't one already")
+
+        query = view.filter_query({'SearchableText': 'ham', 'path': '/foo'})
+        self.assertEquals(query.get('path'), '/foo',
+            'Existing path filter should remain unchanged')
+
+        # When respect_navroot is enabled...
+        settings.respect_navroot = True
+
+        query = view.filter_query({'SearchableText': 'ham'})
+        self.assertEquals(query.get('path'), '/plone',
+            'Search should be constrained to navroot')
+
+        query = view.filter_query({'SearchableText': 'ham', 'path': '/foo'})
+        self.assertEquals(query.get('path'), '/foo',
+            'Existing path filter should remain unchanged')
