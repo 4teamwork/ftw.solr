@@ -10,6 +10,7 @@ from plone.app.testing import TEST_USER_ID
 from zope.component import getUtility
 from plone.registry.interfaces import IRegistry
 from ftw.solr.interfaces import ISearchSettings
+from collective.solr.parser import SolrResponse
 
 
 class TestSearchView(TestCase):
@@ -92,3 +93,40 @@ class TestSearchView(TestCase):
         self.assertEquals(breadcrumbs[2]['Title'], 'path')
         self.assertEquals(breadcrumbs[3]['Title'], 'to')
         self.assertEquals(breadcrumbs[4]['Title'], 'an')
+
+    def test_suggestions(self):
+        portal = self.layer['portal']
+        request = self.layer['request']
+
+        # Setup browser layers
+        notify(BeforeTraverseEvent(portal, request))
+        
+        request.form.update({'SearchableText': 'bidlung', })
+        view = getMultiAdapter((portal, request), name=u'search')
+        view.solr_response = SolrResponse()
+        view.solr_response.spellcheck = {}
+        view.solr_response.spellcheck['suggestions'] = {
+            'bidlung': {'endOffset': 246,
+                        'numFound': 5,
+                        'origFreq': 1,
+                        'startOffset': 239,
+                        'suggestion': [{'freq': 2704, 'word': 'bildung'},
+                                       {'freq': 1, 'word': 'bidlungs'},
+                                       {'freq': 1, 'word': 'bidung'},
+                                       {'freq': 561, 'word': 'bildungs'},
+                                       {'freq': 233, 'word': 'bislang'}]},
+            'platform': {'endOffset': 336,
+                         'numFound': 5,
+                         'origFreq': 9,
+                         'startOffset': 328,
+                         'suggestion': [{'freq': 557, 'word': 'plattform'},
+                                        {'freq': 2, 'word': 'platforma'},
+                                        {'freq': 2, 'word': 'platforme'},
+                                        {'freq': 2, 'word': 'platforms'},
+                                        {'freq': 7, 'word': 'plateforme'}]},
+            'correctlySpelled': False,
+        }
+        
+        suggestions = view.suggestions()
+        self.assertEquals(suggestions[0][0], 'bildung')
+        self.assertEquals(suggestions[0][1], '&SearchableText=bildung')
