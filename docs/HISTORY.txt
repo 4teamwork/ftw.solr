@@ -4,7 +4,10 @@ Changelog
 1.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Made respecting the navroot for searches configurable.
+  Only if `ISearchSettings.respect_navroot` is set searches will be constrained
+  to the navigation root (defaults to False).
+  [lgraf]
 
 
 1.0.2 (2013-05-28)
