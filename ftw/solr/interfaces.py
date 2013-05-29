@@ -8,14 +8,14 @@ class IFtwSolrLayer(Interface):
     """
 
 class ILiveSearchSettings(Interface):
-    
+
     grouping = schema.Bool(
         title=_(u'Enable Grouping in LiveSearch'),
         description=_(u'If enabled, livesearch results are grouped by portal '
                        'type.'),
         default=False,
     )
-    
+
     group_by = schema.List(
         title=_(u'Groups'),
         description=_(u'Specify a list of portal types by which livesearch '
@@ -66,6 +66,11 @@ class ISearchSettings(Interface):
         default=3,
     )
 
+    respect_navroot = schema.Bool(
+        title=_(u'Respect Navigation Root'),
+        description=_(u'Constrain searches to navigation root'),
+        default=False,
+    )
 
 class IZCMLSolrConnectionConfig(Interface):
     """Solr connection settings configured through ZCML.
