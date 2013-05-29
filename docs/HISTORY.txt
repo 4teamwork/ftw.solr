@@ -1,10 +1,11 @@
 Changelog
 =========
 
-1.0.3 (unreleased)
-------------------
+1.1 (unreleased)
+----------------
 
-- Nothing changed yet.
+- Added spellchecking feature (aka "Did you mean ...").
+  [buchi]
 
 
 1.0.2 (2013-05-28)
