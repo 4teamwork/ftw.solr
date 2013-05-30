@@ -4,6 +4,9 @@ Changelog
 1.1 (unreleased)
 ----------------
 
+- Only display selected facets list if there actually are selected facets.
+  [lgraf]
+
 - Added spellchecking feature (aka "Did you mean ...").
   [buchi]
 
