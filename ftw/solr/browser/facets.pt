@@ -7,7 +7,7 @@
         Filter
     </h4>
 
-    <ul id="selected-facets">
+    <ul id="selected-facets" tal:condition="selected">
         <li tal:repeat="item selected">
             <span class="facetItemTitle"
                   tal:content="item/title"
