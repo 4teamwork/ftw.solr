@@ -11,7 +11,7 @@
     <i18n:registerTranslations directory="locales" />
     <cmf:registerDirectory name="ftw_solr" />
 
-    <include file="patches.zcml" />
+    <include package=".patches" />
     <include file="permissions.zcml" />
 
     <include package=".browser" />
