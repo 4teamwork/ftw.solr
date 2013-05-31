@@ -37,6 +37,12 @@
 
     <browser:page
         for="*"
+        name="suggest-terms"
+        class=".suggest.SuggestView"
+        permission="zope2.View"/>
+
+    <browser:page
+        for="*"
         name="wordcloud"
         class=".wordcloud.WordCloudView"
         permission="zope2.View"
@@ -51,5 +57,8 @@
         name="jquery.history.js"
         file="jquery.history.js" />
 
+    <browser:resource
+        name="ftw.solr.suggest.js"
+        file="suggest.js" />
 
 </configure>

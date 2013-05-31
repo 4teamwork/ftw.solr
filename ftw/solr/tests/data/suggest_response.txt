@@ -1,0 +1,33 @@
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Content-Length: 478
+
+{
+  "responseHeader": {
+    "status": 0,
+    "QTime": 1
+  },
+  "spellcheck": {
+    "suggestions": [
+      "ab",
+      {
+        "numFound": 9,
+        "startOffset": 0,
+        "endOffset": 2,
+        "suggestion": [
+          "aber",
+          "abs",
+          "abschluss",
+          "abgeschlossen",
+          "ablauf",
+          "abteilung",
+          "abschnitt",
+          "abklarungen",
+          "abgelehnt"
+        ]
+      },
+      "collation",
+      "aber"
+    ]
+  }
+}
