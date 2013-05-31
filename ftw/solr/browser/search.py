@@ -46,7 +46,7 @@ class SearchView(browser.Search):
 
         # Otherwise, if there wasn't a path filter in the query before,
         # remove the path filter that filter_query() put in.
-        if original_query.get('path') is None:
+        if query and original_query.get('path') is None:
             query.pop('path')
         return query
 

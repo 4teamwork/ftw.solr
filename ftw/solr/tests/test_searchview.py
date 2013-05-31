@@ -94,6 +94,19 @@ class TestSearchView(TestCase):
         self.assertEquals(breadcrumbs[3]['Title'], 'to')
         self.assertEquals(breadcrumbs[4]['Title'], 'an')
 
+    def test_calling_search_view(self):
+        portal = self.layer['portal']
+        request = self.layer['request']
+
+        # Setup browser layers
+        notify(BeforeTraverseEvent(portal, request))
+
+        view = getMultiAdapter((portal, request), name=u'search')
+
+        # Calling the @@search view without parameters shouldn't fail
+        view()
+
+
     def test_filter_query_respecting_navroot(self):
         portal = self.layer['portal']
         request = self.layer['request']

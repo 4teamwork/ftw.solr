@@ -4,6 +4,9 @@ Changelog
 1.1 (unreleased)
 ----------------
 
+- Make sure @@search view doesn't fail when called without parameters.
+  [lgraf]
+
 - Only display selected facets list if there actually are selected facets.
   [lgraf]
 
