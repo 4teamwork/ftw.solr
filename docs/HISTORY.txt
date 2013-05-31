@@ -15,6 +15,9 @@ Changelog
   to the navigation root (defaults to False).
   [lgraf]
 
+- Added autocomplete support based on Solr's suggester component.
+  [buchi]
+
 
 1.0.2 (2013-05-28)
 ------------------
