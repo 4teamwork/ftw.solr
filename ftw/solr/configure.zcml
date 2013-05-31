@@ -41,4 +41,12 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <genericsetup:registerProfile
+        name="autocomplete"
+        title="ftw.solr-autocomplete"
+        directory="profiles/autocomplete"
+        description="Enables autocomplete instead of live search"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>

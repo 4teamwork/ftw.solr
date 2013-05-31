@@ -57,5 +57,8 @@
         name="jquery.history.js"
         file="jquery.history.js" />
 
+    <browser:resource
+        name="ftw.solr.suggest.js"
+        file="suggest.js" />
 
 </configure>
