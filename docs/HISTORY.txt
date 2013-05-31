@@ -4,6 +4,10 @@ Changelog
 1.1 (unreleased)
 ----------------
 
+- Reorganized monkey patches.
+  Everything patch-related now lives in the patches subpackage.
+  [lgraf]
+
 - Make sure @@search view doesn't fail when called without parameters.
   [lgraf]
 
