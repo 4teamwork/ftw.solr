@@ -156,7 +156,7 @@ class LiveSearchReplyView(BrowserView):
         if len(results)>self.limit:
             # add a more... row
             self.write('''<li class="LSRow">''')
-            self.write('<a href="%s&%s" style="font-weight:normal">%s</a>' % ('search?SearchableText=' + self.searchterms, self.facet_params, translate(label_show_all, context=self.request)))
+            self.write('<a href="%s&%s" style="font-weight:normal">%s</a>' % ('@@search?SearchableText=' + self.searchterms, self.facet_params, translate(label_show_all, context=self.request)))
             self.write('''</li>''')
         self.write('''</ul>''')
 
@@ -198,7 +198,7 @@ class LiveSearchReplyView(BrowserView):
         if show_more:
             # add a more... row
             self.write('''<dd class="LSRow LSShowMore">''')
-            self.write('<a href="%s&%s" style="font-weight:normal">%s</a>' % ('search?SearchableText=' + self.searchterms, self.facet_params, translate(label_show_all, context=self.request)))
+            self.write('<a href="%s&%s" style="font-weight:normal">%s</a>' % ('@@search?SearchableText=' + self.searchterms, self.facet_params, translate(label_show_all, context=self.request)))
             self.write('''</dd>''')
 
         self.write('''</dl>''')
