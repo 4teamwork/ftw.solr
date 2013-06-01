@@ -4,7 +4,11 @@ Changelog
 1.1.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Also use livesearch request handler in livesearch when grouping is disabled.
+  [buchi]
+
+- Fixed "show more" link in live search to point to @@search view.
+  [buchi]
 
 
 1.1 (2013-05-31)

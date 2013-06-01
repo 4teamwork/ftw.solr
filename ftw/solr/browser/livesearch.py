@@ -87,7 +87,8 @@ class LiveSearchReplyView(BrowserView):
 
         else:
             results = catalog(SearchableText=r, portal_type=friendly_types,
-                              path=path, sort_limit=self.limit)
+                              qt='livesearch', path=path,
+                              sort_limit=self.limit)
 
         self.searchterm_query = '?searchterm=%s'%url_quote_plus(q)
         if not results:
@@ -155,7 +156,7 @@ class LiveSearchReplyView(BrowserView):
         if len(results)>self.limit:
             # add a more... row
             self.write('''<li class="LSRow">''')
-            self.write('<a href="%s&%s" style="font-weight:normal">%s</a>' % ('search?SearchableText=' + self.searchterms, self.facet_params, translate(label_show_all, context=self.request)))
+            self.write('<a href="%s&%s" style="font-weight:normal">%s</a>' % ('@@search?SearchableText=' + self.searchterms, self.facet_params, translate(label_show_all, context=self.request)))
             self.write('''</li>''')
         self.write('''</ul>''')
 
@@ -197,7 +198,7 @@ class LiveSearchReplyView(BrowserView):
         if show_more:
             # add a more... row
             self.write('''<dd class="LSRow LSShowMore">''')
-            self.write('<a href="%s&%s" style="font-weight:normal">%s</a>' % ('search?SearchableText=' + self.searchterms, self.facet_params, translate(label_show_all, context=self.request)))
+            self.write('<a href="%s&%s" style="font-weight:normal">%s</a>' % ('@@search?SearchableText=' + self.searchterms, self.facet_params, translate(label_show_all, context=self.request)))
             self.write('''</dd>''')
 
         self.write('''</dl>''')
