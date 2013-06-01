@@ -87,7 +87,8 @@ class LiveSearchReplyView(BrowserView):
 
         else:
             results = catalog(SearchableText=r, portal_type=friendly_types,
-                              path=path, sort_limit=self.limit)
+                              qt='livesearch', path=path,
+                              sort_limit=self.limit)
 
         self.searchterm_query = '?searchterm=%s'%url_quote_plus(q)
         if not results:
