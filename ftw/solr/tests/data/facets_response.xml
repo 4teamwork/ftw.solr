@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+  <lst name="responseHeader">
+    <int name="status">0</int>
+    <int name="QTime">1</int>
+    <lst name="params">
+      <str name="facet.limit">-1</str>
+      <str name="rows">0</str>
+      <str name="facet">true</str>
+      <arr name="facet.field">
+        <str>type</str>
+        <str>section</str>
+        <str>topics</str>
+      </arr>
+      <str name="indent">10</str>
+      <str name="q">solr</str>
+    </lst>
+  </lst>
+  <result name="response" numFound="400" start="0"/>
+  <lst name="facet_counts">
+    <lst name="facet_queries">
+      <int name="modified:[NOW/DAY TO *]">0</int>
+      <int name="modified:[NOW/DAY-1DAY TO NOW/DAY]">0</int>
+      <int name="modified:[NOW/DAY-7DAYS TO *]">0</int>
+      <int name="modified:[NOW/DAY-1MONTH TO *]">5</int>
+      <int name="modified:[NOW/DAY-1YEAR TO *]">30</int>
+      <int name="modified:[* TO NOW/DAY-1YEAR]">400</int>
+    </lst>
+    <lst name="facet_fields">
+      <lst name="type">
+        <int name="hardware">30</int>
+        <int name="monitor">20</int>
+        <int name="electronics">1</int>
+        <int name="software">1</int>
+      </lst>
+      <lst name="section">
+        <int name="international">10</int>
+      </lst>
+      <lst name="topics">
+        <int name="spam">100</int>
+        <int name="eggs">5</int>
+      </lst>
+    </lst>
+  </lst>
+</response>
