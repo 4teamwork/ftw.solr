@@ -4,7 +4,8 @@ Changelog
 1.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Sort facet fields in the order specified in the Solr control panel.
+  [buchi]
 
 
 1.1.1 (2013-06-01)
