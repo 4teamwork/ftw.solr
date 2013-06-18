@@ -8,6 +8,8 @@ from zope.i18nmessageid import Message
 from collective.solr.browser import facets
 from collective.solr.browser.facets import param, facetParameters
 from collective.solr.interfaces import IFacetTitleVocabularyFactory
+from collective.solr.interfaces import ISolrConnectionConfig
+
 
 FACET_QUERY_POSITIONS = {
     '[NOW/DAY TO *]': 0,
@@ -85,6 +87,16 @@ class SearchFacetsView(facets.SearchFacetsView):
                 ))
             info.append(dict(title=facet_title, counts=sorted(counts,
                 key=lambda x: FACET_QUERY_POSITIONS.get(x['name'], 100))))
+
+        # Sort facets in the order stored in the configuration
+        config = queryUtility(ISolrConnectionConfig)
+        if config is not None:
+            def pos(item):
+                try:
+                    return config.facets.index(item['title'])
+                except ValueError:
+                    return len(config.facets)
+            info.sort(key=pos)
 
         return info
 
