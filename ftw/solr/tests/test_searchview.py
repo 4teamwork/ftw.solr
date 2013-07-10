@@ -125,20 +125,24 @@ class TestSearchView(TestCase):
         self.assertEquals(query.get('path'), None,
             "No path filter should be added if there wasn't one already")
 
-        query = view.filter_query({'SearchableText': 'ham', 'path': '/foo'})
+        request.form.update({'path': '/foo'})
+        query = view.filter_query({'SearchableText': 'ham'})
         self.assertEquals(query.get('path'), '/foo',
             'Existing path filter should remain unchanged')
 
         # When respect_navroot is enabled...
         settings.respect_navroot = True
 
+        del request.form['path']
         query = view.filter_query({'SearchableText': 'ham'})
         self.assertEquals(query.get('path'), '/plone',
             'Search should be constrained to navroot')
 
-        query = view.filter_query({'SearchableText': 'ham', 'path': '/foo'})
+        request.form.update({'path': '/foo'})
+        query = view.filter_query({'SearchableText': 'ham'})
         self.assertEquals(query.get('path'), '/foo',
             'Existing path filter should remain unchanged')
+
 
     def test_suggestions(self):
         portal = self.layer['portal']
