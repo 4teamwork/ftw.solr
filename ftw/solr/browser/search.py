@@ -37,7 +37,6 @@ class SearchView(browser.Search):
     def filter_query(self, query):
         registry = getUtility(IRegistry)
         settings = registry.forInterface(ISearchSettings)
-        original_query = query.copy()
 
         query = super(SearchView, self).filter_query(query)
         if settings.respect_navroot:
@@ -46,7 +45,7 @@ class SearchView(browser.Search):
 
         # Otherwise, if there wasn't a path filter in the query before,
         # remove the path filter that filter_query() put in.
-        if query and original_query.get('path') is None:
+        if query and 'path' in query and 'path' not in self.request.form:
             query.pop('path')
         return query
 
