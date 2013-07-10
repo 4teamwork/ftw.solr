@@ -7,6 +7,10 @@ Changelog
 - Sort facet fields in the order specified in the Solr control panel.
   [buchi]
 
+- Fixed handling of path filter which was always removed when respect_navroot
+  is set to False.
+  [buchi]
+
 
 1.1.1 (2013-06-01)
 ------------------
