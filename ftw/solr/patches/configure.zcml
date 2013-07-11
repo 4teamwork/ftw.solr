@@ -13,6 +13,13 @@
         />
 
     <monkey:patch
+        description="Remove invalid facet field parameters"
+        module="collective.solr.dispatcher"
+        original="cleanupQueryParameters"
+        replacement=".mangler.cleanupQueryParameters"
+        />
+
+    <monkey:patch
         description="Allow more solr query parameters"
         module="collective.solr.dispatcher"
         original="extractQueryParameters"

@@ -11,6 +11,9 @@ Changelog
   is set to False.
   [buchi]
 
+- Handle invalid facet parameters.
+  [buchi]
+
 
 1.1.1 (2013-06-01)
 ------------------

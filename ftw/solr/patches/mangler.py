@@ -1,5 +1,6 @@
 from zope.component import queryUtility
 from collective.solr.interfaces import ISolrConnectionConfig
+from collective.solr.mangler import sort_aliases
 
 
 # Allow more solr parameters
@@ -46,6 +47,40 @@ def extractQueryParameters(args):
             params['rows'] = int(value)
             del args[key]
     return params
+
+# Remove facet.field parameters specifying an non-existing field.
+def cleanupQueryParameters(args, schema):
+    """ validate and possibly clean up the given query parameters using
+        the given solr schema """
+    sort = args.get('sort', None)
+    if sort is not None:
+        field, order = sort.split(' ', 1)
+        if not field in schema:
+            field = sort_aliases.get(field, None)
+        fld = schema.get(field, None)
+        if fld is not None and fld.indexed:
+            args['sort'] = '%s %s' % (field, order)
+        else:
+            del args['sort']
+
+    # Remove facet fields that are not in the solr schema
+    facet_fields = args.get('facet.field', [])
+    if not isinstance(facet_fields, list):
+        facet_fields = [facet_fields]
+    valid_facet_fields = []
+    for facet_field in facet_fields:
+        fld = schema.get(facet_field, None)
+        if fld is not None and fld.indexed:
+            valid_facet_fields.append(facet_field)
+    if valid_facet_fields:
+        args['facet.field'] = valid_facet_fields
+    elif 'facet.field' in args:
+        del args['facet.field']
+
+    if 'facet.field' in args and not 'facet' in args:
+        args['facet'] = 'true'
+
+    return args
 
 
 # Do not extend params['fq'] if it is a list as this would end
