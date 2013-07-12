@@ -47,4 +47,18 @@
         replacement=".search.buildQuery"
         />
 
+    <monkey:patch
+        description="Makes reindexObjectSecurity update solr index as well"
+        class="Products.CMFCore.CMFCatalogAware.CatalogAware"
+        original="reindexObjectSecurity"
+        replacement=".reindex.ftw_solr_CatalogAware_reindexObjectSecurity"
+        />
+
+    <monkey:patch
+        description="Makes reindexObjectSecurity update solr index as well"
+        class="Products.Archetypes.CatalogMultiplex.CatalogMultiplex"
+        original="reindexObjectSecurity"
+        replacement=".reindex.ftw_solr_CatalogMultiplex_reindexObjectSecurity"
+        />
+
 </configure>

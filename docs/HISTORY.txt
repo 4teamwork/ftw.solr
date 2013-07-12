@@ -14,6 +14,9 @@ Changelog
 - Handle invalid facet parameters.
   [buchi]
 
+- Monkey patch reindexObjectSecurity for both CatalogAware and CatalogMultiplex
+  so the relevant security indexes in solr also get updated.
+  [lgraf]
 
 1.1.1 (2013-06-01)
 ------------------
