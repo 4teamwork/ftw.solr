@@ -18,6 +18,13 @@ Changelog
   so the relevant security indexes in solr also get updated.
   [lgraf]
 
+- Only add the default search argument to the query if it's not None and if
+  Solr has a default search field defined in it's schema (which is deprecated
+  in Solr). This mainly prevents logging of 'dropping unknown search attribute'
+  warnings.
+  [buchi]
+
+
 1.1.1 (2013-06-01)
 ------------------
 

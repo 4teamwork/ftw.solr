@@ -14,7 +14,8 @@ def buildQuery(self, default=None, **args):
     logger.debug('building query for "%r", %r', default, args)
     schema = self.getManager().getSchema() or {}
     defaultSearchField = getattr(schema, 'defaultSearchField', None)
-    args[None] = default
+    if default is not None and defaultSearchField is not None:
+        args[None] = default
     query = {}
     for name, value in sorted(args.items()):
         field = schema.get(name or defaultSearchField, None)
