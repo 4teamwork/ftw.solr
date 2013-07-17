@@ -27,6 +27,12 @@ Changelog
 - Escape forward slashes in all query values, not only in paths.
   [buchi]
 
+- Always insert the default 'select' search handler into the query parameters if
+  no 'qt' parameter is provided. We need this because we have to disable the
+  /select search handler in the Solr configuration to be able to select other search
+  handlers by parameter.
+  [buchi]
+
 
 1.1.1 (2013-06-01)
 ------------------
