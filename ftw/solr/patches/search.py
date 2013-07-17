@@ -76,12 +76,13 @@ def buildQuery(self, default=None, **args):
                 value = '+%s' % value
         else:
             value = '+%s:%s' % (name, value)
+
+        # Since Solr 4.0 slashes must be escaped
+        # see: http://wiki.apache.org/solr/SolrQuerySyntax
+        if '/' in value:
+            value = value.replace('/', '\/')
+
         query[name] = value
-    # --- Monkey Patch
-    # Escape slahes in paths
-    for key in ['path_parents', 'path_string']:
-        if key in query:
-            query[key] = query[key].replace('/', '\/')
-    # --- / Monkey Patch
+
     logger.debug('built query "%s"', query)
     return query

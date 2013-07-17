@@ -24,6 +24,9 @@ Changelog
   warnings.
   [buchi]
 
+- Escape forward slashes in all query values, not only in paths.
+  [buchi]
+
 
 1.1.1 (2013-06-01)
 ------------------
