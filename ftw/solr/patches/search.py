@@ -53,6 +53,8 @@ def buildQuery(self, default=None, **args):
                 query[name] = ''.join(value)
             else:
                 query[name] = '(%s)' % ' OR '.join(value)
+            if '/' in query[name]:
+                query[name] = query[name].replace('/', '\\/')
             continue
         elif isinstance(value, basestring):
             if field.class_ == 'solr.TextField':
@@ -80,7 +82,7 @@ def buildQuery(self, default=None, **args):
         # Since Solr 4.0 slashes must be escaped
         # see: http://wiki.apache.org/solr/SolrQuerySyntax
         if '/' in value:
-            value = value.replace('/', '\/')
+            value = value.replace('/', '\\/')
 
         query[name] = value
 
