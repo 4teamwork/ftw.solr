@@ -43,3 +43,10 @@ class TestBuildQuery(TestCase):
     def test_slash_in_searchabletext(self):
         self.assertEquals('+SearchableText:spam\\/eggs',
                           self.build_query(SearchableText='spam/eggs'))
+
+    def test_queries_with_path_and_depth_should_be_escaped(self):
+        self.assertEquals(
+            '+path_depth:[4 TO 6] AND +path_parents:\\/spam\\/and\\/eggs',
+            self.build_query(
+                path_parents=set(['+path_depth:[4 TO 6] AND '
+                                  '+path_parents:/spam/and/eggs'])))
