@@ -39,3 +39,7 @@ class TestBuildQuery(TestCase):
     def test_path_list_query(self):
         self.assertEquals('+path_parents:(\\/spam OR \\/eggs)',
                           self.build_query(path_parents=['/spam', '/eggs']))
+
+    def test_slash_in_searchabletext(self):
+        self.assertEquals('+SearchableText:spam\\/eggs',
+                          self.build_query(SearchableText='spam/eggs'))
