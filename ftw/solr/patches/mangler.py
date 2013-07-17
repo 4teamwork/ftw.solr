@@ -46,6 +46,16 @@ def extractQueryParameters(args):
         elif key == 'b_size':
             params['rows'] = int(value)
             del args[key]
+
+    # Add default search handler if no search handler is specified in the 
+    # query. With Solr 4 we have to disable the /select search handler to be
+    # able to select another search handler with the 'qt' parameter. However
+    # queries without a 'qt' parameter do no longer work.
+    # TODO: In the future we should extend c.solr to handle multiple search
+    # handlers by URL.
+    if 'qt' not in params:
+        params['qt'] = 'select'
+
     return params
 
 # Remove facet.field parameters specifying an non-existing field.
