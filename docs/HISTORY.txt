@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1.2 (unreleased)
+1.1.2 (2013-07-18)
 ------------------
 
 - Sort facet fields in the order specified in the Solr control panel.
