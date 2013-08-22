@@ -4,7 +4,8 @@ Changelog
 1.1.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- The searchbox_currentfolder_only checkbox remembers the state after
+  a searchrequest.
 
 
 1.1.2 (2013-07-18)

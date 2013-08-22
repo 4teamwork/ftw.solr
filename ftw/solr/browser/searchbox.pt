@@ -29,7 +29,8 @@
                    class="noborder"
                    type="checkbox"
                    name="path"
-                   tal:attributes="value view/folder_path"
+                   tal:attributes="value view/folder_path;
+                                   checked python:request.form.get('path', '') and 'checked' or ''"
                    />
             <label for="searchbox_currentfolder_only"
                    i18n:translate="label_searchbox_currentfolder_only"
