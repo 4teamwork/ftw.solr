@@ -2,7 +2,7 @@
      i18n:domain="plone">
     <form name="searchform"
           action="@@search"
-          tal:attributes="action string:${view/site_url}/@@search">
+          tal:attributes="action python:hasattr(context, 'absolute_url') and '%s/@@search' % context.absolute_url() or '%s/@@search' % view.site_url()">
 
         <label for="searchGadget" class="hiddenStructure"
                     i18n:translate="text_search">Search Site</label>
@@ -29,7 +29,8 @@
                    class="noborder"
                    type="checkbox"
                    name="path"
-                   tal:attributes="value view/folder_path"
+                   tal:attributes="value view/folder_path;
+                                   checked python:request.form.get('path', '') and 'checked' or ''"
                    />
             <label for="searchbox_currentfolder_only"
                    i18n:translate="label_searchbox_currentfolder_only"
