@@ -6,6 +6,8 @@ from ftw.solr.interfaces import IZCMLSolrConnectionConfig
 from logging import getLogger
 from zope.component import getUtility, queryUtility
 from zope.interface import implements
+from collective.solr.parser import SolrField
+
 
 logger = getLogger('ftw.solr.manager')
 
@@ -42,6 +44,14 @@ class FtwSolrConnection(SolrConnection):
         update="set" attribute on each field except the uniqueKey.
         """
         schema = self.get_schema()
+
+        # Warn about fields that aren't stored
+        for key in schema.keys():
+            field = schema[key]
+            if isinstance(field, SolrField) and field.get('stored') != True:
+                logger.warn("Field '%s' is not stored! It will be dropped "
+                            "from the document upon updates!" % key)
+
         uniqueKey = schema.get('uniqueKey', None)
         if uniqueKey is None:
             raise Exception("Could not get uniqueKey from Solr schema")
