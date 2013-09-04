@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<componentregistry>
+  <utilities>
+    <utility
+      interface="collective.solr.interfaces.ISolrIndexQueueProcessor"
+      name="solr"
+      factory="collective.solr.indexerr.SolrIndexProcessor"
+      remove="True"/>
+    <utility
+      interface="collective.solr.interfaces.ISolrIndexQueueProcessor"
+      name="ftw-solr"
+      factory="ftw.solr.index_processor.FtwSolrIndexProcessor"/>
+  </utilities>
+</componentregistry>
