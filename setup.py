@@ -4,8 +4,9 @@ import os
 version = '1.2.dev0'
 
 tests_require = [
-    'plone.app.testing',
     'ftw.builder',
+    'plone.app.dexterity',
+    'plone.app.testing',
     ]
 
 setup(name='ftw.solr',

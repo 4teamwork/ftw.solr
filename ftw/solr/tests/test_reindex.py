@@ -23,9 +23,12 @@ class TestReindexingSecurity(TestCase):
     def get_indexing_queue_length(self):
         return getQueue().length()
 
+    def folder_builder(self):
+        return Builder('folder')
+
     def test_indexes_are_updated_recursively(self):
-        folder = create(Builder('folder'))
-        subfolder = create(Builder('folder').within(folder))
+        folder = create(self.folder_builder())
+        subfolder = create(self.folder_builder().within(folder))
 
         self.assertEquals(
             {'folder': ['Anonymous'],
@@ -47,11 +50,11 @@ class TestReindexingSecurity(TestCase):
              'subfolder': set(Catalog().get_allowed_roles_and_users(subfolder))})
 
     def test_resursive_indexing_is_not_done_when_subobjects_do_not_acquire(self):
-        folder = create(Builder('folder'))
+        folder = create(self.folder_builder())
         folder.manage_permission('View', roles=['Reader'], acquire=False)
         folder.reindexObjectSecurity()
 
-        subfolder = create(Builder('folder').within(folder))
+        subfolder = create(self.folder_builder().within(folder))
         subfolder.manage_permission('View', roles=['Reader'], acquire=False)
         subfolder.reindexObjectSecurity()
         transaction.commit()
@@ -78,3 +81,9 @@ class TestReindexingSecurity(TestCase):
 
             {'folder': Catalog().get_allowed_roles_and_users(folder),
              'subfolder': Catalog().get_allowed_roles_and_users(subfolder)})
+
+
+class TestDexterityReindexingSecurity(TestReindexingSecurity):
+
+    def folder_builder(self):
+        return Builder('dexterity folder')

@@ -4,6 +4,11 @@ Changelog
 1.2 (unreleased)
 ------------------
 
+- Improve reindexing object security performance.
+  We now walk down the children and stop walking down if the security indexes
+  of an object have not changed.
+  [jone]
+
 - Added support for atomic updates.
   This means whenever possible, only the necessary / specified attributes get updated
   in Solr, and more importantly, re-indexed by Plone's indexers.

@@ -6,8 +6,10 @@ from plone.app.testing import IntegrationTesting
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import applyProfile
+from plone.dexterity.fti import DexterityFTI
 from plone.testing import z2
 from zope.configuration import xmlconfig
+import ftw.solr.tests.builders
 
 
 class SolrLayer(PloneSandboxLayer):
@@ -29,7 +31,14 @@ class SolrLayer(PloneSandboxLayer):
         z2.installProduct(app, 'collective.indexing')
 
     def setUpPloneSite(self, portal):
+        applyProfile(portal, 'plone.app.dexterity:default')
         applyProfile(portal, 'ftw.solr:default')
+
+        fti = DexterityFTI('DexterityFolder',
+                           klass="plone.dexterity.content.Container",
+                           global_allow=True)
+        portal.portal_types._setObject('ClassificationFTI', fti)
+        fti.lookupSchema()
 
 
 SOLR_FIXTURE = SolrLayer()

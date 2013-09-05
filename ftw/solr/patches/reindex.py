@@ -107,28 +107,8 @@ def ftw_solr_CatalogAware_reindexObjectSecurity(self, skip_self=False):
     catalog = self._getCatalogTool()
     if catalog is None:
         return
-    path = '/'.join(self.getPhysicalPath())
 
-    # XXX if _getCatalogTool() is overriden we will have to change
-    # this method for the sub-objects.
-    for brain in catalog.unrestrictedSearchResults(path=path):
-        brain_path = brain.getPath()
-        if brain_path == path and skip_self:
-            continue
-        # Get the object
-        ob = brain._unrestrictedGetObject()
-        if ob is None:
-            # BBB: Ignore old references to deleted objects.
-            # Can happen only when using
-            # catalog-getObject-raises off in Zope 2.8
-            logger.warning("reindexObjectSecurity: Cannot get %s from "
-                           "catalog", brain_path)
-            continue
-        # Recatalog with the same catalog uid.
-        s = getattr(ob, '_p_changed', 0)
-
-        # Also update relevant security indexes in solr
-        indexer = getQueue()
-        indexer.reindex(ob, self._cmf_security_indexes)
-
-        if s is None: ob._p_deactivate()
+    s = getattr(self, '_p_changed', 0)
+    recursive_index_security(catalog, self)
+    if s is None:
+        self._p_deactivate()
