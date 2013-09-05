@@ -57,4 +57,22 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <genericsetup:upgradeStep
+      title="Add utilities for atomic updates"
+      description=""
+      source="1003"
+      destination="1004"
+      handler="ftw.solr.upgrades.to1004.RegisterLocalUtilities"
+      profile="ftw.solr:default"
+      />
+
+  <genericsetup:registerProfile
+      name="1004"
+      title="ftw.solr.upgrades.1004"
+      description=""
+      directory="profiles/1004"
+      for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
 </configure>

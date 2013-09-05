@@ -2,16 +2,6 @@
 <componentregistry>
   <utilities>
     <utility
-      interface="collective.solr.interfaces.ISolrConnectionManager"
-      factory="collective.solr.manager.SolrConnectionManager"
-      remove="True"/>
-    <utility
-      interface="collective.solr.interfaces.ISolrConnectionManager"
-      factory="ftw.solr.manager.SolrConnectionManager"/>
-
-    <!-- Replace the SolrIndexQueueProcessor with our own in order to
-    handle atomic updates -->
-    <utility
       interface="collective.solr.interfaces.ISolrIndexQueueProcessor"
       name="solr"
       factory="collective.solr.indexerr.SolrIndexProcessor"
