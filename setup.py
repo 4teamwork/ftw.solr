@@ -4,6 +4,8 @@ import os
 version = '1.2.dev0'
 
 tests_require = [
+    'ftw.builder',
+    'plone.app.dexterity',
     'plone.app.testing',
     ]
 
