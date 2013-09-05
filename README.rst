@@ -8,6 +8,37 @@ Introduction
 Features
 ========
 
+Atomic updates (aka partial updates)
+------------------------------------
+
+Since Solr 4.0 it's possible to update fields in a Solr document individually,
+sending only the fields that actually changed, whereas before it was necessary
+to send *all* the fields again every time something changed (and therefore ask
+Plone again to index them all, causing a massive performance penalty).
+
+ftw.solr supports atomic updates for Solr version 4.1 and above. In order for
+atomic updates to work, three things must be taken care of:
+
+- An `<updateLog />` must be enabled in `solrconfig.xml`. If it's missing,
+  Solr will reject any update messages that contain atomic update instructions.
+- A `_version_` field must be defined in the Solr schema.
+- All fields in the Solr schema must be defined with `stored=True`
+
+In the stock Solr configs from 4.1 upwards `<updateLog />` and the
+`_version_` field are already configured correctly. If you're using
+`collective.recipe.solrinstance`, check the generated `solrconfig.xml`, it might
+not have been updated for the use of atomic updates yet.
+
+If there's a field in the Solr schema that's *not* `stored=True`, it will get
+**dropped** from documents in Solr on the next update to that document.
+Indexing won't fail, but that field simply won't have any content any more.
+
+Apart from those prerequisites, there's nothing more to be done in order to use
+atomic updates. `ftw.solr` will automatically perform atomic updates whenever
+possible.
+
+Also see http://wiki.apache.org/solr/Atomic_Updates
+
 Highlighting (aka Snippets)
 ---------------------------
 
