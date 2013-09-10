@@ -17,6 +17,9 @@ Changelog
   See http://wiki.apache.org/solr/Atomic_Updates for details.
   [lgraf]
 
+- Make sure values in search patterns are all lowercase.
+  [buchi]
+
 
 1.1.2 (2013-07-18)
 ------------------
