@@ -56,8 +56,7 @@ def mangleQuery(keywords, config, schema):
                 value = value.lower()
                 base_value = value
                 if simple_term: # use prefix/wildcard search
-                    value = '(%s* OR %s)' % (prepare_wildcard(value),
-                                             value.lower())
+                    value = '(%s* OR %s)' % (prepare_wildcard(value), value)
                 elif isWildCard(value):
                     value = prepare_wildcard(value)
                     base_value = quote(value.replace('*', '').replace('?', ''))
