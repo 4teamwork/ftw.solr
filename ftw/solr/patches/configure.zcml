@@ -27,17 +27,10 @@
         />
 
     <monkey:patch
-        description="Treat search terms ending with a digit as simple"
-        module="collective.solr.mangler"
-        original="isSimpleTerm"
-        replacement=".utils.isSimpleTerm"
-        />
-
-    <monkey:patch
-        description="Treat search terms ending with a digit as simple"
-        module="collective.solr.mangler"
-        original="isSimpleSearch"
-        replacement=".utils.isSimpleSearch"
+        description="Make sure values in search patterns are all lowercase"
+        module="collective.solr.dispatcher"
+        original="mangleQuery"
+        replacement=".mangler.extractQueryParameters"
         />
 
     <monkey:patch

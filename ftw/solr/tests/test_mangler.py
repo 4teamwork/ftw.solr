@@ -2,6 +2,45 @@ from unittest import TestCase
 from ftw.solr.patches.mangler import cleanupQueryParameters
 from ftw.solr.patches.mangler import extractQueryParameters
 from collective.solr.parser import SolrSchema, SolrField
+from ftw.solr.patches.mangler import mangleQuery
+from collective.solr.interfaces import ISolrConnectionConfig
+from collective.solr.manager import SolrConnectionConfig
+from collective.solr.tests.utils import getData
+from zope.component import provideUtility, getUtility
+
+
+class TestQueryMangler(TestCase):
+
+    def setUp(self):
+        provideUtility(SolrConnectionConfig(), ISolrConnectionConfig)
+        xml = getData('plone_schema.xml')
+        xml = xml[xml.find('<schema'):]
+        self.schema = SolrSchema(xml.strip())
+
+    def test_search_pattern_base_value_is_lowercase(self):
+        config = getUtility(ISolrConnectionConfig)
+        config.search_pattern = '{value} OR searchwords:{base_value}^1000'
+
+        query = dict(SearchableText='Pass')
+        mangleQuery(query, config, self.schema)
+        self.assertEquals(
+            {'SearchableText': set(['(pass* OR pass) OR searchwords:pass^1000'])},
+            query
+        )
+
+        query = dict(SearchableText='Pass*')
+        mangleQuery(query, config, self.schema)
+        self.assertEquals(
+            {'SearchableText': set(['pass* OR searchwords:pass^1000'])},
+            query
+        )
+
+        query = dict(SearchableText='Pass port')
+        mangleQuery(query, config, self.schema)
+        self.assertEquals(
+            {'SearchableText': set(['(pass port) OR searchwords:pass port^1000'])},
+            query
+        )
 
 
 class TestQueryParameters(TestCase):
