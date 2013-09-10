@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.2 (unreleased)
-------------------
+1.2 (2013-09-10)
+----------------
 
 - Improve reindexing object security performance.
   We now walk down the children and stop walking down if the security indexes
