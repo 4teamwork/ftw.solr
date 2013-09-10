@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2.1 (unreleased)
+1.2.1 (2013-09-10)
 ------------------
 
 - Fixed monkey patch of mangleQuery.
