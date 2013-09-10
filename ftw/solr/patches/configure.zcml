@@ -30,7 +30,7 @@
         description="Make sure values in search patterns are all lowercase"
         module="collective.solr.dispatcher"
         original="mangleQuery"
-        replacement=".mangler.extractQueryParameters"
+        replacement=".mangler.mangleQuery"
         />
 
     <monkey:patch

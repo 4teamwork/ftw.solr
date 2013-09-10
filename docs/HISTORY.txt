@@ -4,7 +4,8 @@ Changelog
 1.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed monkey patch of mangleQuery.
+  [buchi]
 
 
 1.2 (2013-09-10)
