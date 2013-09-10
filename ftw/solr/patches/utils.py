@@ -1,3 +1,6 @@
+# Modified implementation from c.solr.utils:
+# Treat search terms ending with a digit as simple
+
 from re import compile, UNICODE
 
 
