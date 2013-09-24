@@ -60,7 +60,7 @@ class LiveSearchReplyView(BrowserView):
         r = quote_bad_chars(q)+'*'
         self.searchterms = url_quote_plus(r)
 
-        
+
         site_encoding = plone_utils.getSiteEncoding()
         if path is None:
             path = getNavigationRoot(context)
@@ -98,7 +98,7 @@ class LiveSearchReplyView(BrowserView):
             self.write('''<div class="LSIEFix">''')
             self.write('''<div id="LSNothingFound">%s</div>''' % (
                 translate(label_no_results_found, context=self.request)))
-            self.write('''<div class="LSRow">''')
+            self.write('''<div class="LSRow advancedSearch">''')
             self.write('<a href="search_form" style="font-weight:normal">%s</a'
                 '>' % translate(label_advanced_search, context=self.request))
             self.write('''</div>''')
@@ -174,7 +174,7 @@ class LiveSearchReplyView(BrowserView):
                     if result.portal_type in self.useViewAction:
                         itemUrl += '/view'
                     itemUrl = itemUrl + self.searchterm_query
-                    
+
                     self.write('''<dd class="LSRow">''')
                     self.write(icon.html_tag() or '')
                     full_title = safe_unicode(self.pretty_title_or_id(result))
@@ -194,7 +194,7 @@ class LiveSearchReplyView(BrowserView):
                     self.write('''</dd>''')
                 if len(results) > self.settings.group_limit:
                     show_more = True
-        
+
         if show_more:
             # add a more... row
             self.write('''<dd class="LSRow LSShowMore">''')
