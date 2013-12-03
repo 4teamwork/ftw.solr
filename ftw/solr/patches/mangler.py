@@ -11,6 +11,48 @@ from ftw.solr.patches.utils import isSimpleTerm
 from ftw.solr.patches.utils import isSimpleSearch
 
 
+def strip_wildcards(value):
+    return value.replace('*', '').replace('?', '')
+
+
+def strip_parens(value):
+    return value.strip('()')
+
+
+def leading_wildcards(base_value):
+    """Prepend wildcards to each term for a string of search terms.
+    (foo bar baz) -> (*foo *bar *baz)
+    """
+    base_value = strip_parens(strip_wildcards(base_value))
+    search_terms = base_value.split()
+    value = ' '.join(['*%s' % term for term in search_terms])
+    return "(%s)" % prepare_wildcard(value)
+
+
+def trailing_wildcards(base_value):
+    """Append wildcards to each term for a string of search terms.
+    (foo bar baz) -> (foo* bar* baz*)
+    """
+    base_value = strip_parens(strip_wildcards(base_value))
+    search_terms = base_value.split()
+    value = ' '.join(['%s*' % term for term in search_terms])
+    return "(%s)" % prepare_wildcard(value)
+
+
+def mangle_searchable_text_query(value, pattern):
+    value = value.lower()
+    base_value = value
+    if isSimpleTerm(value): # use prefix/wildcard search
+        value = '(%s* OR %s)' % (prepare_wildcard(value), value)
+    elif isWildCard(value):
+        value = prepare_wildcard(value)
+        base_value = quote(value.replace('*', '').replace('?', ''))
+    # simple queries use custom search pattern
+    value = pattern.format(value=quote(value),
+        base_value=base_value)
+    return value, base_value
+
+
 def mangleQuery(keywords, config, schema):
     """ translate / mangle query parameters to replace zope specifics
         with equivalent constructs for solr """
@@ -51,21 +93,13 @@ def mangleQuery(keywords, config, schema):
         args = extras.get(key, {})
         if key == 'SearchableText':
             pattern = getattr(config, 'search_pattern', '')
-            simple_term = isSimpleTerm(value)
             if pattern and isSimpleSearch(value):
-                value = value.lower()
-                base_value = value
-                if simple_term: # use prefix/wildcard search
-                    value = '(%s* OR %s)' % (prepare_wildcard(value), value)
-                elif isWildCard(value):
-                    value = prepare_wildcard(value)
-                    base_value = quote(value.replace('*', '').replace('?', ''))
-                # simple queries use custom search pattern
-                value = pattern.format(value=quote(value),
-                    base_value=base_value)
+                value, base_value = mangle_searchable_text_query(
+                    value,
+                    pattern)
                 keywords[key] = set([value])    # add literal query parameter
                 continue
-            elif simple_term: # use prefix/wildcard search
+            elif isSimpleTerm(value): # use prefix/wildcard search
                 keywords[key] = '(%s* OR %s)' % (
                     prepare_wildcard(value), value)
                 continue
