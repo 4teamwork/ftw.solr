@@ -21,28 +21,28 @@ class TestQueryMangler(TestCase):
         xml = xml[xml.find('<schema'):]
         self.schema = SolrSchema(xml.strip())
 
-    def test_search_pattern_base_value_is_lowercase(self):
+    def test_search_pattern_value_is_lowercase(self):
         config = getUtility(ISolrConnectionConfig)
-        config.search_pattern = '{value} OR searchwords:{base_value}^1000'
+        config.search_pattern = 'Title:{value}'
 
         query = dict(SearchableText='Pass')
         mangleQuery(query, config, self.schema)
         self.assertEquals(
-            {'SearchableText': set(['pass OR searchwords:pass^1000'])},
+            {'SearchableText': set(['Title:pass'])},
             query
         )
 
         query = dict(SearchableText='Pass*')
         mangleQuery(query, config, self.schema)
         self.assertEquals(
-            {'SearchableText': set(['pass OR searchwords:pass^1000'])},
+            {'SearchableText': set(['Title:pass'])},
             query
         )
 
         query = dict(SearchableText='Pass port')
         mangleQuery(query, config, self.schema)
         self.assertEquals(
-            {'SearchableText': set(['(pass port) OR searchwords:pass port^1000'])},
+            {'SearchableText': set(['Title:(pass port)'])},
             query
         )
 
@@ -113,15 +113,7 @@ class TestMangleSearchableTextQuery(TestCase):
 
     def test_simple_search_results_in_simple_pattern_substitution(self):
         orig_query = 'foo bar'
-        pattern = '{value} OR searchwords:{base_value}^1000'
-        mangled_query = mangle_searchable_text_query(orig_query, pattern)
-        self.assertEquals(
-            '(foo bar) OR searchwords:foo bar^1000',
-            mangled_query)
-
-    def test_simple_search_drops_wildcards_for_base_value_and_quotes_it(self):
-        orig_query = 'foo* bar*'
-        pattern = '{base_value}'
+        pattern = '{value}'
         mangled_query = mangle_searchable_text_query(orig_query, pattern)
         self.assertEquals(
             '(foo bar)',

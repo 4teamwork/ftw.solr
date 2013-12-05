@@ -5,7 +5,6 @@ from collective.solr.interfaces import ISolrConnectionConfig
 from collective.solr.mangler import iso8601date
 from collective.solr.mangler import sort_aliases, query_args, ignored, ranges
 from collective.solr.queryparser import quote
-from collective.solr.utils import isWildCard
 from collective.solr.utils import prepare_wildcard
 from ftw.solr.patches.utils import isSimpleTerm
 from ftw.solr.patches.utils import isSimpleSearch
@@ -52,9 +51,6 @@ def trailing_wildcards(value):
 
 def mangle_searchable_text_query(value, pattern):
     value = value.lower()
-    base_value = value
-    if isWildCard(value):
-        base_value = quote(value.replace('*', '').replace('?', ''))
 
     value_lwc = leading_wildcards(value)
     value_twc = trailing_wildcards(value)
@@ -62,7 +58,6 @@ def mangle_searchable_text_query(value, pattern):
 
     value = pattern.format(
         value=quote(value),
-        base_value=base_value,
         value_lwc=value_lwc,
         value_twc=value_twc)
     return value
