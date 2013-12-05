@@ -11,6 +11,45 @@ from ftw.solr.patches.utils import isSimpleTerm
 from ftw.solr.patches.utils import isSimpleSearch
 
 
+def strip_wildcards(value):
+    return value.replace('*', '').replace('?', '')
+
+
+def strip_parens(value):
+    return value.strip('()')
+
+
+def searchterms_from_value(value):
+    """Turn a search query into a list of search terms, removing
+    parentheses, wildcards and quoting any special characters.
+    """
+    # remove any parens and wildcards, so quote() doesn't try to escape them
+    value = strip_wildcards(strip_parens(value))
+    # then quote the value
+    value = quote(value)
+    # and again strip parentheses that might have been added by quote()
+    value = strip_parens(value)
+    return value.split()
+
+
+def leading_wildcards(value):
+    """Prepend wildcards to each term for a string of search terms.
+    (foo bar baz) -> (*foo *bar *baz)
+    """
+    search_terms = searchterms_from_value(value)
+    value = ' '.join(['*%s' % term for term in search_terms])
+    return "(%s)" % prepare_wildcard(value)
+
+
+def trailing_wildcards(value):
+    """Append wildcards to each term for a string of search terms.
+    (foo bar baz) -> (foo* bar* baz*)
+    """
+    search_terms = searchterms_from_value(value)
+    value = ' '.join(['%s*' % term for term in search_terms])
+    return "(%s)" % prepare_wildcard(value)
+
+
 def mangle_searchable_text_query(value, pattern):
     value = value.lower()
     base_value = value

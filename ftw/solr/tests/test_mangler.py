@@ -4,8 +4,11 @@ from collective.solr.parser import SolrSchema, SolrField
 from collective.solr.tests.utils import getData
 from ftw.solr.patches.mangler import cleanupQueryParameters
 from ftw.solr.patches.mangler import extractQueryParameters
+from ftw.solr.patches.mangler import leading_wildcards
 from ftw.solr.patches.mangler import mangleQuery
 from ftw.solr.patches.mangler import mangle_searchable_text_query
+from ftw.solr.patches.mangler import searchterms_from_value
+from ftw.solr.patches.mangler import trailing_wildcards
 from unittest import TestCase
 from zope.component import provideUtility, getUtility
 
@@ -102,6 +105,60 @@ class TestMangleSearchableTextQuery(TestCase):
         self.assertEquals(
             '(foo* bar*) OR searchwords:(foo bar)^1000',
             mangled_query)
+
+
+class TestWildcardFunctions(TestCase):
+
+    def test_searchterms_from_value_strips_wildcards(self):
+        value = '*foo bar* b*az'
+        terms = searchterms_from_value(value)
+        self.assertEquals(['foo', 'bar', 'baz'], terms)
+
+    def test_searchterms_from_value_quotes_terms(self):
+        value = 'foo&&bar'
+        terms = searchterms_from_value(value)
+        self.assertEquals(['foo\\&&bar'], terms)
+
+    def test_searchterms_from_value_strips_parentheses(self):
+        value = '(foo bar)'
+        terms = searchterms_from_value(value)
+        self.assertEquals(['foo', 'bar'], terms)
+
+        value = ')foo bar('
+        terms = searchterms_from_value(value)
+        self.assertEquals(['foo', 'bar'], terms)
+
+    def test_leading_wildcards_prepends_wildcards_to_all_terms(self):
+        terms = 'foo bar qux'
+        result = leading_wildcards(terms)
+        self.assertEquals('(*foo *bar *qux)', result)
+
+    def test_leading_wildcards_drops_existing_wildcards(self):
+        terms = '*foo bar* qu*x'
+        result = leading_wildcards(terms)
+        self.assertEquals('(*foo *bar *qux)', result)
+
+    def test_leading_wildcards_adds_parentheses(self):
+        terms = 'foo bar'
+        result = leading_wildcards(terms)
+        self.assertTrue(result.startswith('('))
+        self.assertTrue(result.endswith(')'))
+
+    def test_trailing_wildcards_prepends_wildcards_to_all_terms(self):
+        terms = 'foo bar qux'
+        result = trailing_wildcards(terms)
+        self.assertEquals('(foo* bar* qux*)', result)
+
+    def test_trailing_wildcards_drops_existing_wildcards(self):
+        terms = '*foo bar* qu*x'
+        result = trailing_wildcards(terms)
+        self.assertEquals('(foo* bar* qux*)', result)
+
+    def test_trailing_wildcards_adds_parentheses(self):
+        terms = 'foo bar'
+        result = trailing_wildcards(terms)
+        self.assertTrue(result.startswith('('))
+        self.assertTrue(result.endswith(')'))
 
 
 class TestQueryParameters(TestCase):
