@@ -28,7 +28,7 @@ class TestQueryMangler(TestCase):
         query = dict(SearchableText='Pass')
         mangleQuery(query, config, self.schema)
         self.assertEquals(
-            {'SearchableText': set(['(pass* OR pass) OR searchwords:pass^1000'])},
+            {'SearchableText': set(['pass OR searchwords:pass^1000'])},
             query
         )
 
@@ -46,14 +46,14 @@ class TestQueryMangler(TestCase):
             query
         )
 
-    def test_simple_terms_result_in_value_with_appended_wildcard(self):
+    def test_simple_terms_result_in_value_without_wildcards(self):
         config = getUtility(ISolrConnectionConfig)
         config.search_pattern = '{value}'
 
         query = dict(SearchableText='foo')
         mangleQuery(query, config, self.schema)
         self.assertEquals(
-            {'SearchableText': set(['(foo* OR foo)'])},
+            {'SearchableText': set(['foo'])},
             query
         )
 
@@ -79,15 +79,36 @@ class TestQueryMangler(TestCase):
             query
         )
 
+    def test_simple_terms_are_handled_the_same_as_simple_searches(self):
+        config = getUtility(ISolrConnectionConfig)
+        config.search_pattern = '{value} OR {value_lwc} OR {value_twc}'
+
+        # Simple term
+        query = dict(SearchableText='foo')
+        mangleQuery(query, config, self.schema)
+        self.assertEquals(
+            {'SearchableText': set(['foo OR (*foo) OR (foo*)'])},
+            query
+        )
+
+        # Simple search
+        query = dict(SearchableText='foo bar')
+        mangleQuery(query, config, self.schema)
+        self.assertEquals(
+            {'SearchableText': set(
+                ['(foo bar) OR (*foo *bar) OR (foo* bar*)'])},
+            query
+        )
+
 
 class TestMangleSearchableTextQuery(TestCase):
 
-    def test_simple_terms_result_in_basic_wildcard_search(self):
+    def test_simple_terms_value_contains_no_wildcards(self):
         orig_query = 'foo'
-        pattern = '{value} OR searchwords:{base_value}^1000'
+        pattern = '{value}'
         mangled_query = mangle_searchable_text_query(orig_query, pattern)
         self.assertEquals(
-            '(foo* OR foo) OR searchwords:foo^1000',
+            'foo',
             mangled_query)
 
     def test_simple_search_results_in_simple_pattern_substitution(self):

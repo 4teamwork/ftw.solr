@@ -53,9 +53,7 @@ def trailing_wildcards(value):
 def mangle_searchable_text_query(value, pattern):
     value = value.lower()
     base_value = value
-    if isSimpleTerm(value): # use prefix/wildcard search
-        value = '(%s* OR %s)' % (prepare_wildcard(value), value)
-    elif isWildCard(value):
+    if isWildCard(value):
         value = prepare_wildcard(value)
         base_value = quote(value.replace('*', '').replace('?', ''))
     # simple queries use custom search pattern
