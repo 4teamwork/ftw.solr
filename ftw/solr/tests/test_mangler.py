@@ -42,6 +42,39 @@ class TestQueryMangler(TestCase):
             query
         )
 
+    def test_simple_terms_result_in_value_with_appended_wildcard(self):
+        config = getUtility(ISolrConnectionConfig)
+        config.search_pattern = '{value}'
+
+        query = dict(SearchableText='foo')
+        mangleQuery(query, config, self.schema)
+        self.assertEquals(
+            {'SearchableText': set(['(foo* OR foo)'])},
+            query
+        )
+
+    def test_simple_search_results_in_value_without_wildcards(self):
+        config = getUtility(ISolrConnectionConfig)
+        config.search_pattern = '{value}'
+
+        query = dict(SearchableText='foo bar')
+        mangleQuery(query, config, self.schema)
+        self.assertEquals(
+            {'SearchableText': set(['(foo bar)'])},
+            query
+        )
+
+    def test_complex_search_goes_through_unmodified(self):
+        config = getUtility(ISolrConnectionConfig)
+        config.search_pattern = '{irrelevant}'
+
+        query = dict(SearchableText='foo AND bar')
+        mangleQuery(query, config, self.schema)
+        self.assertEquals(
+            {'SearchableText': 'foo AND bar'},
+            query
+        )
+
 
 class TestQueryParameters(TestCase):
 
