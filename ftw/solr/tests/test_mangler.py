@@ -106,6 +106,14 @@ class TestMangleSearchableTextQuery(TestCase):
             '(foo* bar*) OR searchwords:(foo bar)^1000',
             mangled_query)
 
+    def test_simple_search_substitutes_lwc_and_twc_values(self):
+        orig_query = 'foo bar'
+        pattern = '{value_lwc} OR {value_twc}'
+        mangled_query = mangle_searchable_text_query(orig_query, pattern)
+        self.assertEquals(
+            '(*foo *bar) OR (foo* bar*)',
+            mangled_query)
+
 
 class TestWildcardFunctions(TestCase):
 

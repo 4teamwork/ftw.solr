@@ -59,9 +59,13 @@ def mangle_searchable_text_query(value, pattern):
         value = prepare_wildcard(value)
         base_value = quote(value.replace('*', '').replace('?', ''))
     # simple queries use custom search pattern
+    value_lwc = leading_wildcards(value)
+    value_twc = trailing_wildcards(value)
     value = pattern.format(
         value=quote(value),
-        base_value=base_value)
+        base_value=base_value,
+        value_lwc=value_lwc,
+        value_twc=value_twc)
     return value
 
 
