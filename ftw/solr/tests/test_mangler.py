@@ -8,6 +8,8 @@ from collective.solr.manager import SolrConnectionConfig
 from collective.solr.tests.utils import getData
 from zope.component import provideUtility, getUtility
 
+from ftw.solr.patches.mangler import leading_wildcards
+
 
 class TestQueryMangler(TestCase):
 
@@ -41,6 +43,33 @@ class TestQueryMangler(TestCase):
             {'SearchableText': set(['(pass port) OR searchwords:pass port^1000'])},
             query
         )
+
+class TestWildcardFunctions(TestCase):
+
+    def test_leading_wildcards_prepends_wildcards_to_all_terms(self):
+        terms = 'foo bar qux'
+        result = leading_wildcards(terms)
+        self.assertEquals(result, '(*foo *bar *qux)')
+
+    def test_leading_wildcards_drops_existing_wildcards(self):
+        terms = '*foo bar* qu*x'
+        result = leading_wildcards(terms)
+        self.assertEquals(result, '(*foo *bar *qux)')
+
+    def test_leading_wildcards_adds_parentheses(self):
+        terms = 'foo bar'
+        result = leading_wildcards(terms)
+        self.assertTrue(result.startswith('('))
+        self.assertTrue(result.endswith(')'))
+
+    def test_leading_wildcards_strips_existing_parentheses(self):
+        terms = '(foo bar)'
+        result = leading_wildcards(terms)
+        self.assertEquals(result, '(*foo *bar)')
+
+        terms = ')foo bar('
+        result = leading_wildcards(terms)
+        self.assertEquals(result, '(*foo *bar)')
 
 
 class TestQueryParameters(TestCase):

@@ -19,22 +19,33 @@ def strip_parens(value):
     return value.strip('()')
 
 
-def leading_wildcards(base_value):
+def search_terms_from_value(value):
+    """Turn a search query into a list of search terms, removing
+    parentheses, wildcards and quoting any special characters.
+    """
+    # remove any parens and wildcards, so quote() doesn't try to escape them
+    value = strip_wildcards(strip_parens(value))
+    # then quote the value
+    value = quote(value)
+    # and again strip parentheses that might have been added by quote()
+    value = strip_parens(value)
+    return value.split()
+
+
+def leading_wildcards(value):
     """Prepend wildcards to each term for a string of search terms.
     (foo bar baz) -> (*foo *bar *baz)
     """
-    base_value = strip_parens(strip_wildcards(base_value))
-    search_terms = base_value.split()
+    search_terms = search_terms_from_value(value)
     value = ' '.join(['*%s' % term for term in search_terms])
     return "(%s)" % prepare_wildcard(value)
 
 
-def trailing_wildcards(base_value):
+def trailing_wildcards(value):
     """Append wildcards to each term for a string of search terms.
     (foo bar baz) -> (foo* bar* baz*)
     """
-    base_value = strip_parens(strip_wildcards(base_value))
-    search_terms = base_value.split()
+    search_terms = search_terms_from_value(value)
     value = ' '.join(['%s*' % term for term in search_terms])
     return "(%s)" % prepare_wildcard(value)
 
