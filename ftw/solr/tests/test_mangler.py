@@ -35,7 +35,7 @@ class TestQueryMangler(TestCase):
         query = dict(SearchableText='Pass*')
         mangleQuery(query, config, self.schema)
         self.assertEquals(
-            {'SearchableText': set(['pass* OR searchwords:pass^1000'])},
+            {'SearchableText': set(['pass OR searchwords:pass^1000'])},
             query
         )
 
@@ -121,10 +121,10 @@ class TestMangleSearchableTextQuery(TestCase):
 
     def test_simple_search_drops_wildcards_for_base_value_and_quotes_it(self):
         orig_query = 'foo* bar*'
-        pattern = '{value} OR searchwords:{base_value}^1000'
+        pattern = '{base_value}'
         mangled_query = mangle_searchable_text_query(orig_query, pattern)
         self.assertEquals(
-            '(foo* bar*) OR searchwords:(foo bar)^1000',
+            '(foo bar)',
             mangled_query)
 
     def test_simple_search_substitutes_lwc_and_twc_values(self):
@@ -134,6 +134,19 @@ class TestMangleSearchableTextQuery(TestCase):
         self.assertEquals(
             '(*foo *bar) OR (foo* bar*)',
             mangled_query)
+
+    def test_substituted_value_never_contains_any_wildcards(self):
+        # Simple term
+        orig_query = '*f*oo*'
+        pattern = '{value}'
+        mangled_query = mangle_searchable_text_query(orig_query, pattern)
+        self.assertEquals('foo', mangled_query)
+
+        # Simple search
+        orig_query = 'foo* *bar'
+        pattern = '{value}'
+        mangled_query = mangle_searchable_text_query(orig_query, pattern)
+        self.assertEquals('(foo bar)', mangled_query)
 
 
 class TestWildcardFunctions(TestCase):
