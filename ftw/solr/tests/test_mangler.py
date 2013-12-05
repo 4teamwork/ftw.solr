@@ -1,11 +1,12 @@
-from unittest import TestCase
-from ftw.solr.patches.mangler import cleanupQueryParameters
-from ftw.solr.patches.mangler import extractQueryParameters
-from collective.solr.parser import SolrSchema, SolrField
-from ftw.solr.patches.mangler import mangleQuery
 from collective.solr.interfaces import ISolrConnectionConfig
 from collective.solr.manager import SolrConnectionConfig
+from collective.solr.parser import SolrSchema, SolrField
 from collective.solr.tests.utils import getData
+from ftw.solr.patches.mangler import cleanupQueryParameters
+from ftw.solr.patches.mangler import extractQueryParameters
+from ftw.solr.patches.mangler import mangleQuery
+from ftw.solr.patches.mangler import mangle_searchable_text_query
+from unittest import TestCase
 from zope.component import provideUtility, getUtility
 
 
@@ -74,6 +75,33 @@ class TestQueryMangler(TestCase):
             {'SearchableText': 'foo AND bar'},
             query
         )
+
+
+class TestMangleSearchableTextQuery(TestCase):
+
+    def test_simple_terms_result_in_basic_wildcard_search(self):
+        orig_query = 'foo'
+        pattern = '{value} OR searchwords:{base_value}^1000'
+        mangled_query = mangle_searchable_text_query(orig_query, pattern)
+        self.assertEquals(
+            '(foo* OR foo) OR searchwords:foo^1000',
+            mangled_query)
+
+    def test_simple_search_results_in_simple_pattern_substitution(self):
+        orig_query = 'foo bar'
+        pattern = '{value} OR searchwords:{base_value}^1000'
+        mangled_query = mangle_searchable_text_query(orig_query, pattern)
+        self.assertEquals(
+            '(foo bar) OR searchwords:foo bar^1000',
+            mangled_query)
+
+    def test_simple_search_drops_wildcards_for_base_value_and_quotes_it(self):
+        orig_query = 'foo* bar*'
+        pattern = '{value} OR searchwords:{base_value}^1000'
+        mangled_query = mangle_searchable_text_query(orig_query, pattern)
+        self.assertEquals(
+            '(foo* bar*) OR searchwords:(foo bar)^1000',
+            mangled_query)
 
 
 class TestQueryParameters(TestCase):
