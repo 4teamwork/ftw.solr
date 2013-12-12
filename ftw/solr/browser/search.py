@@ -115,8 +115,8 @@ class SearchView(browser.Search):
                     query_string = ''
                     for k, v in query_params.items():
                         if isinstance(v, list):
-                            query_string += '&'.join(['%s=%s' % (k, vv) for vv
-                                in v])
+                            query_string += '&' + '&'.join(
+                                ['%s=%s' % (k, vv) for vv in v])
                         else:
                             query_string += '&%s=%s' % (k, v)
                     suggested_terms.append((suggestion[0]['word'],

@@ -180,3 +180,35 @@ class TestSearchView(TestCase):
         suggestions = view.suggestions()
         self.assertEquals(suggestions[0][0], 'bildung')
         self.assertEquals(suggestions[0][1], '&SearchableText=bildung')
+
+
+    def test_suggestions_querystring_with_list_parameter(self):
+        portal = self.layer['portal']
+        request = self.layer['request']
+
+        # Setup browser layers
+        notify(BeforeTraverseEvent(portal, request))
+
+        request.form.update({'SearchableText': 'bidlung',
+                             'facet.field': ['portal_type', 'review_state']})
+        view = getMultiAdapter((portal, request), name=u'search')
+        view.solr_response = SolrResponse()
+        view.solr_response.spellcheck = {}
+        view.solr_response.spellcheck['suggestions'] = {
+            'bidlung': {'endOffset': 246,
+                        'numFound': 5,
+                        'origFreq': 1,
+                        'startOffset': 239,
+                        'suggestion': [{'freq': 2704, 'word': 'bildung'},
+                                       {'freq': 1, 'word': 'bidlungs'},
+                                       {'freq': 1, 'word': 'bidung'},
+                                       {'freq': 561, 'word': 'bildungs'},
+                                       {'freq': 233, 'word': 'bislang'}]},
+            'correctlySpelled': False,
+        }
+
+        suggestions = view.suggestions()
+        self.assertEquals('bildung', suggestions[0][0])
+        self.assertIn('&facet.field=portal_type&facet.field=review_state',
+                      suggestions[0][1])
+        self.assertIn('&SearchableText=bildung', suggestions[0][1])

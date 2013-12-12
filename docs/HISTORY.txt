@@ -10,6 +10,9 @@ Changelog
   to each of the search terms.
   [lgraf]
 
+- Fix querystring of suggestions with list parameters.
+  [buchi]
+
 
 1.2.2 (2013-09-24)
 ------------------
