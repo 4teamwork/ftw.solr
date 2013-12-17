@@ -4,6 +4,9 @@ Changelog
 1.2.3 (unreleased)
 ------------------
 
+- "show all"-link includes the path attribute.
+  [elioschmutz]
+
 - Fix querystring of suggestions with list parameters.
   [buchi]
 
