@@ -154,14 +154,7 @@ class LiveSearchReplyView(BrowserView):
         if len(results) > self.limit:
             # add a more... row
             self.write('''<li class="LSRow">''')
-            self.write(
-                self.get_show_more_link(
-                    translate(label_show_all, context=self.request),
-                    self.searchterms,
-                    self.request.form.get('path', None),
-                    self.facet_params
-                )
-            )
+            self.write(self.get_show_more_link())
             self.write('''</li>''')
         self.write('''</ul>''')
 
@@ -202,27 +195,21 @@ class LiveSearchReplyView(BrowserView):
         if show_more:
             # add a more... row
             self.write('''<dd class="LSRow LSShowMore">''')
-            self.write(
-                self.get_show_more_link(
-                    translate(label_show_all, context=self.request),
-                    self.searchterms,
-                    self.request.form.get('path', None),
-                    self.facet_params
-                )
-            )
+            self.write(self.get_show_more_link())
             self.write('''</dd>''')
 
         self.write('''</dl>''')
 
-    def get_show_more_link(self, link_text='', searchterms='', path='', facet_params=''):
-        params = facet_params
-        params += '&SearchableText=' + searchterms
+    def get_show_more_link(self):
+        params = self.facet_params
+        params += '&SearchableText=' + self.searchterms
+        path = self.request.form.get('path', None)
         if path:
             params += '&path=' + url_quote_plus(path)
 
         return '<a href="@@search?%s" style="font-weight:normal">%s</a>' % (
             params,
-            link_text
+            translate(label_show_all, context=self.request),
         )
 
 

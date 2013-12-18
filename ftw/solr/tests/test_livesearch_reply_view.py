@@ -10,38 +10,42 @@ class TestGetShowMoreLink(TestCase):
     layer = SOLR_INTEGRATION_TESTING
 
     def setUp(self):
-        self.context = LiveSearchReplyView(object, object)
+        request = self.layer['request']
+        self.livesearch = LiveSearchReplyView(object, request)
+        self.livesearch.facet_params = 'facet.field=portal_type'
+        self.livesearch.searchterms = 'james'
+        
 
     def test_has_linktext(self):
-        result = self.context.get_show_more_link('show all')
+        result = self.livesearch.get_show_more_link()
 
-        self.assertEqual('show all', parser.fromstring(result).text)
+        self.assertEqual('Show all items', parser.fromstring(result).text)
 
     def test_has_search_term(self):
-        result = self.context.get_show_more_link(searchterms="james")
+        result = self.livesearch.get_show_more_link()
 
         self.assertIn(
             'SearchableText=james',
             parser.fromstring(result).attrib.get('href'))
 
     def test_has_path_parameter_if_path_is_set(self):
-        result = self.context.get_show_more_link(path='/path/to/context')
+        self.livesearch.request.form.update({'path':'/path/to/context',})
+        result = self.livesearch.get_show_more_link()
 
         self.assertIn(
             'path=%2Fpath%2Fto%2Fcontext',
             parser.fromstring(result).attrib.get('href'))
 
     def test_has_no_path_parameter_if_no_path_is_set(self):
-        result = self.context.get_show_more_link()
+        result = self.livesearch.get_show_more_link()
 
         self.assertNotIn(
             'path=',
             parser.fromstring(result).attrib.get('href'))
 
     def test_has_facet_params(self):
-        result = self.context.get_show_more_link(
-            facet_params='facet.area=true')
+        result = self.livesearch.get_show_more_link()
 
         self.assertIn(
-            'facet.area=true',
+            'facet.field=portal_type',
             parser.fromstring(result).attrib.get('href'))
