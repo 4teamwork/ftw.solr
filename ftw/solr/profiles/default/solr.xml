@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<object name="solr">
+  <settings>
+    <search-pattern
+      value="+(Title:{value}^5 OR Description:{value}^2 OR SearchableText:{value} OR SearchableText:{value_lwc} OR SearchableText:{value_twc} OR searchwords:{value}^1000) +showinsearch:True" />
+  </settings>
+</object>

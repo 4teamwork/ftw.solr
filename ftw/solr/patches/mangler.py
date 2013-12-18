@@ -5,10 +5,62 @@ from collective.solr.interfaces import ISolrConnectionConfig
 from collective.solr.mangler import iso8601date
 from collective.solr.mangler import sort_aliases, query_args, ignored, ranges
 from collective.solr.queryparser import quote
-from collective.solr.utils import isWildCard
 from collective.solr.utils import prepare_wildcard
 from ftw.solr.patches.utils import isSimpleTerm
 from ftw.solr.patches.utils import isSimpleSearch
+
+
+def strip_wildcards(value):
+    return value.replace('*', '').replace('?', '')
+
+
+def strip_parens(value):
+    return value.strip('()')
+
+
+def searchterms_from_value(value):
+    """Turn a search query into a list of search terms, removing
+    parentheses, wildcards and quoting any special characters.
+    """
+    # remove any parens and wildcards, so quote() doesn't try to escape them
+    value = strip_wildcards(strip_parens(value))
+    # then quote the value
+    value = quote(value)
+    # and again strip parentheses that might have been added by quote()
+    value = strip_parens(value)
+    return value.split()
+
+
+def leading_wildcards(value):
+    """Prepend wildcards to each term for a string of search terms.
+    (foo bar baz) -> (*foo *bar *baz)
+    """
+    search_terms = searchterms_from_value(value)
+    value = ' '.join(['*%s' % term for term in search_terms])
+    return "(%s)" % prepare_wildcard(value)
+
+
+def trailing_wildcards(value):
+    """Append wildcards to each term for a string of search terms.
+    (foo bar baz) -> (foo* bar* baz*)
+    """
+    search_terms = searchterms_from_value(value)
+    value = ' '.join(['%s*' % term for term in search_terms])
+    return "(%s)" % prepare_wildcard(value)
+
+
+def mangle_searchable_text_query(value, pattern):
+    value = value.lower()
+
+    value_lwc = leading_wildcards(value)
+    value_twc = trailing_wildcards(value)
+    value = strip_wildcards(value)
+
+    value = pattern.format(
+        value=quote(value),
+        value_lwc=value_lwc,
+        value_twc=value_twc)
+    return value
 
 
 def mangleQuery(keywords, config, schema):
@@ -51,21 +103,11 @@ def mangleQuery(keywords, config, schema):
         args = extras.get(key, {})
         if key == 'SearchableText':
             pattern = getattr(config, 'search_pattern', '')
-            simple_term = isSimpleTerm(value)
             if pattern and isSimpleSearch(value):
-                value = value.lower()
-                base_value = value
-                if simple_term: # use prefix/wildcard search
-                    value = '(%s* OR %s)' % (prepare_wildcard(value), value)
-                elif isWildCard(value):
-                    value = prepare_wildcard(value)
-                    base_value = quote(value.replace('*', '').replace('?', ''))
-                # simple queries use custom search pattern
-                value = pattern.format(value=quote(value),
-                    base_value=base_value)
+                value = mangle_searchable_text_query(value, pattern)
                 keywords[key] = set([value])    # add literal query parameter
                 continue
-            elif simple_term: # use prefix/wildcard search
+            elif isSimpleTerm(value): # use prefix/wildcard search
                 keywords[key] = '(%s* OR %s)' % (
                     prepare_wildcard(value), value)
                 continue

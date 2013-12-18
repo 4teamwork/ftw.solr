@@ -19,20 +19,13 @@ def isSimpleSearch(term):
         term = unicode(term, 'utf-8', 'ignore')
     if not term:
         return False
+
     num_quotes = term.count('"')
-    if num_quotes % 2 == 1:
+    if num_quotes > 0:
+        # We consider all queries containing quotes non-simple, whether
+        # quotes are balanced or not
         return False
-    if num_quotes > 1:
-        # replace the quoted parts of the query with a marker
-        parts = term.split('"')
-        # take only the even parts (i.e. those outside the quotes)
-        new_parts = []
-        for i in range(0, len(parts)):
-            if i % 2 == 0:
-                new_parts.append(parts[i])
-            else:
-                new_parts.append('quoted')
-        term = u''.join(new_parts)
+
     if bool(operators.match(term)):
         return False
     if bool(simpleCharacters.match(term)):
