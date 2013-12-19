@@ -13,7 +13,6 @@ from zope.publisher.browser import BrowserView
 
 legend_livesearch = _('legend_livesearch', default='LiveSearch &#8595;')
 label_no_results_found = _('label_no_results_found', default='No matching results found.')
-label_advanced_search = _('label_advanced_search', default='Advanced Search&#8230;')
 label_show_all = _('label_show_all', default='Show all items')
 
 
@@ -96,10 +95,6 @@ class LiveSearchReplyView(BrowserView):
             self.write('''<div class="LSIEFix">''')
             self.write('''<div id="LSNothingFound">%s</div>''' % (
                 translate(label_no_results_found, context=self.request)))
-            self.write('''<div class="LSRow advancedSearch">''')
-            self.write('<a href="search_form" style="font-weight:normal">%s</a'
-                '>' % translate(label_advanced_search, context=self.request))
-            self.write('''</div>''')
             self.write('''</div>''')
             self.write('''</fieldset>''')
 

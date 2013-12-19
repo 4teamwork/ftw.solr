@@ -4,6 +4,9 @@ Changelog
 1.2.3 (unreleased)
 ------------------
 
+- Removed link to advanced search in livesearch when no results are found.
+  [buchi]
+
 - "show all"-link includes the path attribute.
   [elioschmutz]
 
