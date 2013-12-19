@@ -4,6 +4,9 @@ Changelog
 1.2.3 (unreleased)
 ------------------
 
+- "show all"-link includes the path attribute.
+  [elioschmutz]
+
 - Added support for forward as well as reverse wildcard search.
   This is done by providing two additional dynamic variables in the search pattern,
   value_lwc and value_twc that have leading respectively trailing wildcards appended

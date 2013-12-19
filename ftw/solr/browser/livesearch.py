@@ -1,16 +1,15 @@
 from Acquisition import aq_inner
-from zope.publisher.browser import BrowserView
-from zope.i18n import translate
-from zope.component import getMultiAdapter, getUtility
+from ftw.solr.interfaces import ILiveSearchSettings
+from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as _
 from Products.CMFPlone.browser.navtree import getNavigationRoot
 from Products.CMFPlone.utils import safe_unicode
-from Products.PythonScripts.standard import url_quote_plus
 from Products.PythonScripts.standard import html_quote
-from plone.registry.interfaces import IRegistry
-from ftw.solr.interfaces import ILiveSearchSettings
-
+from Products.PythonScripts.standard import url_quote_plus
+from zope.component import getMultiAdapter, getUtility
+from zope.i18n import translate
+from zope.publisher.browser import BrowserView
 
 legend_livesearch = _('legend_livesearch', default='LiveSearch &#8595;')
 label_no_results_found = _('label_no_results_found', default='No matching results found.')
@@ -59,7 +58,6 @@ class LiveSearchReplyView(BrowserView):
             q = q.replace(char, ' ')
         r = quote_bad_chars(q)+'*'
         self.searchterms = url_quote_plus(r)
-
 
         site_encoding = plone_utils.getSiteEncoding()
         if path is None:
@@ -153,13 +151,12 @@ class LiveSearchReplyView(BrowserView):
             self.write('''</li>''')
             full_title, display_title, display_description = None, None, None
 
-        if len(results)>self.limit:
+        if len(results) > self.limit:
             # add a more... row
             self.write('''<li class="LSRow">''')
-            self.write('<a href="%s&%s" style="font-weight:normal">%s</a>' % ('@@search?SearchableText=' + self.searchterms, self.facet_params, translate(label_show_all, context=self.request)))
+            self.write(self.get_show_more_link())
             self.write('''</li>''')
         self.write('''</ul>''')
-
 
     def write_grouped_results(self, grouped_results, group_by_types):
         show_more = False
@@ -198,14 +195,27 @@ class LiveSearchReplyView(BrowserView):
         if show_more:
             # add a more... row
             self.write('''<dd class="LSRow LSShowMore">''')
-            self.write('<a href="%s&%s" style="font-weight:normal">%s</a>' % ('@@search?SearchableText=' + self.searchterms, self.facet_params, translate(label_show_all, context=self.request)))
+            self.write(self.get_show_more_link())
             self.write('''</dd>''')
 
         self.write('''</dl>''')
 
+    def get_show_more_link(self):
+        params = self.facet_params
+        params += '&SearchableText=' + self.searchterms
+        path = self.request.form.get('path', None)
+        if path:
+            params += '&path=' + url_quote_plus(path)
+
+        return '<a href="@@search?%s" style="font-weight:normal">%s</a>' % (
+            params,
+            translate(label_show_all, context=self.request),
+        )
+
 
 def quotestring(s):
     return '"%s"' % s
+
 
 def quote_bad_chars(s):
     bad_chars = ["(", ")"]
