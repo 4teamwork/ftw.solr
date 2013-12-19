@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.2.3 (unreleased)
-------------------
+1.3 (2013-12-19)
+----------------
 
 - Updated jquery.history.js to latest version (1.8.0b2) which fixes issues
   with URI encoding in IE9.
