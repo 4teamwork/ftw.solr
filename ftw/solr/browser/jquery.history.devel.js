@@ -1,6 +1,6 @@
 /*
-    http://www.JSON.org/json2.js
-    2011-01-18
+    json2.js
+    2012-10-08
 
     Public Domain.
 
@@ -146,7 +146,7 @@
     redistribute.
 */
 
-/*jslint evil: true, strict: false, regexp: false */
+/*jslint evil: true, regexp: true */
 
 /*members "", "\b", "\t", "\n", "\f", "\r", "\"", JSON, "\\", apply,
     call, charCodeAt, getUTCDate, getUTCFullYear, getUTCHours,
@@ -159,12 +159,12 @@
 // Create a JSON object only if one does not already exist. We create the
 // methods in a closure to avoid creating global variables.
 
-if (!window.JSON) {
-    window.JSON = {};
+if (typeof JSON !== 'object') {
+    JSON = {};
 }
 
 (function () {
-    "use strict";
+    'use strict';
 
     function f(n) {
         // Format integers to have at least two digits.
@@ -175,13 +175,14 @@ if (!window.JSON) {
 
         Date.prototype.toJSON = function (key) {
 
-            return isFinite(this.valueOf()) ?
-                this.getUTCFullYear()     + '-' +
-                f(this.getUTCMonth() + 1) + '-' +
-                f(this.getUTCDate())      + 'T' +
-                f(this.getUTCHours())     + ':' +
-                f(this.getUTCMinutes())   + ':' +
-                f(this.getUTCSeconds())   + 'Z' : null;
+            return isFinite(this.valueOf())
+                ? this.getUTCFullYear()     + '-' +
+                    f(this.getUTCMonth() + 1) + '-' +
+                    f(this.getUTCDate())      + 'T' +
+                    f(this.getUTCHours())     + ':' +
+                    f(this.getUTCMinutes())   + ':' +
+                    f(this.getUTCSeconds())   + 'Z'
+                : null;
         };
 
         String.prototype.toJSON      =
@@ -191,8 +192,7 @@ if (!window.JSON) {
             };
     }
 
-    var JSON = window.JSON,
-        cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+    var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
         escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
         gap,
         indent,
@@ -218,8 +218,9 @@ if (!window.JSON) {
         escapable.lastIndex = 0;
         return escapable.test(string) ? '"' + string.replace(escapable, function (a) {
             var c = meta[a];
-            return typeof c === 'string' ? c :
-                '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+            return typeof c === 'string'
+                ? c
+                : '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
         }) + '"' : '"' + string + '"';
     }
 
@@ -303,9 +304,11 @@ if (!window.JSON) {
 // Join all of the elements together, separated with commas, and wrap them in
 // brackets.
 
-                v = partial.length === 0 ? '[]' : gap ?
-                    '[\n' + gap + partial.join(',\n' + gap) + '\n' + mind + ']' :
-                    '[' + partial.join(',') + ']';
+                v = partial.length === 0
+                    ? '[]'
+                    : gap
+                    ? '[\n' + gap + partial.join(',\n' + gap) + '\n' + mind + ']'
+                    : '[' + partial.join(',') + ']';
                 gap = mind;
                 return v;
             }
@@ -315,8 +318,8 @@ if (!window.JSON) {
             if (rep && typeof rep === 'object') {
                 length = rep.length;
                 for (i = 0; i < length; i += 1) {
-                    k = rep[i];
-                    if (typeof k === 'string') {
+                    if (typeof rep[i] === 'string') {
+                        k = rep[i];
                         v = str(k, value);
                         if (v) {
                             partial.push(quote(k) + (gap ? ': ' : ':') + v);
@@ -328,7 +331,7 @@ if (!window.JSON) {
 // Otherwise, iterate through all of the keys in the object.
 
                 for (k in value) {
-                    if (Object.hasOwnProperty.call(value, k)) {
+                    if (Object.prototype.hasOwnProperty.call(value, k)) {
                         v = str(k, value);
                         if (v) {
                             partial.push(quote(k) + (gap ? ': ' : ':') + v);
@@ -340,9 +343,11 @@ if (!window.JSON) {
 // Join all of the member texts together, separated with commas,
 // and wrap them in braces.
 
-            v = partial.length === 0 ? '{}' : gap ?
-                '{\n' + gap + partial.join(',\n' + gap) + '\n' + mind + '}' :
-                '{' + partial.join(',') + '}';
+            v = partial.length === 0
+                ? '{}'
+                : gap
+                ? '{\n' + gap + partial.join(',\n' + gap) + '\n' + mind + '}'
+                : '{' + partial.join(',') + '}';
             gap = mind;
             return v;
         }
@@ -413,7 +418,7 @@ if (!window.JSON) {
                 var k, v, value = holder[key];
                 if (value && typeof value === 'object') {
                     for (k in value) {
-                        if (Object.hasOwnProperty.call(value, k)) {
+                        if (Object.prototype.hasOwnProperty.call(value, k)) {
                             v = walk(value, k);
                             if (v !== undefined) {
                                 value[k] = v;
@@ -468,8 +473,9 @@ if (!window.JSON) {
 // In the optional fourth stage, we recursively walk the new structure, passing
 // each name/value pair to a reviver function for possible transformation.
 
-                return typeof reviver === 'function' ?
-                    walk({'': j}, '') : j;
+                return typeof reviver === 'function'
+                    ? walk({'': j}, '')
+                    : j;
             }
 
 // If the text is not JSON parseable, then a SyntaxError is thrown.
@@ -477,9 +483,7 @@ if (!window.JSON) {
             throw new SyntaxError('JSON.parse');
         };
     }
-}());
-
-/**
+}());/**
  * History.js jQuery Adapter
  * @author Benjamin Arthur Lupton <contact@balupton.com>
  * @copyright 2010-2011 Benjamin Arthur Lupton <contact@balupton.com>
@@ -555,7 +559,6 @@ if (!window.JSON) {
 	}
 
 })(window);
-
 
 /**
  * History.js HTML4 Support
@@ -762,7 +765,7 @@ if (!window.JSON) {
 		};
 
 		/**
-		 * History.discardState(State)
+		 * History.discardedState(State)
 		 * Checks to see if the state is discarded
 		 * @param {object} State
 		 * @return {bool}
@@ -835,7 +838,8 @@ if (!window.JSON) {
 				// Define some variables that will help in our checker function
 				var lastDocumentHash = '',
 					iframeId, iframe,
-					lastIframeHash, checkerRunning;
+					lastIframeHash, checkerRunning,
+					startedWithHash = Boolean(History.getHash());
 
 				// Handle depending on the browser
 				if ( History.isInternetExplorer() ) {
@@ -847,7 +851,10 @@ if (!window.JSON) {
 					iframe = document.createElement('iframe');
 
 					// Adjust iFarme
+					// IE 6 requires iframe to have a src on HTTPS pages, otherwise it will throw a
+					// "This page contains both secure and nonsecure items" warning.
 					iframe.setAttribute('id', iframeId);
+					iframe.setAttribute('src', '#');
 					iframe.style.display = 'none';
 
 					// Append iFrame
@@ -874,7 +881,7 @@ if (!window.JSON) {
 						// Fetch
 						var
 							documentHash = History.getHash(),
-							iframeHash = History.getHash(iframe.contentWindow.document.location);
+							iframeHash = History.getHash(iframe.contentWindow.document);
 
 						// The Document Hash has changed (application caused)
 						if ( documentHash !== lastDocumentHash ) {
@@ -906,9 +913,19 @@ if (!window.JSON) {
 
 							// Equalise
 							lastIframeHash = iframeHash;
-
-							// Update the Hash
-							History.setHash(iframeHash,false);
+							
+							// If there is no iframe hash that means we're at the original
+							// iframe state.
+							// And if there was a hash on the original request, the original
+							// iframe state was replaced instantly, so skip this state and take
+							// the user back to where they came from.
+							if (startedWithHash && iframeHash === '') {
+								History.back();
+							}
+							else {
+								// Update the Hash
+								History.setHash(iframeHash,false);
+							}
 						}
 
 						// Reset Running
@@ -925,7 +942,7 @@ if (!window.JSON) {
 					// Define the checker function
 					History.checkerFunction = function(){
 						// Prepare
-						var documentHash = History.getHash();
+						var documentHash = History.getHash()||'';
 
 						// The Document Hash has changed (application caused)
 						if ( documentHash !== lastDocumentHash ) {
@@ -1002,7 +1019,7 @@ if (!window.JSON) {
 				}
 
 				// Create State
-				currentState = History.extractState(History.getFullUrl(currentHash||History.getLocationHref(),false),true);
+				currentState = History.extractState(History.getFullUrl(currentHash||History.getLocationHref()),true);
 
 				// Check if we are the same state
 				if ( History.isLastSavedState(currentState) ) {
@@ -1059,7 +1076,7 @@ if (!window.JSON) {
 
 				// Check the State
 				if ( History.getHashByUrl(url) ) {
-					throw new Error('History.js does not support states with fragement-identifiers (hashes/anchors).');
+					throw new Error('History.js does not support states with fragment-identifiers (hashes/anchors).');
 				}
 
 				// Handle Queueing
@@ -1083,7 +1100,8 @@ if (!window.JSON) {
 					newStateHash = History.getHashByState(newState),
 					oldState = History.getState(false),
 					oldStateHash = History.getHashByState(oldState),
-					html4Hash = History.getHash();
+					html4Hash = History.getHash(),
+					wasExpected = History.expectedStateId == newState.id;
 
 				// Store the newState
 				History.storeState(newState);
@@ -1102,19 +1120,18 @@ if (!window.JSON) {
 					return false;
 				}
 
-				// Update HTML4 Hash
-				if ( !History.isHashEqual(newStateHash, html4Hash) && !History.isHashEqual(newStateHash, History.getShortUrl(History.getLocationHref())) ) {
-					//History.debug('History.pushState: update hash', newStateHash, html4Hash);
-					History.setHash(newStateHash,false);
-					return false;
-				}
-
 				// Update HTML5 State
 				History.saveState(newState);
 
 				// Fire HTML5 Event
-				//History.debug('History.pushState: trigger popstate');
-				History.Adapter.trigger(window,'statechange');
+				if(!wasExpected)
+					History.Adapter.trigger(window,'statechange');
+
+				// Update HTML4 Hash
+				if ( !History.isHashEqual(newStateHash, html4Hash) && !History.isHashEqual(newStateHash, History.getShortUrl(History.getLocationHref())) ) {
+					History.setHash(newStateHash,false);
+				}
+				
 				History.busy(false);
 
 				// End pushState closure
@@ -1161,14 +1178,40 @@ if (!window.JSON) {
 
 				// Fetch the State Objects
 				var newState        = History.createStateObject(data,title,url),
+					newStateHash = History.getHashByState(newState),
 					oldState        = History.getState(false),
+					oldStateHash = History.getHashByState(oldState),
 					previousState   = History.getStateByIndex(-2);
 
 				// Discard Old State
 				History.discardState(oldState,newState,previousState);
 
-				// Alias to PushState
-				History.pushState(newState.data,newState.title,newState.url,false);
+				// If the url hasn't changed, just store and save the state
+				// and fire a statechange event to be consistent with the
+				// html 5 api
+				if ( newStateHash === oldStateHash ) {
+					// Store the newState
+					History.storeState(newState);
+					History.expectedStateId = newState.id;
+	
+					// Recycle the State
+					History.recycleState(newState);
+	
+					// Force update of the title
+					History.setTitle(newState);
+					
+					// Update HTML5 State
+					History.saveState(newState);
+
+					// Fire HTML5 Event
+					//History.debug('History.pushState: trigger popstate');
+					History.Adapter.trigger(window,'statechange');
+					History.busy(false);
+				}
+				else {
+					// Alias to PushState
+					History.pushState(newState.data,newState.title,newState.url,false);
+				}
 
 				// End replaceState closure
 				return true;
@@ -1196,14 +1239,12 @@ if (!window.JSON) {
 
 	}; // History.initHtml4
 
-	// Try and Initialise History
+	// Try to Initialise History
 	if ( typeof History.init !== 'undefined' ) {
 		History.init();
 	}
 
 })(window);
-
-
 /**
  * History.js Core
  * @author Benjamin Arthur Lupton <contact@balupton.com>
@@ -1222,7 +1263,7 @@ if (!window.JSON) {
 		console = window.console||undefined, // Prevent a JSLint complain
 		document = window.document, // Make sure we are using the correct document
 		navigator = window.navigator, // Make sure we are using the correct navigator
-		sessionStorage = window.sessionStorage||false, // sessionStorage
+		sessionStorage = false, // sessionStorage
 		setTimeout = window.setTimeout,
 		clearTimeout = window.clearTimeout,
 		setInterval = window.setInterval,
@@ -1231,6 +1272,14 @@ if (!window.JSON) {
 		alert = window.alert,
 		History = window.History = window.History||{}, // Public History Object
 		history = window.history; // Old History Object
+
+	try {
+		sessionStorage = window.sessionStorage; // This will throw an exception in some browsers when cookies/localStorage are explicitly disabled (i.e. Chrome)
+		sessionStorage.setItem('TEST', '1');
+		sessionStorage.removeItem('TEST');
+	} catch(e) {
+		sessionStorage = false;
+	}
 
 	// MooTools Compatibility
 	JSON.stringify = JSON.stringify||JSON.encode;
@@ -1242,7 +1291,7 @@ if (!window.JSON) {
 	}
 
 	// Initialise History
-	History.init = function(){
+	History.init = function(options){
 		// Check Load Status of Adapter
 		if ( typeof History.Adapter === 'undefined' ) {
 			return false;
@@ -1267,7 +1316,7 @@ if (!window.JSON) {
 	// Initialise Core
 
 	// Initialise Core
-	History.initCore = function(){
+	History.initCore = function(options){
 		// Initialise
 		if ( typeof History.initCore.initialized !== 'undefined' ) {
 			// Already Loaded
@@ -1306,6 +1355,12 @@ if (!window.JSON) {
 		History.options.doubleCheckInterval = History.options.doubleCheckInterval || 500;
 
 		/**
+		 * History.options.disableSuid
+		 * Force History not to append suid
+		 */
+		History.options.disableSuid = History.options.disableSuid || false;
+
+		/**
 		 * History.options.storeInterval
 		 * How long should we wait between store calls
 		 */
@@ -1328,6 +1383,18 @@ if (!window.JSON) {
 		 * What is the title of the initial state
 		 */
 		History.options.initialTitle = History.options.initialTitle || document.title;
+
+		/**
+		 * History.options.html4Mode
+		 * If true, will force HTMl4 mode (hashtags)
+		 */
+		History.options.html4Mode = History.options.html4Mode || false;
+
+		/**
+		 * History.options.delayInit
+		 * Want to override default options and call init manually.
+		 */
+		History.options.delayInit = History.options.delayInit || false;
 
 
 		// ====================================================================
@@ -1472,20 +1539,31 @@ if (!window.JSON) {
 		 * History.emulated
 		 * Which features require emulating?
 		 */
-		History.emulated = {
-			pushState: !Boolean(
-				window.history && window.history.pushState && window.history.replaceState
-				&& !(
-					(/ Mobile\/([1-7][a-z]|(8([abcde]|f(1[0-8]))))/i).test(navigator.userAgent) /* disable for versions of iOS before version 4.3 (8F190) */
-					|| (/AppleWebKit\/5([0-2]|3[0-2])/i).test(navigator.userAgent) /* disable for the mercury iOS browser, or at least older versions of the webkit engine */
+
+		if (History.options.html4Mode) {
+			History.emulated = {
+				pushState : true,
+				hashChange: true
+			};
+		}
+
+		else {
+
+			History.emulated = {
+				pushState: !Boolean(
+					window.history && window.history.pushState && window.history.replaceState
+					&& !(
+						(/ Mobile\/([1-7][a-z]|(8([abcde]|f(1[0-8]))))/i).test(navigator.userAgent) /* disable for versions of iOS before version 4.3 (8F190) */
+						|| (/AppleWebKit\/5([0-2]|3[0-2])/i).test(navigator.userAgent) /* disable for the mercury iOS browser, or at least older versions of the webkit engine */
+					)
+				),
+				hashChange: Boolean(
+					!(('onhashchange' in window) || ('onhashchange' in document))
+					||
+					(History.isInternetExplorer() && History.getInternetExplorerMajorVersion() < 8)
 				)
-			),
-			hashChange: Boolean(
-				!(('onhashchange' in window) || ('onhashchange' in document))
-				||
-				(History.isInternetExplorer() && History.getInternetExplorerMajorVersion() < 8)
-			)
-		};
+			};
+		}
 
 		/**
 		 * History.enabled
@@ -1529,7 +1607,9 @@ if (!window.JSON) {
 		 */
 		History.isEmptyObject = function(obj) {
 			for ( var name in obj ) {
-				return false;
+				if ( obj.hasOwnProperty(name) ) {
+					return false;
+				}
 			}
 			return true;
 		};
@@ -1732,7 +1812,7 @@ if (!window.JSON) {
 		 * History.getLocationHref(document)
 		 * Returns a normalized version of document.location.href
 		 * accounting for browser inconsistencies, etc.
-		 * 
+		 *
 		 * This URL will be URI-encoded and will include the hash
 		 *
 		 * @param {object} document
@@ -1740,6 +1820,7 @@ if (!window.JSON) {
 		 */
 		History.getLocationHref = function(doc) {
 			doc = doc || document;
+
 			// most of the time, this will be true
 			if (doc.URL === doc.location.href)
 				return doc.location.href;
@@ -1754,6 +1835,9 @@ if (!window.JSON) {
 			if (doc.location.hash && decodeURIComponent(doc.location.href.replace(/^[^#]+/, "")) === doc.location.hash)
 				return doc.location.href;
 
+			if (doc.URL.indexOf('#') == -1 && doc.location.href.indexOf('#') != -1)
+				return doc.location.href;
+			
 			return doc.URL || doc.location.href;
 		};
 
@@ -1848,7 +1932,7 @@ if (!window.JSON) {
 			// Fetch ID
 			var id = History.extractId(newState.url),
 				str;
-			
+
 			if ( !id ) {
 				// Find ID via State String
 				str = History.getStateString(newState);
@@ -1908,7 +1992,7 @@ if (!window.JSON) {
 			newState = {};
 			newState.normalized = true;
 			newState.title = oldState.title||'';
-			newState.url = History.getFullUrl(oldState.url?decodeURIComponent(oldState.url):(History.getLocationHref()));
+			newState.url = History.getFullUrl(oldState.url?oldState.url:(History.getLocationHref()));
 			newState.hash = History.getShortUrl(newState.url);
 			newState.data = History.cloneObject(oldState.data);
 
@@ -1925,7 +2009,7 @@ if (!window.JSON) {
 			dataNotEmpty = !History.isEmptyObject(newState.data);
 
 			// Apply
-			if ( newState.title || dataNotEmpty ) {
+			if ( (newState.title || dataNotEmpty) && History.options.disableSuid !== true ) {
 				// Add ID to Hash
 				newState.hash = History.getShortUrl(newState.url).replace(/\??\&_suid.*/,'');
 				if ( !/\?/.test(newState.hash) ) {
@@ -1963,7 +2047,7 @@ if (!window.JSON) {
 			var State = {
 				'data': data,
 				'title': title,
-				'url': encodeURIComponent(url||"")
+				'url': url
 			};
 
 			// Expand the State
@@ -2022,7 +2106,7 @@ if (!window.JSON) {
 		History.getStateId = function(passedState){
 			// Prepare
 			var State, id;
-			
+
 			// Fetch
 			State = History.normalizeState(passedState);
 
@@ -2042,7 +2126,7 @@ if (!window.JSON) {
 		History.getHashByState = function(passedState){
 			// Prepare
 			var State, hash;
-			
+
 			// Fetch
 			State = History.normalizeState(passedState);
 
@@ -2061,10 +2145,21 @@ if (!window.JSON) {
 		 */
 		History.extractId = function ( url_or_hash ) {
 			// Prepare
-			var id,parts,url;
+			var id,parts,url, tmp;
 
 			// Extract
-			parts = /(.*)\&_suid=([0-9]+)$/.exec(url_or_hash);
+			
+			// If the URL has a #, use the id from before the #
+			if (url_or_hash.indexOf('#') != -1)
+			{
+				tmp = url_or_hash.split("#")[0];
+			}
+			else
+			{
+				tmp = url_or_hash;
+			}
+			
+			parts = /(.*)\&_suid=([0-9]+)$/.exec(tmp);
 			url = parts ? (parts[1]||url_or_hash) : url_or_hash;
 			id = parts ? String(parts[2]||'') : '';
 
@@ -2263,7 +2358,25 @@ if (!window.JSON) {
 			// Return State
 			return State;
 		};
-
+		
+		/**
+		 * History.getCurrentIndex()
+		 * Gets the current index
+		 * @return (integer)
+		*/
+		History.getCurrentIndex = function(){
+			// Prepare
+			var index = null;
+			
+			// No states saved
+			if(History.savedStates.length < 1) {
+				index = 0;
+			}
+			else {
+				index = History.savedStates.length-1;
+			}
+			return index;
+		};
 
 		// ====================================================================
 		// Hash Helpers
@@ -2275,10 +2388,11 @@ if (!window.JSON) {
 		 * Note: unlike location.hash, this is guaranteed to return the escaped hash in all browsers
 		 * @return {string}
 		 */
-		History.getHash = function(location){
-			if ( !location ) location = document.location;
-			var href = location.href.replace( /^[^#]*/, "" );
-			return href.substr(1);
+		History.getHash = function(doc){
+			var url = History.getLocationHref(doc),
+				hash;
+			hash = History.getHashByUrl(url);
+			return hash;
 		};
 
 		/**
@@ -2825,7 +2939,7 @@ if (!window.JSON) {
 				History.doubleCheckComplete();
 
 				// Check for a Hash, and handle apporiatly
-				currentHash	= History.getHash();
+				currentHash = History.getHash();
 				if ( currentHash ) {
 					// Expand Hash
 					currentState = History.extractState(currentHash||History.getLocationHref(),true);
@@ -3041,7 +3155,6 @@ if (!window.JSON) {
 		/**
 		 * Clear Intervals on exit to prevent memory leaks
 		 */
-		History.Adapter.bind(window,"beforeunload",History.clearAllIntervals);
 		History.Adapter.bind(window,"unload",History.clearAllIntervals);
 
 		/**
@@ -3056,7 +3169,7 @@ if (!window.JSON) {
 			// When the page is closed
 			History.onUnload = function(){
 				// Prepare
-				var	currentStore, item;
+				var	currentStore, item, currentStoreString;
 
 				// Fetch
 				try {
@@ -3095,17 +3208,40 @@ if (!window.JSON) {
 				History.store = currentStore;
 				History.normalizeStore();
 
-				// Store
-				sessionStorage.setItem('History.store',JSON.stringify(currentStore));
+				// In Safari, going into Private Browsing mode causes the
+				// Session Storage object to still exist but if you try and use
+				// or set any property/function of it it throws the exception
+				// "QUOTA_EXCEEDED_ERR: DOM Exception 22: An attempt was made to
+				// add something to storage that exceeded the quota." infinitely
+				// every second.
+				currentStoreString = JSON.stringify(currentStore);
+				try {
+					// Store
+					sessionStorage.setItem('History.store', currentStoreString);
+				}
+				catch (e) {
+					if (e.code === DOMException.QUOTA_EXCEEDED_ERR) {
+						if (sessionStorage.length) {
+							// Workaround for a bug seen on iPads. Sometimes the quota exceeded error comes up and simply
+							// removing/resetting the storage can work.
+							sessionStorage.removeItem('History.store');
+							sessionStorage.setItem('History.store', currentStoreString);
+						} else {
+							// Otherwise, we're probably private browsing in Safari, so we'll ignore the exception.
+						}
+					} else {
+						throw e;
+					}
+				}
 			};
 
 			// For Internet Explorer
 			History.intervalList.push(setInterval(History.onUnload,History.options.storeInterval));
-			
+
 			// For Other Browsers
 			History.Adapter.bind(window,'beforeunload',History.onUnload);
 			History.Adapter.bind(window,'unload',History.onUnload);
-			
+
 			// Both are enabled for consistency
 		}
 
@@ -3148,7 +3284,9 @@ if (!window.JSON) {
 
 	}; // History.initCore
 
-	// Try and Initialise History
-	History.init();
+	// Try to Initialise History
+	if (!History.options || !History.options.delayInit) {
+		History.init();
+	}
 
 })(window);

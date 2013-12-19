@@ -4,6 +4,10 @@ Changelog
 1.2.3 (unreleased)
 ------------------
 
+- Updated jquery.history.js to latest version (1.8.0b2) which fixes issues
+  with URI encoding in IE9.
+  [buchi]
+
 - Removed link to advanced search in livesearch when no results are found.
   [buchi]
 
