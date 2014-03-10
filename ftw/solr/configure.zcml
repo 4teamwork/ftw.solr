@@ -25,6 +25,8 @@
     <adapter name="creator_fullname" factory=".indexers.creator_fullname" />
     <adapter name="snippetText" factory=".indexers.SnippetTextIndexer" />
 
+    <adapter factory=".flare.PloneFlare" />
+
     <!-- Contentlisting adapters for solr response/flares -->
     <adapter
         factory="plone.app.contentlisting.contentlisting.ContentListing"
