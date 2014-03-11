@@ -6,6 +6,7 @@ from plone.app.contentlisting.interfaces import IContentListing
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.PloneBatch import Batch
+from Products.CMFPlone.utils import safe_hasattr
 from Products.ZCTextIndex.ParseTree import ParseError
 from plone.app.layout.viewlets import common
 from collective.solr.solr import SolrException
@@ -89,9 +90,9 @@ class SearchView(browser.Search):
         """Return snippets with highlighted search terms in a dict with the
            item's UID as key and the snippet text as value.
         """
-        if not hasattr(self, 'solr_response'):
+        if not safe_hasattr(self, 'solr_response'):
             return {}
-        if hasattr(self.solr_response, 'highlighting'):
+        if safe_hasattr(self.solr_response, 'highlighting'):
             joined_snippets = {}
             for uid, snippets in self.solr_response.highlighting.items():
                 joined_snippets[uid] = ' '.join([' '.join(snippet) for snippet
@@ -102,11 +103,15 @@ class SearchView(browser.Search):
     def suggestions(self):
         """Get suggestions from spellcheck component.
         """
+        if not safe_hasattr(self, 'solr_response'):
+            return []
+
         suggested_terms = []
         search_terms = [term.lower() for term in self.request.form.get(
             'SearchableText', '').split()]
         query_params = self.request.form.copy()
-        if hasattr(self.solr_response, 'spellcheck'):
+
+        if safe_hasattr(self.solr_response, 'spellcheck'):
             suggestions = self.solr_response.spellcheck.get('suggestions', [])
             for term in search_terms:
                 if term in suggestions:

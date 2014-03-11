@@ -212,3 +212,13 @@ class TestSearchView(TestCase):
         self.assertIn('&facet.field=portal_type&facet.field=review_state',
                       suggestions[0][1])
         self.assertIn('&SearchableText=bildung', suggestions[0][1])
+
+    def test_suggestions_without_solr_response(self):
+        portal = self.layer['portal']
+        request = self.layer['request']
+
+        # Setup browser layers
+        notify(BeforeTraverseEvent(portal, request))
+
+        view = getMultiAdapter((portal, request), name=u'search')
+        self.assertEquals([], view.suggestions())
