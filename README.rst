@@ -1,8 +1,8 @@
 Introduction
 ============
 
-`ftw.solr` provides various customizations and enhancements on top of
-`collective.solr` which integrates the Solr search engine with Plone.
+``ftw.solr`` provides various customizations and enhancements on top of
+``collective.solr`` which integrates the Solr search engine with Plone.
 
 
 Features
@@ -16,25 +16,26 @@ sending only the fields that actually changed, whereas before it was necessary
 to send *all* the fields again every time something changed (and therefore ask
 Plone again to index them all, causing a massive performance penalty).
 
-ftw.solr supports atomic updates for Solr version 4.1 and above. In order for
-atomic updates to work, three things must be taken care of:
+``ftw.solr`` supports atomic updates for Solr version 4.1 and above.
+In order for atomic updates to work, three things must be taken care of:
 
-- An `<updateLog />` must be enabled in `solrconfig.xml`. If it's missing,
+- An ``<updateLog />`` must be enabled in ``solrconfig.xml``. If it's missing,
   Solr will reject any update messages that contain atomic update instructions.
-- A `_version_` field must be defined in the Solr schema.
-- All fields in the Solr schema must be defined with `stored=True`
+- A ``_version_`` field must be defined in the Solr schema.
+- All fields in the Solr schema must be defined with ``stored="true"``
 
-In the stock Solr configs from 4.1 upwards `<updateLog />` and the
-`_version_` field are already configured correctly. If you're using
-`collective.recipe.solrinstance`, check the generated `solrconfig.xml`, it might
-not have been updated for the use of atomic updates yet.
+In the stock Solr configs from 4.1 upwards ``<updateLog />`` and the
+``_version_`` field are already configured correctly. If you're using
+``collective.recipe.solrinstance``, check the generated ``solrconfig.xml``,
+it might not have been updated for the use of atomic updates yet.
 
-If there's a field in the Solr schema that's *not* `stored=True`, it will get
+If there's a field in the Solr schema that's *not* ``stored="true"``,
+it will get
 **dropped** from documents in Solr on the next update to that document.
 Indexing won't fail, but that field simply won't have any content any more.
 
 Apart from those prerequisites, there's nothing more to be done in order to use
-atomic updates. `ftw.solr` will automatically perform atomic updates whenever
+atomic updates. ``ftw.solr`` will automatically perform atomic updates whenever
 possible.
 
 Also see http://wiki.apache.org/solr/Atomic_Updates
@@ -44,31 +45,33 @@ Highlighting (aka Snippets)
 
 When displaying search results, Plone by default displays the title and the
 description of an item. Solr, like Google and other search engines, can return a
-snippet of the text containing the words searched for. `ftw.solr` enables this
-feature in Plone.
+snippet of the text containing the words searched for.
+``ftw.solr`` enables this feature in Plone.
 
 Live search grouping
 --------------------
 
-Search results in Plone's live search can be grouped by portal_type. This is
-the way search results are shown in Spotlight on Mac OS X.
+Search results in Plone's live search can be grouped by ``portal_type``.
+This is the way search results are shown in Spotlight on Mac OS X.
 
 Facet queries
 -------------
 
-In addition to facet fields support provided by `collective.solr`,
-`ftw.solr` adds support for facet queries. This type of faceting offers a lot
-of flexibility. Instead of choosing a specific field to facet its values, multiple
-Solr queries can be specified, that themselve become facets.
+In addition to facet fields support provided by ``collective.solr``,
+``ftw.solr`` adds support for facet queries.
+This type of faceting offers a lot of flexibility.
+Instead of choosing a specific field to facet its values, multiple
+Solr queries can be specified, that themselves become facets.
 
 Word Cloud
 ----------
 
-Assuming there is a correctly configured index 'wordCloudTerms', a Word Cloud
+Assuming there is a correctly configured index ``wordCloudTerms``,
+a Word Cloud
 showing the most common terms across documents can be displayed.
 
 The Word Cloud is implemented in a browser view that can either be displayed
-stand-alone by traversing to /@@wordcloud or rendered in a portlet.
+stand-alone by traversing to ``/@@wordcloud`` or rendered in a portlet.
 
 Ajax-ified search form
 ----------------------
@@ -95,7 +98,9 @@ Solr Configuration
 Search Handlers
 ---------------
 
-`ftw.solr` requires two custom search handlers that must be configured on the Solr server.
+``ftw.solr`` requires two custom search handlers that must be configured on the
+Solr server. Search handlers are configured in ``solrconfig.xml`` of your 
+collection.
 
 The ``livesearch`` request handler is used for live search and should limit the
 returned fields to a minimum for maximum speed. Example::
@@ -110,7 +115,8 @@ returned fields to a minimum for maximum speed. Example::
         </lst>
     </requestHandler>
 
-The ``hlsearch`` request handler should contain the configuration for higlighting. Example::
+The ``hlsearch`` request handler should contain the configuration for highlighting.
+Example::
 
     <requestHandler name="hlsearch" class="solr.SearchHandler">
         <lst name="defaults">
@@ -132,7 +138,10 @@ Field types and indexes
 Highlighting
 ~~~~~~~~~~~~
 
-Highlighting requires an index named ``snippetText`` with it's own field type which does not too much text analysis.
+Highlighting requires an index named ``snippetText``
+with its own field type which does not do too much text analysis.
+Fields and indexes are configured in ``schema.xml`` of your collection.
+ 
 Example::
 
     <fieldType name="text_snippets" class="solr.TextField" positionIncrementGap="100">
@@ -154,8 +163,9 @@ Example::
 Word Cloud
 ~~~~~~~~~~
 
-The Word Cloud feature requires an index named ``wordCloudTerms`` with it's own
-field type. It's basically a copy of SearchableText but with less analysis and
+The Word Cloud feature requires an index named ``wordCloudTerms``
+with it's own field type.
+It's basically a copy of ``SearchableText`` but with less analysis and
 filtering (no lowercasing, no character normalization, etc...).
 
 Field type example::
@@ -196,13 +206,14 @@ Index example::
 Installation
 ============
 
-Install `ftw.solr` by adding it to the list of eggs in your
+Install ``ftw.solr`` by adding it to the list of eggs in your
 buildout or by adding it as a dependency of your policy package. Then run
 buildout and restart your instance.
 
-Go to Site Setup of your Plone site and activate the `ftw.solr` add-on. Check
-the Solr control panel provided by `collective.solr` for Solr-specific
-configuration options.
+Go to *Site Setup* of your Plone site and activate the 
+``ftw.solr-autocomplete`` add-on.
+Check the Solr control panel provided by ``collective.solr``
+for Solr-specific configuration options.
 
 
 Links
