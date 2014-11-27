@@ -1,9 +1,10 @@
+from collective.indexing.queue import getQueue
+from plone.indexer.interfaces import IIndexer
 from Products.Archetypes.config import TOOL_NAME
 from Products.Archetypes.utils import isFactoryContained
 from Products.CMFCore.interfaces import ICatalogTool
+from Products.CMFCore.interfaces._content import ICatalogAware
 from Products.CMFCore.utils import getToolByName
-from collective.indexing.queue import getQueue
-from plone.indexer.interfaces import IIndexer
 from zope.component import queryMultiAdapter
 import logging
 
@@ -68,6 +69,11 @@ def recursive_index_security(catalog, obj):
     also not change, so we can abort wakling down the path.
     """
     indexes_to_update = []
+
+    # Since objectValues returns all objects, including placefulworkflow policy
+    # objects, we have to check if the object is Catalog aware.
+    if not ICatalogAware.providedBy(obj):
+        return
 
     for index_name in obj._cmf_security_indexes:
         if not is_index_up_to_date(catalog, obj, index_name):
