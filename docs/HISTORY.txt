@@ -4,6 +4,10 @@ Changelog
 1.3.2 (unreleased)
 ------------------
 
+- BugFix in "recursive_index_security" method. Do not try to reindex the
+  security on not catalog aware objects.
+  [mathias.leimgruber]
+
 - Some work on docs (fix Pythonism, add some info, improve markup). [jean]
 
 
