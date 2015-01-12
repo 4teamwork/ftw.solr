@@ -20,3 +20,9 @@ class PloneFlare(flare.PloneFlare):
             return value.encode('utf8')
         else:
             return value
+
+    def getURL(self):
+        if self.getRemoteUrl and self.getRemoteUrl.startswith('http'):
+            return self.getRemoteUrl
+        return super(PloneFlare, self).getURL()
+

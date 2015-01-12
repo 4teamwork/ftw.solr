@@ -33,3 +33,27 @@ class SolrContentListingObject(catalog.CatalogContentListingObject):
     def getIcon(self):
         return queryMultiAdapter((self.context, self.request,
                                   self._brain), interface=IContentIcon)()
+    def appendViewAction(self):
+        if self.is_external():
+            return ''
+        return super(SolrContentListingObject, self).appendViewAction()
+
+    def is_external(self):
+        if (self._brain.getRemoteUrl and
+            self._brain.getRemoteUrl.startswith('http')):
+            return True
+        return False
+
+    def result_url(self):
+        search_term = self.request.form.get('SearchableText', '')
+        url = self._brain.getURL()
+        anchor = None
+        if '#' in url:
+            url, anchor = url.split('#')
+        url = url + self.appendViewAction()
+        if search_term:
+            url = url + '?searchterm=' + search_term
+        if anchor:
+            url = url + '#' + anchor
+        return url
+

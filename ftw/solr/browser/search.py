@@ -129,6 +129,9 @@ class SearchView(browser.Search):
         return suggested_terms
 
     def breadcrumbs(self, item):
+        if item.is_external():
+            return None
+
         registry = getUtility(IRegistry)
         settings = registry.forInterface(ISearchSettings)
         maxb = settings.max_breadcrumbs
