@@ -11,6 +11,7 @@ from zope.component import getUtility
 from plone.registry.interfaces import IRegistry
 from ftw.solr.interfaces import ISearchSettings
 from collective.solr.parser import SolrResponse
+from plone.app.contentlisting.interfaces import IContentListingObject
 
 
 class TestSearchView(TestCase):
@@ -31,6 +32,7 @@ class TestSearchView(TestCase):
 
         flare = PloneFlare(portal)
         flare['path_string'] = '/plone/f1/f2/f3'
+        flare = IContentListingObject(flare)
         view = getMultiAdapter((f3, request), name=u'search')
         breadcrumbs = view.breadcrumbs(flare)
         self.assertEquals(len(breadcrumbs), 2)
@@ -53,6 +55,7 @@ class TestSearchView(TestCase):
 
         flare = PloneFlare(portal)
         flare['path_string'] = '/plone/path/to/object'
+        flare = IContentListingObject(flare)
         view = getMultiAdapter((portal, request), name=u'search')
         breadcrumbs = view.breadcrumbs(flare)
         self.assertEquals(len(breadcrumbs), 2)
@@ -77,6 +80,7 @@ class TestSearchView(TestCase):
 
         flare = PloneFlare(portal)
         flare['path_string'] = '/plone/a/long/path/to/an/object'
+        flare = IContentListingObject(flare)
         view = getMultiAdapter((portal, request), name=u'search')
         breadcrumbs = view.breadcrumbs(flare)
         self.assertEquals(len(breadcrumbs), 4)
