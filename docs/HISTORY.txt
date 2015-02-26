@@ -1,8 +1,13 @@
 Changelog
 =========
 
-1.3.2 (unreleased)
+1.4.0 (unreleased)
 ------------------
+
+- Add support for search results from external sites. Solr flares having a 
+  getRemoteUrl attribute that starts with 'http' are handled as external
+  results. External sites can be indexed with ftw.crawler.
+  [buchi]
 
 - BugFix in "recursive_index_security" method. Do not try to reindex the
   security on not catalog aware objects.
