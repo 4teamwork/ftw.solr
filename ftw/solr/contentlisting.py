@@ -39,8 +39,8 @@ class SolrContentListingObject(catalog.CatalogContentListingObject):
         return super(SolrContentListingObject, self).appendViewAction()
 
     def is_external(self):
-        if (self._brain.getRemoteUrl and
-            self._brain.getRemoteUrl.startswith('http')):
+        if (getattr(self._brain, 'getRemoteUrl', None) and
+                self._brain.getRemoteUrl.startswith('http')):
             return True
         return False
 
