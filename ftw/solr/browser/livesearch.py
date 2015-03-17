@@ -58,18 +58,31 @@ class LiveSearchReplyView(BrowserView):
         r = quote_bad_chars(q)+'*'
         self.searchterms = url_quote_plus(r)
 
+        friendly_types = plone_utils.getUserFriendlyTypes()
+        query = dict(SearchableText=r, portal_type=friendly_types,
+                     qt='livesearch',
+                     sort_limit=self.limit)
+
         site_encoding = plone_utils.getSiteEncoding()
         if path is None:
             path = getNavigationRoot(context)
+            portal_url = getToolByName(context, 'portal_url')
+            site = portal_url.getPortalObject()
+            if '/'.join(site.getPhysicalPath()) == path:
+                path = None
+        if path is not None:
+            query['path'] = path
+
         catalog = getToolByName(context, 'portal_catalog')
-        friendly_types = plone_utils.getUserFriendlyTypes()
+
 
         self.facet_params = context.restrictedTraverse('@@search-facets/facet_parameters')()
 
+
+
         if self.settings.grouping:
-            results = catalog(SearchableText=r, portal_type=friendly_types,
-                              qt='livesearch', path=path,
-                              sort_limit=self.settings.group_search_limit)
+            query['sort_limit'] = self.settings.group_search_limit
+            results = catalog(**query)
 
             group_by_types = self.settings.group_by + ['other']
             grouped_results = {}
@@ -83,9 +96,7 @@ class LiveSearchReplyView(BrowserView):
                     grouped_results['other'].append(result)
 
         else:
-            results = catalog(SearchableText=r, portal_type=friendly_types,
-                              qt='livesearch', path=path,
-                              sort_limit=self.limit)
+            results = catalog(**query)
 
         self.searchterm_query = '?searchterm=%s'%url_quote_plus(q)
         if not results:
