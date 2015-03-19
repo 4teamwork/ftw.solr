@@ -4,7 +4,10 @@ Changelog
 1.4.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Allow dots in simple terms / simple searches.
+  Fixes issue where a dot in a search term causes the search_pattern template to
+  be circumvented, and therefore messing up the relevancy ranking.
+  [lgraf]
 
 
 1.4.0 (2015-02-26)
