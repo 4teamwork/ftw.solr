@@ -11,7 +11,7 @@ timezone = DateTime().timezone()
 
 
 class SolrContentListingObject(catalog.CatalogContentListingObject):
-    
+
     implements(IContentListingObject)
 
     def __init__(self, flare):
@@ -22,8 +22,7 @@ class SolrContentListingObject(catalog.CatalogContentListingObject):
 
     def __repr__(self):
         return "<ftw.solr.contentlisting." + \
-               "SolrContentListingObject instance at %s>" % (
-            self.getPath(), )
+               "SolrContentListingObject instance at %s>" % (self.getPath(), )
 
     def EffectiveDate(self, zone=timezone):
         return self._brain.effective.toZone(zone).ISO8601()
@@ -34,6 +33,7 @@ class SolrContentListingObject(catalog.CatalogContentListingObject):
     def getIcon(self):
         return queryMultiAdapter((self.context, self.request,
                                   self._brain), interface=IContentIcon)()
+
     def appendViewAction(self):
         if self.is_external():
             return ''
@@ -57,4 +57,3 @@ class SolrContentListingObject(catalog.CatalogContentListingObject):
         if anchor:
             url = url + '#' + anchor
         return url
-
