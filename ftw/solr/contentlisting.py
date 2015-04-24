@@ -5,6 +5,7 @@ from zope.interface import implements
 from zope.component import queryMultiAdapter
 from zope.component.hooks import getSite
 from DateTime import DateTime
+import urllib
 
 timezone = DateTime().timezone()
 
@@ -52,7 +53,7 @@ class SolrContentListingObject(catalog.CatalogContentListingObject):
             url, anchor = url.split('#')
         url = url + self.appendViewAction()
         if search_term:
-            url = url + '?searchterm=' + search_term
+            url = url + '?searchterm=' + urllib.quote(search_term)
         if anchor:
             url = url + '#' + anchor
         return url
