@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.4.2 (unreleased)
+1.4.2 (2015-04-24)
 ------------------
 
 - Fix quoting of searchterm url parameter in search result links.
