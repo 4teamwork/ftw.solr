@@ -5,12 +5,13 @@ from zope.interface import implements
 from zope.component import queryMultiAdapter
 from zope.component.hooks import getSite
 from DateTime import DateTime
+import urllib
 
 timezone = DateTime().timezone()
 
 
 class SolrContentListingObject(catalog.CatalogContentListingObject):
-    
+
     implements(IContentListingObject)
 
     def __init__(self, flare):
@@ -21,8 +22,7 @@ class SolrContentListingObject(catalog.CatalogContentListingObject):
 
     def __repr__(self):
         return "<ftw.solr.contentlisting." + \
-               "SolrContentListingObject instance at %s>" % (
-            self.getPath(), )
+               "SolrContentListingObject instance at %s>" % (self.getPath(), )
 
     def EffectiveDate(self, zone=timezone):
         return self._brain.effective.toZone(zone).ISO8601()
@@ -33,6 +33,7 @@ class SolrContentListingObject(catalog.CatalogContentListingObject):
     def getIcon(self):
         return queryMultiAdapter((self.context, self.request,
                                   self._brain), interface=IContentIcon)()
+
     def appendViewAction(self):
         if self.is_external():
             return ''
@@ -52,8 +53,7 @@ class SolrContentListingObject(catalog.CatalogContentListingObject):
             url, anchor = url.split('#')
         url = url + self.appendViewAction()
         if search_term:
-            url = url + '?searchterm=' + search_term
+            url = url + '?searchterm=' + urllib.quote(search_term)
         if anchor:
             url = url + '#' + anchor
         return url
-
