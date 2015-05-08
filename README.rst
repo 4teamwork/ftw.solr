@@ -219,9 +219,9 @@ for Solr-specific configuration options.
 Links
 =====
 
-- Main github project repository: https://github.com/4teamwork/ftw.solr
-- Issue tracker: https://github.com/4teamwork/ftw.solr/issues
-- Package on pypi: http://pypi.python.org/pypi/ftw.solr
+- Github: https://github.com/4teamwork/ftw.solr
+- Issues: https://github.com/4teamwork/ftw.solr/issues
+- Pypi: http://pypi.python.org/pypi/ftw.solr
 - Continuous integration: https://jenkins.4teamwork.ch/search?q=ftw.solr
 
 
