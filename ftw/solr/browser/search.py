@@ -129,7 +129,7 @@ class SearchView(browser.Search):
         return suggested_terms
 
     def breadcrumbs(self, item):
-        if item.is_external():
+        if hasattr(item, 'is_external') and item.is_external():
             return None
 
         registry = getUtility(IRegistry)

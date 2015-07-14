@@ -57,10 +57,11 @@
                                        show_about python:not isAnon or allowAnonymousViewAbout;">
               <dl class="searchResults">
                   <tal:results repeat="item batch">
-                        <dt tal:attributes="class item/ContentTypeClass">
+                        <dt tal:attributes="class item/ContentTypeClass"
+                            tal:define="url item/result_url | item/getURL">
                           <img tal:replace="structure item/getIcon" />
                           <a href="#"
-                             tal:attributes="href string:${item/result_url};
+                             tal:attributes="href string:${url};
                                              class string:state-${item/review_state}"
                              tal:content="python: item.Title() or item.getId()" />
                         </dt>
