@@ -4,7 +4,9 @@ Changelog
 1.4.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix display of results when the search returns Brains and not Solr flares.
+  This fixes searches which don't include searchableText.
+  [tschanzt]
 
 
 1.4.2 (2015-04-24)
