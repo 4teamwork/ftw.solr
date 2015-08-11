@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.4.3 (unreleased)
+1.4.3 (2015-08-11)
 ------------------
 
 - Fix display of results when the search returns Brains and not Solr flares.
