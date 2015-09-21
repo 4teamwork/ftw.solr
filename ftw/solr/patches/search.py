@@ -1,32 +1,60 @@
-from Missing import MV
-from logging import getLogger
-
+from collective.solr.mangler import cleanupQueryParameters
+from collective.solr.mangler import mangleQuery
+from collective.solr.mangler import optimizeQueryParameters
+from collective.solr.mangler import subtractQueryParameters
 from collective.solr.queryparser import quote
+from collective.solr.search import languageFilter
 from collective.solr.utils import isWildCard
 from collective.solr.utils import prepare_wildcard
+from collective.solr.utils import prepareData
+from logging import getLogger
+from Missing import MV
 
 
 logger = getLogger('collective.solr.search')
 
 
-def buildQuery(self, default=None, **args):
+def buildQueryAndParameters(self, default=None, **args):
     """ helper to build a querystring for simple use-cases """
+    schema = self.getManager().getSchema() or {}
+    config = self.getConfig()
+
+    params = subtractQueryParameters(args)
+    params = cleanupQueryParameters(params, schema)
+
+    languageFilter(args)
+    prepareData(args)
+    mangleQuery(args, config, schema)
+
     logger.debug('building query for "%r", %r', default, args)
     schema = self.getManager().getSchema() or {}
     defaultSearchField = getattr(schema, 'defaultSearchField', None)
+
     if default is not None and defaultSearchField is not None:
         args[None] = default
+
     query = {}
+
     for name, value in sorted(args.items()):
         field = schema.get(name or defaultSearchField, None)
         if field is None or not field.indexed:
-            logger.warning('dropping unknown search attribute "%s" '
-                ' (%r) for query: %r', name, value, args)
+            logger.info(
+                'dropping unknown search attribute "%s" '
+                ' (%r) for query: %r', name, value, args
+            )
             continue
         if isinstance(value, bool):
             value = str(value).lower()
         elif not value:     # solr doesn't like empty fields (+foo:"")
-            continue
+            if not name:
+                continue
+            logger.info(
+                'empty search term form "%s:%s", aborting buildQuery' % (
+                    name,
+                    value
+                )
+            )
+            return {}, params
         elif field.class_ == 'solr.BoolField':
             if not isinstance(value, (tuple, list)):
                 value = [value]
@@ -70,8 +98,9 @@ def buildQuery(self, default=None, **args):
             if not value:   # don't search for empty strings, even quoted
                 continue
         else:
-            logger.info('skipping unsupported value "%r" (%s)',
-                value, name)
+            logger.info(
+                'skipping unsupported value "%r" (%s)', value, name
+            )
             continue
         if name is None:
             if value and value[0] not in '+-':
@@ -85,6 +114,8 @@ def buildQuery(self, default=None, **args):
             value = value.replace('/', '\\/')
 
         query[name] = value
-
     logger.debug('built query "%s"', query)
-    return query
+
+    if query:
+        optimizeQueryParameters(query, params)
+    return query, params

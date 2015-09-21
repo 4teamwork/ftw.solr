@@ -161,9 +161,9 @@ def mangleQuery(keywords, config, schema):
 
 # Allow more solr parameters
 # e.g. 'qt'
-def extractQueryParameters(args):
-    """ extract parameters related to sorting and limiting search results
-        from a given set of arguments, also removing them """
+def subtractQueryParameters(args, request_keywords=None):
+    """ subtract parameters related to sorting and limiting search results
+        from a given set of arguments, also removing them from the input """
     def get(name):
         for prefix in 'sort_', 'sort-':
             key = '%s%s' % (prefix, name)
