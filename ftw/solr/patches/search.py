@@ -108,11 +108,6 @@ def buildQueryAndParameters(self, default=None, **args):
         else:
             value = '+%s:%s' % (name, value)
 
-        # Since Solr 4.0 slashes must be escaped
-        # see: http://wiki.apache.org/solr/SolrQuerySyntax
-        if '/' in value:
-            value = value.replace('/', '\\/')
-
         query[name] = value
     logger.debug('built query "%s"', query)
 
