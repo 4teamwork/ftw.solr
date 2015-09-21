@@ -3,7 +3,7 @@ from collective.solr.manager import SolrConnectionConfig
 from collective.solr.parser import SolrSchema, SolrField
 from collective.solr.tests.utils import getData
 from ftw.solr.patches.mangler import cleanupQueryParameters
-from ftw.solr.patches.mangler import extractQueryParameters
+from ftw.solr.patches.mangler import subtractQueryParameters
 from ftw.solr.patches.mangler import leading_wildcards
 from ftw.solr.patches.mangler import mangleQuery
 from ftw.solr.patches.mangler import mangle_searchable_text_query
@@ -148,10 +148,13 @@ class TestWildcardFunctions(TestCase):
         terms = searchterms_from_value(value)
         self.assertEquals(['foo', 'bar', 'baz'], terms)
 
+    # XXX: Output changed due changes in quote method from collective.solr.
+    # The queryparser now recognizes boolean operators, therefore it's no
+    # longer escaped.
     def test_searchterms_from_value_quotes_terms(self):
         value = 'foo&&bar'
         terms = searchterms_from_value(value)
-        self.assertEquals(['foo\\&&bar'], terms)
+        self.assertEquals(['foo&&bar'], terms)
 
     def test_searchterms_from_value_strips_parentheses(self):
         value = '(foo bar)'
@@ -231,8 +234,8 @@ class TestQueryParameters(TestCase):
         self.assertEquals({'facet': 'true', 'facet.field': ['bar']}, params)
 
     def test_insert_default_qt_parameter(self):
-        self.assertEquals({'qt': 'select'}, extractQueryParameters({}))
+        self.assertEquals({'qt': 'select'}, subtractQueryParameters({}))
 
     def test_keep_existing_qt_parameter(self):
-        self.assertEquals({'qt': 'search'}, extractQueryParameters(
+        self.assertEquals({'qt': 'search'}, subtractQueryParameters(
             {'qt': 'search'}))
