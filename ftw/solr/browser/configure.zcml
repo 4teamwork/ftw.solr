@@ -61,12 +61,4 @@
         name="ftw.solr.suggest.js"
         file="suggest.js" />
 
-    <browser:page
-        for="*"
-        name="solr-maintenance"
-        class=".maintenance.SolrMaintenanceView"
-        allowed_interface="collective.solr.interfaces.ISolrMaintenanceView"
-        permission="cmf.ManagePortal"
-        layer="ftw.solr.interfaces.IFtwSolrLayer" />
-
 </configure>
