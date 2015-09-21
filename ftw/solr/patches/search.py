@@ -1,5 +1,4 @@
 from collective.solr.mangler import cleanupQueryParameters
-from collective.solr.mangler import mangleQuery
 from collective.solr.mangler import optimizeQueryParameters
 from collective.solr.mangler import subtractQueryParameters
 from collective.solr.queryparser import quote
@@ -7,6 +6,7 @@ from collective.solr.search import languageFilter
 from collective.solr.utils import isWildCard
 from collective.solr.utils import prepare_wildcard
 from collective.solr.utils import prepareData
+from ftw.solr.patches.mangler import mangleQuery
 from logging import getLogger
 from Missing import MV
 
