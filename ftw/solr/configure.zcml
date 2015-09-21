@@ -27,14 +27,6 @@
 
     <adapter factory=".flare.PloneFlare" />
 
-    <!-- Contentlisting adapters for solr response/flares -->
-    <adapter
-        factory="plone.app.contentlisting.contentlisting.ContentListing"
-        for="collective.solr.parser.SolrResponse" />
-    <adapter
-        factory="ftw.solr.contentlisting.SolrContentListingObject"
-        for="collective.solr.flare.PloneFlare" />
-
     <genericsetup:registerProfile
         name="default"
         title="ftw.solr"
