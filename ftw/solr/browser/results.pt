@@ -99,9 +99,9 @@
 
                           </span>
 
-                          <tal:snippet tal:define="hasSnippet python:item.UID in snippets">
+                          <tal:snippet tal:define="hasSnippet python:item.uuid() in snippets">
                               <div tal:condition="hasSnippet"
-                                   tal:content="structure python:snippets[item.UID]">
+                                   tal:content="structure python:snippets[item.uuid()]">
                               </div>
                               <div tal:condition="not: hasSnippet"
                                    tal:content="python:item.Description()">
