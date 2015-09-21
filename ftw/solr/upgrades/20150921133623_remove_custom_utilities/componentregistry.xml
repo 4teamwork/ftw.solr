@@ -1,24 +1,25 @@
 <?xml version="1.0"?>
 <componentregistry>
   <utilities>
-    <utility
-      interface="collective.solr.interfaces.ISolrConnectionManager"
-      factory="collective.solr.manager.SolrConnectionManager"
-      remove="True"/>
-    <utility
-      interface="collective.solr.interfaces.ISolrConnectionManager"
-      factory="ftw.solr.manager.SolrConnectionManager"/>
 
-    <!-- Replace the SolrIndexQueueProcessor with our own in order to
-    handle atomic updates -->
+    <utility
+      interface="collective.solr.interfaces.ISolrConnectionManager"
+      factory="collective.solr.manager.SolrConnectionManager" />
+
+    <utility
+      interface="collective.solr.interfaces.ISolrConnectionManager"
+      factory="ftw.solr.manager.SolrConnectionManager" remove="True"/>
+
     <utility
       interface="collective.solr.interfaces.ISolrIndexQueueProcessor"
       name="solr"
-      factory="collective.solr.indexerr.SolrIndexProcessor"
-      remove="True"/>
+      factory="collective.solr.indexerr.SolrIndexProcessor" />
+
     <utility
       interface="collective.solr.interfaces.ISolrIndexQueueProcessor"
       name="ftw-solr"
-      factory="ftw.solr.index_processor.FtwSolrIndexProcessor"/>
+      factory="ftw.solr.index_processor.FtwSolrIndexProcessor"
+      remove="True"/>
+
   </utilities>
 </componentregistry>
