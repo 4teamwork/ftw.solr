@@ -39,6 +39,7 @@
         for="*"
         name="suggest-terms"
         class=".suggest.SuggestView"
+        layer="ftw.solr.interfaces.IFtwSolrLayer"
         permission="zope2.View"/>
 
     <browser:page
