@@ -27,7 +27,6 @@ def buildQueryAndParameters(self, default=None, **args):
     mangleQuery(args, config, schema)
 
     logger.debug('building query for "%r", %r', default, args)
-    schema = self.getManager().getSchema() or {}
     defaultSearchField = getattr(schema, 'defaultSearchField', None)
 
     if default is not None and defaultSearchField is not None:
