@@ -155,6 +155,6 @@ class SearchFacetsView(facets.SearchFacetsView):
         """Return the facet parameters to be queried for as an url-encoded
            string.
         """
-        facets, dependencies = facetParameters(self.context, self.request)
+        facets, dependencies = facetParameters(self)
         return urlencode({'facet': 'true', 'facet.field': facets, },
                          doseq=True)
