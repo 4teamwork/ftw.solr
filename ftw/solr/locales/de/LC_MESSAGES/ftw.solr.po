@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-11-27 08:27+0000\n"
+"POT-Creation-Date: 2015-10-02 10:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -116,6 +116,11 @@ msgstr "Titel"
 #: ./ftw/solr/portlets/wordcloud_portlet.py:42
 msgid "label_scale_factor"
 msgstr "Skalierungsfaktor"
+
+#. Default: "${amount} results available."
+#: ./ftw/solr/browser/livesearch.py:110
+msgid "label_search_results"
+msgstr "${amount} Resultate gefunden."
 
 #. Default: "Search words"
 #: ./ftw/solr/extender.py:36

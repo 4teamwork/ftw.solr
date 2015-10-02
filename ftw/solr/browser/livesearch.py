@@ -1,8 +1,9 @@
 from Acquisition import aq_inner
+from ftw.solr import _
 from ftw.solr.interfaces import ILiveSearchSettings
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone import PloneMessageFactory as _
+from Products.CMFPlone import PloneMessageFactory as _pmf
 from Products.CMFPlone.browser.navtree import getNavigationRoot
 from Products.CMFPlone.utils import safe_unicode
 from Products.PythonScripts.standard import html_quote
@@ -11,9 +12,10 @@ from zope.component import getMultiAdapter, getUtility
 from zope.i18n import translate
 from zope.publisher.browser import BrowserView
 
-legend_livesearch = _('legend_livesearch', default='LiveSearch &#8595;')
-label_no_results_found = _('label_no_results_found', default='No matching results found.')
-label_show_all = _('label_show_all', default='Show all items')
+
+legend_livesearch = _pmf('legend_livesearch', default='LiveSearch &#8595;')
+label_no_results_found = _pmf('label_no_results_found', default='No matching results found.')
+label_show_all = _pmf('label_show_all', default='Show all items')
 
 
 class LiveSearchReplyView(BrowserView):
@@ -99,6 +101,21 @@ class LiveSearchReplyView(BrowserView):
             self.write('''</fieldset>''')
 
         else:
+            self.write(
+                '''
+                <span class="hiddenStructure"
+                      aria-live="polite" role="state">
+                      {0}
+                </span>
+                '''.format(
+                    translate(
+                        _(u'label_search_results',
+                            default=u'${amount} results available.',
+                            mapping={'amount': len(results[:self.limit])}),
+                        context=self.request)
+                    )
+                )
+
             self.write('''<fieldset class="livesearchContainer">''')
             self.write('''<legend id="livesearchLegend">%s</legend>''' % (
                 translate(legend_livesearch, context=self.request)))
