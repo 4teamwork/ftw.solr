@@ -70,7 +70,7 @@ class LiveSearchReplyView(BrowserView):
 
         if self.settings.grouping:
             results = catalog(SearchableText=r, portal_type=friendly_types,
-                              qt='livesearch', path=path,
+                              request_handler='livesearch', path=path,
                               sort_limit=self.settings.group_search_limit)
 
             group_by_types = self.settings.group_by + ['other']
@@ -86,7 +86,7 @@ class LiveSearchReplyView(BrowserView):
 
         else:
             results = catalog(SearchableText=r, portal_type=friendly_types,
-                              qt='livesearch', path=path,
+                              request_handler='livesearch', path=path,
                               sort_limit=self.limit)
 
         self.searchterm_query = '?searchterm=%s'%url_quote_plus(q)
