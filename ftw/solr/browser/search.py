@@ -69,7 +69,7 @@ class SearchView(browser.Search):
         if query is None:
             results = []
         else:
-            query.update({'qt': 'hlsearch'})
+            query.update({'request_handler': 'hlsearch'})
             catalog = getToolByName(self.context, 'portal_catalog')
             try:
                 results = catalog(**query)
