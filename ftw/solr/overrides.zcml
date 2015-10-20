@@ -10,4 +10,17 @@
       factory="ftw.solr.contentlisting.SolrContentListingObject"
       for="collective.solr.flare.PloneFlare" />
 
+  <!-- Unregister binary adder -->
+  <include package="z3c.unconfigure" file="meta.zcml" />
+  <unconfigure>
+    <adapter
+        factory="collective.solr.indexer.BinaryAdder"
+        name="File"
+        />
+    <adapter
+        factory="collective.solr.indexer.BinaryAdder"
+        name="Image"
+        />
+  </unconfigure>
+
 </configure>
