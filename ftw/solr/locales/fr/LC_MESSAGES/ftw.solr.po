@@ -1,0 +1,148 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2015-11-23 15:12+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Preferred-Encodings: utf-8 latin1\n"
+
+#: ./ftw/solr/interfaces.py:71
+msgid "Constrain searches to navigation root"
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:13
+msgid "Enable Grouping in LiveSearch"
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:39
+msgid "Group Limit"
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:32
+msgid "Group Search Limit"
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:20
+msgid "Groups"
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:14
+msgid "If enabled, livesearch results are grouped by portal type."
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:65
+msgid "Max. Breadcrumbs"
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:52
+msgid "Maximum Description Length"
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:47
+msgid "Maximum Title Length"
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:70
+msgid "Respect Navigation Root"
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:21
+msgid "Specify a list of portal types by which livesearch results are grouped. Groups are shown in the provided order. Results that do not match a portal type in the given list are shown at the bottom."
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:40
+msgid "The maximum number of search results per group."
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:33
+msgid "The maximum number of search results to consider forgrouping."
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:60
+msgid "Use Path for Breadcrumbs"
+msgstr ""
+
+#. Default: "Number of different sizes to represent term weight"
+#: ./ftw/solr/portlets/wordcloud_portlet.py:35
+msgid "help_num_sizes"
+msgstr ""
+
+#. Default: "Maximum number of words to be displayed"
+#: ./ftw/solr/portlets/wordcloud_portlet.py:28
+msgid "help_num_words"
+msgstr ""
+
+#. Default: "Portlet title"
+#: ./ftw/solr/portlets/wordcloud_portlet.py:22
+msgid "help_portlet_title"
+msgstr ""
+
+#. Default: "Constant scaling factor to scale font size by"
+#: ./ftw/solr/portlets/wordcloud_portlet.py:43
+msgid "help_scale_factor"
+msgstr ""
+
+#. Default: "Specify words for which this item will show up as the first search result. Multiple words can be specified on new lines."
+#: ./ftw/solr/extender.py:37
+msgid "help_searchwords"
+msgstr ""
+
+#. Default: "No matching results found."
+#: ./ftw/solr/browser/livesearch.py:15
+msgid "label_no_results_found"
+msgstr ""
+
+#. Default: "Number of sizes"
+#: ./ftw/solr/portlets/wordcloud_portlet.py:34
+msgid "label_num_sizes"
+msgstr ""
+
+#. Default: "Number of words"
+#: ./ftw/solr/portlets/wordcloud_portlet.py:27
+msgid "label_num_words"
+msgstr ""
+
+#. Default: "Title"
+#: ./ftw/solr/portlets/wordcloud_portlet.py:21
+msgid "label_portlet_title"
+msgstr ""
+
+#. Default: "Scale factor"
+#: ./ftw/solr/portlets/wordcloud_portlet.py:42
+msgid "label_scale_factor"
+msgstr ""
+
+#. Default: "Search words"
+#: ./ftw/solr/extender.py:36
+msgid "label_searchwords"
+msgstr "Mots de recherche"
+
+#. Default: "Show all items"
+#: ./ftw/solr/browser/livesearch.py:16
+msgid "label_show_all"
+msgstr ""
+
+#. Default: "Show in search"
+#: ./ftw/solr/extender.py:22
+msgid "label_showinsearch"
+msgstr ""
+
+#. Default: "LiveSearch &#8595;"
+#: ./ftw/solr/browser/livesearch.py:14
+msgid "legend_livesearch"
+msgstr ""
+
+#. Default: "Did you mean… ${suggestion}"
+#: ./ftw/solr/browser/results.pt:42
+msgid "text_did_you_mean"
+msgstr ""
+
+
