@@ -1,3 +1,6 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -16,31 +19,31 @@ msgid "Remove this search limit..."
 msgstr ""
 
 msgid "Search words"
-msgstr "Suchbegriffe"
+msgstr ""
 
 msgid "Show in search"
-msgstr "In der Suche zeigen"
+msgstr ""
 
 msgid "[* TO NOW/DAY-1YEAR]"
-msgstr "Vor einem Jahr"
+msgstr "Un anno fa"
 
 msgid "[NOW/DAY TO *]"
-msgstr "Heute"
+msgstr "Oggi"
 
 msgid "[NOW/DAY-1DAY TO NOW/DAY]"
-msgstr "Gestern"
+msgstr "Ieri"
 
 msgid "[NOW/DAY-1MONTH TO *]"
-msgstr "Letzten Monat"
+msgstr "Il mese scorso"
 
 msgid "[NOW/DAY-1YEAR TO *]"
-msgstr "Letztes Jahr"
+msgstr "L'anno scorso"
 
 msgid "[NOW/DAY-7DAYS TO *]"
-msgstr "Letzte Woche"
+msgstr "Il mese scorso"
 
 msgid "creator_fullname"
-msgstr "Ersteller"
+msgstr "Creatore"
 
 #. Default: "Filter"
 #: ./ftw/solr/browser/facets.pt:6
@@ -68,15 +71,15 @@ msgid "legend_livesearch"
 msgstr ""
 
 msgid "modified"
-msgstr "Letzte Änderung"
+msgstr "Ultimo aggiornamento"
 
 msgid "portal_type"
-msgstr "Inhaltstyp"
+msgstr "Tipo"
 
 msgid "review_state"
-msgstr "Revisionsstatus"
+msgstr "Revisione"
 
 msgid "site_section"
-msgstr "Bereich"
+msgstr "Sezione"
 
 

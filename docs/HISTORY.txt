@@ -4,7 +4,8 @@ Changelog
 1.4.4 (unreleased)
 ------------------
 
-- Add French translation.
+- Add English, French and Italian translation of the time range facets (and
+  a selection of other message ids).
   [mbaechtold]
 
 
