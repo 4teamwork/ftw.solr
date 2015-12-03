@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-05-24 09:00+0000\n"
+"POT-Creation-Date: 2015-11-27 08:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -10,7 +10,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
+
+#: ./ftw/solr/interfaces.py:71
+msgid "Constrain searches to navigation root"
+msgstr ""
 
 #: ./ftw/solr/interfaces.py:13
 msgid "Enable Grouping in LiveSearch"
@@ -32,12 +35,20 @@ msgstr ""
 msgid "If enabled, livesearch results are grouped by portal type."
 msgstr ""
 
+#: ./ftw/solr/interfaces.py:65
+msgid "Max. Breadcrumbs"
+msgstr ""
+
 #: ./ftw/solr/interfaces.py:52
 msgid "Maximum Description Length"
 msgstr ""
 
 #: ./ftw/solr/interfaces.py:47
 msgid "Maximum Title Length"
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:70
+msgid "Respect Navigation Root"
 msgstr ""
 
 #: ./ftw/solr/interfaces.py:21
@@ -50,6 +61,10 @@ msgstr ""
 
 #: ./ftw/solr/interfaces.py:33
 msgid "The maximum number of search results to consider forgrouping."
+msgstr ""
+
+#: ./ftw/solr/interfaces.py:60
+msgid "Use Path for Breadcrumbs"
 msgstr ""
 
 #. Default: "Number of different sizes to represent term weight"
@@ -77,13 +92,8 @@ msgstr "Konstanter Faktor um den die Schriftgrösse skaliert wird"
 msgid "help_searchwords"
 msgstr "Zusätzliche Suchbegriffe, bei welchen dieser Artikel gefunden werden soll. Ein Begriff pro Zeile."
 
-#. Default: "Advanced Search…"
-#: ./ftw/solr/browser/livesearch.py:17
-msgid "label_advanced_search"
-msgstr ""
-
 #. Default: "No matching results found."
-#: ./ftw/solr/browser/livesearch.py:16
+#: ./ftw/solr/browser/livesearch.py:15
 msgid "label_no_results_found"
 msgstr ""
 
@@ -113,7 +123,7 @@ msgid "label_searchwords"
 msgstr "Suchbegriffe"
 
 #. Default: "Show all items"
-#: ./ftw/solr/browser/livesearch.py:18
+#: ./ftw/solr/browser/livesearch.py:16
 msgid "label_show_all"
 msgstr ""
 
@@ -123,7 +133,7 @@ msgid "label_showinsearch"
 msgstr "In der Suche zeigen"
 
 #. Default: "LiveSearch &#8595;"
-#: ./ftw/solr/browser/livesearch.py:15
+#: ./ftw/solr/browser/livesearch.py:14
 msgid "legend_livesearch"
 msgstr ""
 
