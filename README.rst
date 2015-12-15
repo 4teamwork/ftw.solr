@@ -4,6 +4,7 @@ Introduction
 ``ftw.solr`` provides various customizations and enhancements on top of
 ``collective.solr`` which integrates the Solr search engine with Plone.
 
+.. contents:: Table of Contents
 
 Features
 ========
@@ -99,7 +100,7 @@ Search Handlers
 ---------------
 
 ``ftw.solr`` requires two custom search handlers that must be configured on the
-Solr server. Search handlers are configured in ``solrconfig.xml`` of your 
+Solr server. Search handlers are configured in ``solrconfig.xml`` of your
 collection.
 
 The ``livesearch`` request handler is used for live search and should limit the
@@ -141,7 +142,7 @@ Highlighting
 Highlighting requires an index named ``snippetText``
 with its own field type which does not do too much text analysis.
 Fields and indexes are configured in ``schema.xml`` of your collection.
- 
+
 Example::
 
     <fieldType name="text_snippets" class="solr.TextField" positionIncrementGap="100">
@@ -206,14 +207,86 @@ Index example::
 Installation
 ============
 
-Install ``ftw.solr`` by adding it to the list of eggs in your
-buildout or by adding it as a dependency of your policy package. Then run
-buildout and restart your instance.
+Add as dependency
+-----------------
 
-Go to *Site Setup* of your Plone site and activate the 
-``ftw.solr-autocomplete`` add-on.
-Check the Solr control panel provided by ``collective.solr``
-for Solr-specific configuration options.
+Install ``ftw.solr`` by adding it to the list of eggs in your
+buildout or by adding it as a dependency of your policy package.
+
+.. code:: rst
+
+    [instance]
+    eggs +=
+        ftw.solr
+
+Extend your buildout
+--------------------
+
+For production:
+
+.. code:: ini
+
+    [buildout]
+    extends =
+        https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/production.cfg
+        https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/solr.cfg
+
+    deployment-number = 05
+
+For local development:
+
+.. code:: ini
+
+    [buildout]
+    extends =
+        https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/plone-development.cfg
+        https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/plone-development-solr.cfg
+
+Update medatata.xml
+-------------------
+
+Add ``ftw.solr`` to your metadata.xml:
+
+.. code:: xml
+
+    <?xml version="1.0"?>
+    <metadata>
+        <dependencies>
+            <dependency>profile-ftw.solr:default</dependency>
+        </dependencies>
+    </metadata>
+
+Use solr.xml
+------------
+
+Add a ``solr.xml`` for ``collective.solr`` controlpanel configurations:
+
+.. code:: xml
+
+    <?xml version="1.0"?>
+    <object name="solr">
+      <connection>
+        <active value="True" />
+      </connection>
+      <settings>
+        <commit-within value="10000"/>
+        <required-query-parameters>
+          <parameter name="SearchableText" />
+          <parameter name="qt" />
+        </required-query-parameters>
+        <search-facets>
+          <parameter name="portal_type"/>
+          <parameter name="review_state"/>
+        </search-facets>
+      </settings>
+    </object>
+
+Run buildout
+------------
+
+If you configured your solr, you can buildout and restart your instance.
+
+- Install the generic setup profile of ``ftw.solr``.
 
 
 Links
