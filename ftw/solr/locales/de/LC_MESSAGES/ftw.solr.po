@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-12-16 11:02+0000\n"
+"POT-Creation-Date: 2015-12-16 12:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 msgid "Enable Grouping in LiveSearch"
 msgstr ""
 
-#: ./ftw/solr/configure.zcml:45
+#: ./ftw/solr/configure.zcml:46
 msgid "Enables autocomplete instead of live search"
 msgstr ""
 
@@ -39,7 +39,7 @@ msgstr ""
 msgid "If enabled, livesearch results are grouped by portal type."
 msgstr ""
 
-#: ./ftw/solr/configure.zcml:37
+#: ./ftw/solr/configure.zcml:38
 msgid "Installs the ftw.solr package"
 msgstr ""
 
@@ -75,11 +75,11 @@ msgstr ""
 msgid "Use Path for Breadcrumbs"
 msgstr ""
 
-#: ./ftw/solr/configure.zcml:37
+#: ./ftw/solr/configure.zcml:38
 msgid "ftw.solr"
 msgstr ""
 
-#: ./ftw/solr/configure.zcml:45
+#: ./ftw/solr/configure.zcml:46
 msgid "ftw.solr-autocomplete"
 msgstr ""
 
@@ -130,7 +130,7 @@ msgid "help_searchwords"
 msgstr "Zusätzliche Suchbegriffe, bei welchen dieser Artikel gefunden werden soll. Ein Begriff pro Zeile."
 
 #. Default: "No items found"
-#: ./ftw/solr/browser/livesearch.py:220
+#: ./ftw/solr/browser/livesearch.py:217
 msgid "label_nothing_found"
 msgstr "Keine Ergebnisse gefunden"
 
@@ -161,7 +161,7 @@ msgid "label_search"
 msgstr "Suche"
 
 #. Default: "Search help"
-#: ./ftw/solr/browser/livesearch.py:189
+#: ./ftw/solr/browser/livesearch.py:186
 msgid "label_search_help"
 msgstr "Hilfe zur Suche"
 
@@ -176,7 +176,7 @@ msgid "label_searchwords"
 msgstr "Suchbegriffe"
 
 #. Default: "Show all items"
-#: ./ftw/solr/browser/livesearch.py:204
+#: ./ftw/solr/browser/livesearch.py:201
 msgid "label_show_all"
 msgstr "Alle Ergebnisse anzeigen"
 

@@ -79,6 +79,9 @@ msgstr "Tipo"
 msgid "review_state"
 msgstr "Revisione"
 
+msgid "site_area"
+msgstr ""
+
 msgid "site_section"
 msgstr "Sezione"
 

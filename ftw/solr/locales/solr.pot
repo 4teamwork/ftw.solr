@@ -82,3 +82,5 @@ msgstr ""
 msgid "site_section"
 msgstr ""
 
+msgid "site_area"
+msgstr ""
