@@ -82,4 +82,3 @@ msgstr "Révision"
 msgid "site_section"
 msgstr "Séction"
 
-
