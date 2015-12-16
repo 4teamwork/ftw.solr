@@ -256,31 +256,6 @@ Add ``ftw.solr`` to your metadata.xml:
         </dependencies>
     </metadata>
 
-Use solr.xml
-------------
-
-Add a ``solr.xml`` for ``collective.solr`` controlpanel configurations:
-
-.. code:: xml
-
-    <?xml version="1.0"?>
-    <object name="solr">
-      <connection>
-        <active value="True" />
-      </connection>
-      <settings>
-        <commit-within value="10000"/>
-        <required-query-parameters>
-          <parameter name="SearchableText" />
-          <parameter name="qt" />
-        </required-query-parameters>
-        <search-facets>
-          <parameter name="portal_type"/>
-          <parameter name="review_state"/>
-        </search-facets>
-      </settings>
-    </object>
-
 Run buildout
 ------------
 
