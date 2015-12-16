@@ -79,4 +79,3 @@ msgstr "Revisionsstatus"
 msgid "site_section"
 msgstr "Bereich"
 
-
