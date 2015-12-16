@@ -25,6 +25,7 @@
     <adapter name="site_section" factory=".indexers.site_section" />
     <adapter name="creator_fullname" factory=".indexers.creator_fullname" />
     <adapter name="snippetText" factory=".indexers.SnippetTextIndexer" />
+    <adapter name="site_area" factory=".indexers.site_area" />
 
     <adapter factory=".flare.PloneFlare" />
 

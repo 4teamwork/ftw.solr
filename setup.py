@@ -40,6 +40,7 @@ setup(name='ftw.solr',
         'plone.app.search',
         'requests',
         'z3c.unconfigure',
+        'plone.api',
         ],
 
       tests_require=tests_require,

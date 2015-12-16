@@ -1,4 +1,4 @@
-import re
+from plone import api
 from plone.indexer import indexer
 from plone.indexer.interfaces import IIndexer
 from plone.indexer.wrapper import IndexableObjectWrapper
@@ -11,6 +11,14 @@ from zope.component import adapts
 from zope.component import getMultiAdapter
 from zope.interface import implements
 from zope.interface import Interface
+import re
+
+
+@indexer(Interface)
+def site_area(obj):
+    """ Index the title of the closest navigation root
+    """
+    return api.portal.get_navigation_root(obj).Title()
 
 
 @indexer(Interface)
