@@ -3,7 +3,7 @@
      tal:condition="python: selected"
      i18n:domain="solr">
 
-  <span i18n:translate="heading_search_filtered_by" i18n:domain="bern.web">
+  <span i18n:translate="heading_search_filtered_by" i18n:domain="ftw.solr">
     Suche eingeschr&auml;nkt nach: </span>
 
     <ul id="selected-facets" tal:condition="selected">

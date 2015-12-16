@@ -5,7 +5,7 @@
   var selectItem = function(event, ui) { window.location = ui.item.url; };
 
   var options = {
-    source: "livesearch_reply",
+    source: "ftw_solr_livesearch_reply",
     minLength: 3,
     position: { my: "right top+5", at: "right bottom", collision: "none" },
     select: selectItem,
