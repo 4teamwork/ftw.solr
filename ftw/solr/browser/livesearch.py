@@ -27,7 +27,7 @@ def quote_bad_chars(s):
     return s
 
 
-class LiveSearchReplyView(BrowserView):
+class FtwSolrLiveSearchReplyView(BrowserView):
 
     def __call__(self):
         context = aq_inner(self.context)

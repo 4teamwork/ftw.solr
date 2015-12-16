@@ -11,7 +11,7 @@
   <metal:searchresults define-macro="search_results">
     <div id="search-results" i18n:domain="ftw.solr" tal:define="st python:request.get('SearchableText', '')">
 
-        <div id="filter-form" i18n:domain="bern.web">
+        <div id="filter-form" i18n:domain="ftw.solr">
           <div>
             <div class="searchBox LSBox filter"
                  tal:define="portal context/@@plone_portal_state/portal;
