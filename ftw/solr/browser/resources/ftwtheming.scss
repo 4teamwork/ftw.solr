@@ -64,6 +64,13 @@
   padding: 0.5em;
   margin-bottom: 2em;
 
+  #portal-searchfacets {
+      background-color: initial;
+      padding: initial;
+      min-width: initial;
+      float: initial;
+  }
+
   & .amount {
     font-weight: bold;
   }
