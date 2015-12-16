@@ -27,6 +27,9 @@ msgstr ""
 msgid "modified"
 msgstr ""
 
+msgid "site_area"
+msgstr ""
+
 msgid "[NOW/DAY TO *]"
 msgstr ""
 

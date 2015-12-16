@@ -79,6 +79,9 @@ msgstr "Portal type"
 msgid "review_state"
 msgstr "Review state"
 
+msgid "site_area"
+msgstr ""
+
 msgid "site_section"
 msgstr "Site section"
 
