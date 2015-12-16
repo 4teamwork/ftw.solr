@@ -1,0 +1,11 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    xmlns:ftwtheming="http://namespaces.zope.org/ftw.theming">
+
+    <configure zcml:condition="installed ftw.theming">
+        <include package="ftw.theming" file="meta.zcml" />
+        <ftwtheming:scss file="browser/resources/ftwtheming.scss" />
+    </configure>
+
+</configure>

@@ -13,9 +13,11 @@
 
     <include package=".patches" />
     <include file="permissions.zcml" />
+    <include file="resources.zcml" />
 
     <include package=".browser" />
     <include package=".portlets" />
+    <include package=".viewlets" />
 
     <include zcml:condition="installed ftw.lawgiver" file="lawgiver.zcml" />
 

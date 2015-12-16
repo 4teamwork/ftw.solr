@@ -8,9 +8,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.PloneBatch import Batch
 from Products.CMFPlone.utils import safe_hasattr
 from Products.ZCTextIndex.ParseTree import ParseError
-from plone.app.layout.viewlets import common
 from collective.solr.solr import SolrException
-from collective.solr.browser.facets import FacetMixin
 from zope.component import getMultiAdapter, getUtility
 from plone.registry.interfaces import IRegistry
 from ftw.solr.interfaces import ISearchSettings
@@ -164,8 +162,3 @@ class SearchView(browser.Search):
             empty = {'absolute_url': '', 'Title': unicode('…', 'utf-8')}
             breadcrumbs = [breadcrumbs[0], empty] + breadcrumbs[-maxb+1:]
         return breadcrumbs
-
-
-class SearchBoxViewlet(common.SearchBoxViewlet, FacetMixin):
-
-    index = ViewPageTemplateFile('searchbox.pt')
