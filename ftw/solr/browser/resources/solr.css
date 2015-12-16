@@ -27,10 +27,10 @@
   display: block;
 }
 
-.global-nav-search-wrapper .portal-searchbox-wrapper #portal-searchbox form #currentfolder_item,
-.global-nav-search-wrapper .portal-searchbox-wrapper #portal-searchbox form #search-no-results-message,
-.global-nav-search-wrapper .portal-searchbox-wrapper #portal-searchbox form #search-amount-results-found-message,
-.global-nav-search-wrapper .portal-searchbox-wrapper #portal-searchbox form #search-one-result-found-message {
+#currentfolder_item,
+#search-no-results-message,
+#search-amount-results-found-message,
+#search-one-result-found-message {
   display: none;
 }
 
@@ -211,6 +211,7 @@
   position: absolute;
   overflow: auto;
   padding: 8px 0;
+  background-color: #fff;
   border: 1px solid #cccccc;
   box-shadow: 0.5em 1em 2em -1em #cccccc;
   -webkit-box-shadow: 0.5em 1em 2em -1em #cccccc;
@@ -255,29 +256,11 @@
   }
 }
 
-.ui-autocomplete:before {
-  content: "";
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 0px 16px 16px;
-  position: absolute;
-  margin-top: -16px;
-  right: 0;
-  margin-right: 4px;
-}
-
-.ui-autocomplete:after {
-  content: "";
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 0 15px 15px;
-  position: absolute;
-  margin-top: -15px;
-  right: 0;
-  top: 0;
-  margin-right: 5px;
+#portal-searchfacets {
+    background-color: initial;
+    padding: initial;
+    min-width: initial;
+    float: initial;
 }
 
 .ui-autocomplete > .currentFolderItem {
