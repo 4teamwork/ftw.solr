@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<object>
+
+    <order manager="plone.portalheader" skinname="Sunburst Theme">
+        <viewlet name="ftw.solr.searchbox" insert-after="plone.searchbox"/>
+    </order>
+
+    <hidden manager="plone.portalheader" skinname="Sunburst Theme">
+        <viewlet name="plone.searchbox" />
+    </hidden>
+
+
+</object>

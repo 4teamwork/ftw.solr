@@ -3,15 +3,6 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="ftw.solr">
 
-    <!-- The search box -->
-    <browser:viewlet
-        name="plone.searchbox"
-        manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
-        class="ftw.solr.browser.search.SearchBoxViewlet"
-        permission="zope2.View"
-        layer="ftw.solr.interfaces.IFtwSolrLayer"
-        />
-
     <browser:page
         for="OFS.interfaces.IFolder"
         name="search-facets"
@@ -20,6 +11,22 @@
         permission="zope2.View"
         allowed_attributes="facet_parameters"
         layer="ftw.solr.interfaces.IFtwSolrLayer" />
+
+    <browser:page
+        for="OFS.interfaces.IFolder"
+        name="available-facets"
+        template="available-facets.pt"
+        class=".facets.AvailableSearchFacetsView"
+        permission="zope2.View"
+        allowed_attributes="facet_parameters" />
+
+    <browser:page
+        for="OFS.interfaces.IFolder"
+        name="selected-facets"
+        template="selected-facets.pt"
+        class=".facets.SearchFacetsView"
+        permission="zope2.View"
+        allowed_attributes="facet_parameters" />
 
     <browser:page
         for="*"
@@ -48,6 +55,10 @@
         class=".wordcloud.WordCloudView"
         permission="zope2.View"
         layer="ftw.solr.interfaces.IFtwSolrLayer" />
+
+    <browser:resourceDirectory
+        name="ftw.solr"
+        directory="resources" />
 
     <browser:resource
         name="search.js"

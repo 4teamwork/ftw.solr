@@ -1,0 +1,18 @@
+<div tal:omit-tag=""
+     tal:define="facets view/facets; selected view/selected"
+     tal:condition="python: facets"
+     i18n:domain="solr">
+
+  <tal:facets repeat="facet facets">
+    <div class="filter facets" tal:define="facet_counts facet/counts">
+      <span tal:content="facet/title" i18n:translate="" tal:attributes="class python: not facet_counts and 'selected' or ''" />
+      <ul tal:condition="facet_counts">
+          <li tal:repeat="item facet_counts">
+              <a href="#" tal:content="string:${item/title} (${item/count})"
+                 tal:attributes="href string:${request/ACTUAL_URL}?${item/query}" />
+          </li>
+      </ul>
+    </div>
+  </tal:facets>
+
+</div>
