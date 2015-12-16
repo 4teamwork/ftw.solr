@@ -169,6 +169,8 @@ class AvailableSearchFacetsView(SearchFacetsView):
 
         facets = [{'title': 'portal_type',
                    'counts': []},
+                  {'title': 'site_section',
+                   'counts': []},
                   {'title': 'modified',
                    'counts': []}]
 
