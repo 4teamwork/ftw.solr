@@ -32,7 +32,7 @@
       </h1>
 
       <div class="row">
-          <div class="searchLeftPart">
+          <div>
             <form name="searchform"
                   action="@@search"
                   class="searchPage enableAutoFocus solrSearchPage">

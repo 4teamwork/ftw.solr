@@ -57,43 +57,6 @@
   width: 100%;
 }
 
-.searchLeftPart {
-  position: relative;
-  float: left;
-  left: 100%;
-  clear: none;
-  margin-left: -98.5025%;
-  width: 97.00499%;
-}
-
-@media (min-width: 1024px) {
-  .searchLeftPart {
-    margin-left: -98.5025%;
-    width: 72.37937%;
-  }
-}
-
-.searchRightPart {
-  position: relative;
-  float: left;
-  left: 100%;
-  clear: none;
-  margin-left: -98.5025%;
-  width: 97.00499%;
-  clear: both;
-}
-
-@media (min-width: 1024px) {
-  .searchRightPart {
-    position: relative;
-    float: left;
-    left: 100%;
-    clear: none;
-    margin-left: -24.62562%;
-    width: 23.12812%;
-  }
-}
-
 .searchResults > dt {
   white-space: nowrap;
   text-overflow: ellipsis;
