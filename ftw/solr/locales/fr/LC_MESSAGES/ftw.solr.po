@@ -105,7 +105,7 @@ msgstr ""
 #. Default: "Suche eingeschr&auml;nkt nach:"
 #: ./ftw/solr/browser/selected-facets.pt:6
 msgid "heading_search_filtered_by"
-msgstr ""
+msgstr "Recherche limitée par:"
 
 #. Default: "Number of different sizes to represent term weight"
 #: ./ftw/solr/portlets/wordcloud_portlet.py:35
@@ -135,7 +135,7 @@ msgstr ""
 #. Default: "No items found"
 #: ./ftw/solr/browser/livesearch.py:217
 msgid "label_nothing_found"
-msgstr ""
+msgstr "Aucun élément trouvé"
 
 #. Default: "Number of sizes"
 #: ./ftw/solr/portlets/wordcloud_portlet.py:34
@@ -161,17 +161,17 @@ msgstr ""
 #: ./ftw/solr/browser/results.pt:31
 #: ./ftw/solr/viewlets/templates/searchbox.pt:27
 msgid "label_search"
-msgstr ""
+msgstr "Rechercher"
 
 #. Default: "Search help"
 #: ./ftw/solr/browser/livesearch.py:186
 msgid "label_search_help"
-msgstr ""
+msgstr "Aide pour la recherche"
 
 #. Default: "only in current section"
 #: ./ftw/solr/viewlets/templates/searchbox.pt:38
 msgid "label_searchbox_currentfolder_only"
-msgstr ""
+msgstr "Seulement dans le dossier courant"
 
 #. Default: "Search words"
 #: ./ftw/solr/extender.py:36
@@ -181,7 +181,7 @@ msgstr "Mots de recherche"
 #. Default: "Show all items"
 #: ./ftw/solr/browser/livesearch.py:201
 msgid "label_show_all"
-msgstr ""
+msgstr "Afficher tous les articles"
 
 #. Default: "Show in search"
 #: ./ftw/solr/extender.py:22
@@ -191,31 +191,31 @@ msgstr ""
 #. Default: "Did you mean… ${suggestion}"
 #: ./ftw/solr/browser/results.pt:62
 msgid "text_did_you_mean"
-msgstr ""
+msgstr "Vouliez-vous dire... ${suggestion}"
 
 #. Default: "Search Site"
 #: ./ftw/solr/viewlets/templates/searchbox.pt:11
 msgid "text_search"
-msgstr ""
+msgstr "Rechercher"
 
 #. Default: "No search results."
 #: ./ftw/solr/viewlets/templates/searchbox.pt:46
 msgid "text_search_help_no_results"
-msgstr ""
+msgstr "Aucun élément trouvé"
 
 #. Default: "result found, use up and down keys to navigate."
 #: ./ftw/solr/viewlets/templates/searchbox.pt:56
 msgid "text_search_one_result_found"
-msgstr ""
+msgstr "Résultat trouvé, utilisez touches haut et bas pour naviguer."
 
 #. Default: "results found, use up and down keys to navigate."
 #: ./ftw/solr/viewlets/templates/searchbox.pt:51
 msgid "text_search_results_found"
-msgstr ""
+msgstr "trouvé aucun résultat, utilisez touches haut et bas pour naviguer."
 
 #. Default: "Search Site"
 #: ./ftw/solr/browser/results.pt:21
 #: ./ftw/solr/viewlets/templates/searchbox.pt:15
 msgid "title_search_site"
-msgstr ""
+msgstr "Rechercher"
 
