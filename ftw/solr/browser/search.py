@@ -1,20 +1,27 @@
 # -*- coding: utf-8 -*-
-
+from collective.solr.solr import SolrException
+from ftw.solr.interfaces import ISearchSettings
 from logging import getLogger
-from plone.app.search import browser
 from plone.app.contentlisting.interfaces import IContentListing
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from plone.app.search import browser
+from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.PloneBatch import Batch
 from Products.CMFPlone.utils import safe_hasattr
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.ZCTextIndex.ParseTree import ParseError
-from collective.solr.solr import SolrException
-from zope.component import getMultiAdapter, getUtility
-from plone.registry.interfaces import IRegistry
-from ftw.solr.interfaces import ISearchSettings
+from zope.component import getMultiAdapter
+from zope.component import getUtility
+from zope.deferredimport import deprecated
 
 
 logger = getLogger('ftw.solr')
+
+
+deprecated(
+    "This class is moved to another place. "
+    "Please use ftw.solr.viewlets.searchbox.SearchBoxViewlet instead",
+    SearchBoxViewlet='ftw.solr.viewlets.searchbox:SearchBoxViewlet')
 
 
 class SearchView(browser.Search):
