@@ -1,3 +1,9 @@
+$dropdown-bg-color: white !default;
+$dropdown-border-color: #aaa !default;
+$dropdown-link-color: $link-color !default;
+$dropdown-bg-color-hover: #3875d7 !default;
+$dropdown-link-color-hover: $link-hover-color !default;
+
 .global-nav-search-wrapper {
   .portal-searchbox-wrapper {
     top: -135px;
