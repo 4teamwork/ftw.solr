@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from collective.solr.solr import SolrException
+from collective.solr.exceptions import SolrConnectionException
 from ftw.solr.interfaces import ISearchSettings
 from logging import getLogger
 from plone.app.contentlisting.interfaces import IContentListing
@@ -81,7 +81,7 @@ class SearchView(browser.Search):
             except ParseError:
                 logger.exception('Exception while searching')
                 return []
-            except SolrException:
+            except SolrConnectionException:
                 logger.exception('Exception while searching')
                 return []
 
