@@ -204,6 +204,12 @@ Index example::
     <copyField source="SearchableText" dest="wordCloudTerms"/>
 
 
+Search / Livesearch
+-------------------
+
+``ftw.solr``provides a better livesearch implementation using jQuery Autocomplete widget.
+A new search and result template is also included.
+
 Installation
 ============
 

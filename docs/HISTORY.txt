@@ -1,10 +1,17 @@
 Changelog
 =========
 
-1.4.5 (unreleased)
+2.0.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Use a different request handler for the livesearch.
+  [buchi]
+
+- Implement a new livesearch based on jquery autocomplete widget.
+  [mathias.leimgruber]
+
+- Moved atomic update feature to collective.solr.
+  [mathias.leimgruber]
 
 
 1.4.4 (2015-12-23)
