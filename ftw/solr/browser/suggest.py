@@ -1,9 +1,9 @@
-import json
-import urllib
-
+from collective.solr.exceptions import SolrConnectionException
 from collective.solr.interfaces import ISolrConnectionManager
 from Products.Five.browser import BrowserView
 from zope.component import getUtility
+import json
+import urllib
 
 
 class SuggestView(BrowserView):
@@ -26,8 +26,14 @@ class SuggestView(BrowserView):
         params['wt'] = 'json'
 
         params = urllib.urlencode(params, doseq=True)
-        response = connection.doPost(connection.solrBase+'/suggest?'+params,
-                                     '', {})
+
+        try:
+            response = connection.doPost(
+                connection.solrBase + '/suggest?' + params, '', {})
+
+        except SolrConnectionException, e:
+            return json.dumps([])
+
         results = json.loads(response.read())
         spellcheck = results.get('spellcheck', None)
         if not spellcheck:

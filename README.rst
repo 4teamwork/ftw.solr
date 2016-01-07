@@ -207,8 +207,42 @@ Index example::
 Search / Livesearch
 -------------------
 
-``ftw.solr``provides a better livesearch implementation using jQuery Autocomplete widget.
+``ftw.solr`` provides a better livesearch implementation using jQuery Autocomplete widget.
 A new search and result template is also included.
+
+Suggestions
+-----------
+By default suggestions are disabled on the advanced search input field.
+if you want autocomplete while typing you need to install the autocomplete profile of ftw.solr and...
+
+**Prerequisit (solr config)**::
+
+    <!-- Suggester for autocomplete -->
+    <searchComponent class="solr.SpellCheckComponent" name="suggest">
+      <lst name="spellchecker">
+        <str name="name">suggest</str>
+        <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
+        <str name="lookupImpl">org.apache.solr.spelling.suggest.fst.WFSTLookupFactory</str>
+        <str name="field">SearchableText</str>
+        <float name="threshold">0.0005</float>
+      </lst>
+    </searchComponent>
+    <requestHandler class="org.apache.solr.handler.component.SearchHandler" name="/suggest">
+      <lst name="defaults">
+        <str name="spellcheck">true</str>
+        <str name="spellcheck.dictionary">suggest</str>
+        <str name="spellcheck.onlyMorePopular">true</str>
+        <str name="spellcheck.count">10</str>
+      </lst>
+      <arr name="components">
+        <str>suggest</str>
+      </arr>
+    </requestHandler>
+
+
+The portal searchbox no longer provides this feature in favor of the new livesearch autocomplete feature.
+
+
 
 Installation
 ============
