@@ -16,7 +16,6 @@
 
     <include package=".browser" />
     <include package=".portlets" />
-    <include package=".upgrades" />
 
     <include zcml:condition="installed ftw.lawgiver" file="lawgiver.zcml" />
 
@@ -50,5 +49,7 @@
         description="Enables autocomplete instead of live search"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
+
+    <include package=".upgrades" />
 
 </configure>

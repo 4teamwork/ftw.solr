@@ -3,6 +3,11 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="ftw.solr">
 
+    <browser:resourceDirectory
+        name="ftw.solr"
+        directory="resources"
+        />
+
     <!-- The search box -->
     <browser:viewlet
         name="plone.searchbox"

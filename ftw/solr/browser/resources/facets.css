@@ -1,0 +1,41 @@
+#search-results {
+  float: left;
+  width: 72%;
+  margin-left: 3%;
+}
+#portal-searchfacets {
+  float: left;
+  width: 25%;
+}
+#portal-searchfacets h4,
+#available-facets dt {
+  font-size: 16px;
+  margin-bottom: 0.5em;
+}
+
+#selected-facets,
+#available-facets ul {
+  list-style: none;
+  padding-left: 0;
+}
+#selected-facets li,
+#available-facets ul li {
+  display: list-item;
+  margin-bottom: 0;
+}
+
+#selected-facets {
+  margin-bottom: 1em;
+}
+.facetItemTitle {
+  font-weight: bold;
+}
+a.facetRemoveItem,
+a.facetRemoveItem:hover{
+  text-decoration: none;
+}
+#search-results .searchResults {
+  margin-top: 1em;
+}
+
+/* @end */

@@ -10,6 +10,10 @@ Changelog
 1.4.4 (2015-12-23)
 ------------------
 
+- Added solr search styles originally from plonetheme.onegov to ftw.solr.
+  Those styles are not plonetheme.onegov specific and are now part of ftw.solr.
+  [lknoepfel]
+
 - Add English, French and Italian translation of the time range facets (and
   a selection of other message ids).
   [mbaechtold]
@@ -42,7 +46,7 @@ Changelog
 1.4.0 (2015-02-26)
 ------------------
 
-- Add support for search results from external sites. Solr flares having a 
+- Add support for search results from external sites. Solr flares having a
   getRemoteUrl attribute that starts with 'http' are handled as external
   results. External sites can be indexed with ftw.crawler.
   [buchi]
