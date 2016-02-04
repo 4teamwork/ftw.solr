@@ -264,7 +264,6 @@
 }
 
 .ui-autocomplete > li.ui-menu-item > a > div {
-  width: calc(100% - 25px);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
