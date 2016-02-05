@@ -44,7 +44,7 @@ jQuery(function ($) {
 
     // Handle clicks in batch navigation and facets
     $('#portal-searchfacets a, #search-results .listingBar a, .filter.facets a').live('click', function (e) {
-        History.pushState(null, null, $(this).attr('href'));
+        History.pushState(null, $("title").text(), $(this).attr('href'));
         e.preventDefault();
     });
 

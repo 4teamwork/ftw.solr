@@ -4,6 +4,9 @@ Changelog
 2.0.0 (unreleased)
 ------------------
 
+- Do not reset the page title on facette search.
+  [mathias.leimgruber]
+
 - Use a different request handler for the livesearch.
   [buchi]
 
