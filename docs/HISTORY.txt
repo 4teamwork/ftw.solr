@@ -4,6 +4,9 @@ Changelog
 2.0.0 (unreleased)
 ------------------
 
+- Use the new ftw.theming variables.
+  [elioschmutz]
+
 - Do not reset the page title on facette search.
   [mathias.leimgruber]
 
@@ -52,7 +55,7 @@ Changelog
 1.4.0 (2015-02-26)
 ------------------
 
-- Add support for search results from external sites. Solr flares having a 
+- Add support for search results from external sites. Solr flares having a
   getRemoteUrl attribute that starts with 'http' are handled as external
   results. External sites can be indexed with ftw.crawler.
   [buchi]
