@@ -29,7 +29,7 @@
                value="Search"
                i18n:attributes="value label_search;" />
 
-        <div id="currentfolder_item">
+        <ul id="currentfolder_item">
           <li class="currentFolderItem">
               <input type="checkbox"
                      name="path"
@@ -41,7 +41,7 @@
                  only in current section
               </label>
           </li>
-        </div>
+        </ul>
 
         <div id="search-no-results-message"
              i18n:translate="text_search_help_no_results">
