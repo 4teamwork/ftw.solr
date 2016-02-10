@@ -31,6 +31,11 @@
       self._renderItemData( ul, item );
     });
     ul.prepend($("#currentfolder_item").children().clone());
+
+    //Change id/for of copied DOM to prevent duplicated ids
+    $("#searchbox_currentfolder_only", ul).attr("id", "live_searchbox_currentfolder_only");
+    $("[for='searchbox_currentfolder_only']", ul).attr("for", "live_searchbox_currentfolder_only");
+
     $(".folder_path", ul).on("change", function() {
       if(this.checked) {
         self.option("source", source + "?path=" + this.value);

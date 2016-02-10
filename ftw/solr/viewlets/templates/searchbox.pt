@@ -32,11 +32,11 @@
         <ul id="currentfolder_item">
           <li class="currentFolderItem">
               <input type="checkbox"
+                     id="searchbox_currentfolder_only"
                      name="path"
                      class="folder_path"
                      tal:attributes="value view/folder_path" />
-              <label id="searchbox_currentfolder_only"
-                 for="searchbox_currentfolder_only"
+              <label for="searchbox_currentfolder_only"
                  i18n:translate="label_searchbox_currentfolder_only">
                  only in current section
               </label>
