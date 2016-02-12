@@ -176,10 +176,9 @@ $dropdown-link-color-hover: $link-hover-color !default;
         padding: 8px 0;
         border: 1px solid $dropdown-border-color;
         background-color: $dropdown-bg-color;
+        border-radius: $border-radius-primary;
 
         @include boxshadow(0.5em 1em 2em -1em $dropdown-border-color);
-
-        @include borderradius($border-radius);
 
         margin-left: -16px;
         margin-top: 10px;
@@ -328,4 +327,13 @@ $dropdown-link-color-hover: $link-hover-color !default;
     }
   }
 
+}
+
+.LSBox {
+  #currentfolder_item,
+  #search-no-results-message,
+  #search-amount-results-found-message,
+  #search-one-result-found-message {
+    display: none;
+  }
 }
