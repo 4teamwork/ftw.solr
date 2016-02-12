@@ -4,7 +4,7 @@ Changelog
 2.0.0 (unreleased)
 ------------------
 
-- Use the new ftw.theming variables.
+- Adjust stylings for the new ftw.theming.
   [elioschmutz]
 
 - Do not reset the page title on facette search.

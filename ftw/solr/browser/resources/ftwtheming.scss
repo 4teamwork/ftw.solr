@@ -328,3 +328,12 @@ $dropdown-link-color-hover: $link-hover-color !default;
   }
 
 }
+
+.LSBox {
+  #currentfolder_item,
+  #search-no-results-message,
+  #search-amount-results-found-message,
+  #search-one-result-found-message {
+    display: none;
+  }
+}
