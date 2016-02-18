@@ -4,6 +4,9 @@ Changelog
 2.0.0 (unreleased)
 ------------------
 
+- Implement accessibility support for solr facets.
+  [Kevin Bieri]
+
 - Make `only in current folder section` selectable in the dropdown menu.
   [Kevin Bieri]
 

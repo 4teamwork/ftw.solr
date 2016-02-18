@@ -142,15 +142,13 @@ $dropdown-link-color-hover: $link-hover-color !default;
     }
     .filter {
       margin-right: 1em;
-      overflow: auto;
 
       input.searchPage {
         line-height: normal;
       }
 
-      span {
+      > a {
         color: $link-color;
-        cursor: pointer;
         padding-left: 10px;
         font-weight: bold;
 
@@ -160,10 +158,17 @@ $dropdown-link-color-hover: $link-hover-color !default;
           @extend .fa-chevron-down:before;
         }
 
-        &.selected {
-          color: $text-color;
-          font-weight: normal;
-          cursor: default;
+      }
+
+      &.selected a {
+        color: $text-color;
+        font-weight: normal;
+        cursor: default;
+        &:after {
+          content: none;
+        }
+        &:hover {
+          text-decoration: none;
         }
       }
 
@@ -172,7 +177,6 @@ $dropdown-link-color-hover: $link-hover-color !default;
 
         display: none;
         position: absolute;
-        overflow: auto;
         padding: 8px 0;
         border: 1px solid $dropdown-border-color;
         background-color: $dropdown-bg-color;
@@ -193,10 +197,8 @@ $dropdown-link-color-hover: $link-hover-color !default;
             color: $dropdown-link-color;
             display: block;
 
-            &:hover {
-              background-color: $dropdown-bg-color-hover;
-              color: $dropdown-link-color-hover;
-              text-decoration: none;
+            &:focus {
+              background-color: $gray-lighter;
             }
           }
         }

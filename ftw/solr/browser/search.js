@@ -43,24 +43,9 @@ jQuery(function ($) {
     });
 
     // Handle clicks in batch navigation and facets
-    $('#portal-searchfacets a, #search-results .listingBar a, .filter.facets a').live('click', function (e) {
+    $('#portal-searchfacets a, #search-results .listingBar a, .filter .facets a').live('click', function (e) {
         History.pushState(null, $("title").text(), $(this).attr('href'));
         e.preventDefault();
     });
 
-});
-
-// solr search facets drop downs
-$(function(){
-  $('body').click(function(e){
-    if (!$(e.target).is('#filter-form .filter:not(.LSBox) > span')){
-        $('#filter-form .filter:not(.LSBox) ul').hide();
-    }
-  });
-
-  $('.solrSearchPage').on('click', '#filter-form .filter:not(.LSBox) > span', function(e){
-    var $this = $(this);
-    $this.parent().siblings(':not(.LSBox)').find('> span').next().hide();
-    $this.next().toggle();
-  });
 });

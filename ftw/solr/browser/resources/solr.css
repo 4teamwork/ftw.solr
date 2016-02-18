@@ -148,7 +148,6 @@
 
 #filter-form > div .filter {
   margin-right: 1em;
-  overflow: auto;
 }
 
 #filter-form > div .filter input.searchPage {
@@ -172,7 +171,6 @@
   margin: 0;
   display: none;
   position: absolute;
-  overflow: auto;
   padding: 8px 0;
   background-color: #fff;
   border: 1px solid #cccccc;
