@@ -221,10 +221,6 @@
     float: initial;
 }
 
-.ui-autocomplete > .currentFolderItem {
-  padding: 10px;
-}
-
 .ui-autocomplete > li.ui-menu-item {
   display: inline-block;
 }

@@ -2,7 +2,20 @@
 
   "use strict";
 
-  var selectItem = function(event, ui) { window.location = ui.item.url; };
+  var doNotClose = false;
+
+  var selectItem = function(event, ui) {
+    if(ui.item.currentFolder) {
+      var checkbox = $(event.currentTarget).find("#live_searchbox_currentfolder_only");
+      var original = $("#searchbox_currentfolder_only");
+      var toggeledValue = !checkbox.prop("checked");
+      checkbox.prop("checked", toggeledValue);
+      original.prop("checked", toggeledValue);
+      doNotClose = true;
+    } else {
+      window.location = ui.item.url;
+    }
+  };
 
   var options = {
     source: "ftw_solr_livesearch_reply",
@@ -27,10 +40,17 @@
 
   var renderMenu = function(ul, items) {
     var self = this;
+
+    items.unshift({
+      firstOfGroup: false,
+      currentFolder: true,
+      title: "Current folder",
+      url: ""
+    });
+
     $.each( items, function( index, item ) {
       self._renderItemData( ul, item );
     });
-    ul.prepend($("#currentfolder_item").children().clone());
 
     //Change id/for of copied DOM to prevent duplicated ids
     $("#searchbox_currentfolder_only", ul).attr("id", "live_searchbox_currentfolder_only");
@@ -50,6 +70,11 @@
   var renderItem = function(ul, item) {
 
     var autocompleteItem = { label: item.title, value: item.title, url: item.url };
+
+    if(item.currentFolder) {
+      autocompleteItem.currentFolder = true;
+      return ul.append($("#currentfolder_item").children().clone().data("ui-autocomplete-item", autocompleteItem));
+    }
 
     var li = $("<li>").data("ui-autocomplete-item", autocompleteItem);
 
@@ -94,13 +119,14 @@
     // on mobile devices.
     var originalCloseFunction = widget.close;
     widget.close = function(event) {
-      if(event && event.type === "blur") {
+      if(event && event.type === "blur" || doNotClose) {
         event.preventDefault();
       } else {
         originalCloseFunction.call(widget);
       }
     };
     $(document).on("mousedown click", function(event) {
+      doNotClose = false;
       if(!$(event.target).is("#searchGadget") && !$(event.target).parents(".ui-autocomplete").length) {
         widget.close();
       }
