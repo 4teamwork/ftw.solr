@@ -107,104 +107,92 @@ $dropdown-link-color-hover: $link-hover-color !default;
 }
 
 #filter-form {
+
+  @include clearfix();
+  padding-bottom: .5em;
+  margin-bottom: 1em;
+  padding-top: 13px;
+  border-bottom: 1px solid lighten($primary-color, 50%);
+
   .searchButton {
     display: none;
   }
 
-  .search-facets {
+  .searchBox {
+    margin-bottom: 10px;
+    margin-right: 1em;
     display: inline-block;
-    vertical-align: top;
-    padding-top: 10px;
   }
 
-  > div {
-    clear: both;
-    padding-bottom: .5em;
-    margin-bottom: 1em;
-    padding-top: 13px;
-    border-bottom: 1px solid lighten($primary-color, 50%);
+  .facets {
+    @include ul(plain);
+    display: none;
+    z-index: 1;
+    position: absolute;
+    white-space: nowrap;
+    padding: 8px 0;
+    border: 1px solid $dropdown-border-color;
+    background-color: $dropdown-bg-color;
+    border-radius: $border-radius-primary;
+    @include boxshadow(0.5em 1em 2em -1em $dropdown-border-color);
+    margin-left: -16px;
+    margin-top: 10px;
 
-    &.no-border {
-      border-bottom: none;
-      border-top: none;
-      margin-bottom: 0;
-    }
+    > li > a {
+      padding: .3em 1.5em;
+      color: $color-text;
+      display: block;
 
-    &:first-child {
-      .filter {
-        margin-bottom: 10px;
+      &:hover, &.active {
+        text-decoration: none;
+        background-color: $gray-lighter;
       }
     }
-    @include screen-medium {
-      .filter {
-        display: inline-block;
-      }
+  }
+
+  .filter {
+    @include screen-medium() {
+      display: inline-block;
     }
-    .filter {
-      margin-right: 1em;
+    display: block;
+    margin-bottom: 10px;
+    margin-right: 1em;
+    position: relative;
 
-      input.searchPage {
-        line-height: normal;
+    > a {
+      @extend .fa-icon-right;
+      font-weight: bold;
+      color: $link-color;
+      padding-left: 10px;
+
+      &:after {
+        @extend .fa-chevron-down:before;
       }
 
-      > a {
-        color: $link-color;
-        padding-left: 10px;
-        font-weight: bold;
-
-        @extend .fa-icon-right;
-
-        &:after {
-          @extend .fa-chevron-down:before;
-        }
-
+      &:hover {
+        text-decoration: none;
       }
 
-      &.selected a {
+      &.selected {
         color: $text-color;
         font-weight: normal;
         cursor: default;
         &:after {
           content: none;
         }
-        &:hover {
-          text-decoration: none;
-        }
-      }
-
-      ul {
-        @include ul("plain");
-
-        display: none;
-        position: absolute;
-        padding: 8px 0;
-        border: 1px solid $dropdown-border-color;
-        background-color: $dropdown-bg-color;
-        border-radius: $border-radius-primary;
-
-        @include boxshadow(0.5em 1em 2em -1em $dropdown-border-color);
-
-        margin-left: -16px;
-        margin-top: 10px;
-
-        li {
-          margin: 0;
-          min-width: 10em;
-
-          a {
-            cursor: pointer;
-            padding: 0.3em 1.5em;
-            color: $dropdown-link-color;
-            display: block;
-
-            &:focus {
-              background-color: $gray-lighter;
-            }
-          }
-        }
       }
     }
   }
+
+  .search-facets {
+    @include screen-medium() {
+      display: inline-block;
+      padding-top: 0;
+    }
+    padding-top: 10px;
+  }
+
+
 }
 
 .ui-autocomplete {
