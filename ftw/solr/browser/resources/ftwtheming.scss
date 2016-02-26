@@ -172,16 +172,17 @@ $dropdown-link-color-hover: $link-hover-color !default;
       &:hover {
         text-decoration: none;
       }
+    }
 
-      &.selected {
-        color: $text-color;
-        font-weight: normal;
-        cursor: default;
-        &:after {
-          content: none;
-        }
+    &.selected a{
+      color: $text-color;
+      font-weight: normal;
+      cursor: default;
+      &:after {
+        content: none;
       }
     }
+
   }
 
   .search-facets {
