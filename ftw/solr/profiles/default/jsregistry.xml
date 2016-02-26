@@ -10,4 +10,7 @@
     <javascript id="++resource++ftw.solr/livesearch.js"
         insert-after="livesearch.js" compression="none" authenticated="False" />
 
+    <javascript id="++resource++ftw.solr/facets.js"
+        insert-after="++resource++ftw.solr/livesearch.js" compression="none" authenticated="False" />
+
 </object>

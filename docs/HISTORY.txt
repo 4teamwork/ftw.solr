@@ -4,6 +4,15 @@ Changelog
 2.0.0 (unreleased)
 ------------------
 
+- Fix css selector of selected facest.
+  [mathias.leimgruber]
+
+- Implement accessible remove facet link.
+  [mathias.leimgruber]
+
+- Implement accessibility support for solr facets.
+  [Kevin Bieri]
+
 - Make `only in current folder section` selectable in the dropdown menu.
   [Kevin Bieri]
 

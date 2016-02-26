@@ -107,102 +107,93 @@ $dropdown-link-color-hover: $link-hover-color !default;
 }
 
 #filter-form {
+
+  @include clearfix();
+  padding-bottom: .5em;
+  margin-bottom: 1em;
+  padding-top: 13px;
+  border-bottom: 1px solid lighten($primary-color, 50%);
+
   .searchButton {
     display: none;
   }
 
-  .search-facets {
+  .searchBox {
+    margin-bottom: 10px;
+    margin-right: 1em;
     display: inline-block;
-    vertical-align: top;
+  }
+
+  .facets {
+    @include ul(plain);
+    display: none;
+    z-index: 1;
+    position: absolute;
+    white-space: nowrap;
+    padding: 8px 0;
+    border: 1px solid $dropdown-border-color;
+    background-color: $dropdown-bg-color;
+    border-radius: $border-radius-primary;
+    @include boxshadow(0.5em 1em 2em -1em $dropdown-border-color);
+    margin-left: -16px;
+    margin-top: 10px;
+
+    > li > a {
+      padding: .3em 1.5em;
+      color: $color-text;
+      display: block;
+
+      &:hover, &.active {
+        text-decoration: none;
+        background-color: $gray-lighter;
+      }
+    }
+  }
+
+  .filter {
+    @include screen-medium() {
+      display: inline-block;
+    }
+    display: block;
+    margin-bottom: 10px;
+    margin-right: 1em;
+    position: relative;
+
+    > a {
+      @extend .fa-icon-right;
+      font-weight: bold;
+      color: $link-color;
+      padding-left: 10px;
+
+      &:after {
+        @extend .fa-chevron-down:before;
+      }
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+    &.selected a{
+      color: $text-color;
+      font-weight: normal;
+      cursor: default;
+      &:after {
+        content: none;
+      }
+    }
+
+  }
+
+  .search-facets {
+    @include screen-medium() {
+      display: inline-block;
+      padding-top: 0;
+    }
     padding-top: 10px;
   }
 
-  > div {
-    clear: both;
-    padding-bottom: .5em;
-    margin-bottom: 1em;
-    padding-top: 13px;
-    border-bottom: 1px solid lighten($primary-color, 50%);
 
-    &.no-border {
-      border-bottom: none;
-      border-top: none;
-      margin-bottom: 0;
-    }
-
-    &:first-child {
-      .filter {
-        margin-bottom: 10px;
-      }
-    }
-    @include screen-medium {
-      .filter {
-        display: inline-block;
-      }
-    }
-    .filter {
-      margin-right: 1em;
-      overflow: auto;
-
-      input.searchPage {
-        line-height: normal;
-      }
-
-      span {
-        color: $link-color;
-        cursor: pointer;
-        padding-left: 10px;
-        font-weight: bold;
-
-        @extend .fa-icon-right;
-
-        &:after {
-          @extend .fa-chevron-down:before;
-        }
-
-        &.selected {
-          color: $text-color;
-          font-weight: normal;
-          cursor: default;
-        }
-      }
-
-      ul {
-        @include ul("plain");
-
-        display: none;
-        position: absolute;
-        overflow: auto;
-        padding: 8px 0;
-        border: 1px solid $dropdown-border-color;
-        background-color: $dropdown-bg-color;
-        border-radius: $border-radius-primary;
-
-        @include boxshadow(0.5em 1em 2em -1em $dropdown-border-color);
-
-        margin-left: -16px;
-        margin-top: 10px;
-
-        li {
-          margin: 0;
-          min-width: 10em;
-
-          a {
-            cursor: pointer;
-            padding: 0.3em 1.5em;
-            color: $dropdown-link-color;
-            display: block;
-
-            &:hover {
-              background-color: $dropdown-bg-color-hover;
-              color: $dropdown-link-color-hover;
-              text-decoration: none;
-            }
-          }
-        }
-      }
-    }
-  }
 }
 
 .ui-autocomplete {
