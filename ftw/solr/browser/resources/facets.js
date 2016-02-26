@@ -16,6 +16,8 @@ Controls on open filter:
 (function(global) {
   'use strict';
 
+  var context = "#filter-form";
+
   var facets = {
     filter: null,
     currentFacet: null,
@@ -45,13 +47,13 @@ Controls on open filter:
     focus: function() {
       focus(this.facets.eq(this.currentFacet));
     }
-  }
+  };
 
   var currentFilter = $();
 
   function focus(target) {
     blur();
-    $(".active").removeClass("active");
+    $(context + " .active").removeClass("active");
     target.addClass("active accessibility-tab-focus").focus();
   }
 
@@ -61,19 +63,19 @@ Controls on open filter:
 
   function openFilter(filter) {
     currentFilter = filter;
-    $(".filter").not(filter).find(".facets").hide();
+    $(context + " .filter").not(filter).find(".facets").hide();
     filter.find(".facets").show().attr("aria-hidden", false);
   }
 
   function toggleFilter(filter) {
-    $(".filter").not(filter).find(".facets").hide();
+    $(context + " .filter").not(filter).find(".facets").hide();
     var facets = filter.find(".facets");
     facets.toggle().attr("aria-hidden", facets.attr("aria-hidden") !== "true");
   }
 
   function closeFilter() {
     focus(currentFilter.find(">a"));
-    $(".facets").hide().attr("aria-hidden", true);
+    $(context + " .facets").hide().attr("aria-hidden", true);
   }
 
   $(document).on("click", function(event) {
@@ -109,32 +111,32 @@ Controls on open filter:
           openFilter(filter);
           facets.init(filter);
         }
-        break
+        break;
       case $.ui.keyCode.UP:
         event.preventDefault();
         facets.prev();
-        break
+        break;
       case $.ui.keyCode.RIGHT:
         event.preventDefault();
         openFilter(filter);
         facets.init(filter);
-        break
+        break;
       case $.ui.keyCode.LEFT:
         event.preventDefault();
         closeFilter();
-        break
+        break;
       case $.ui.keyCode.ESCAPE:
         event.preventDefault();
         closeFilter();
         blur();
-        break
+        break;
       case $.ui.keyCode.ENTER:
         if(target.hasClass("filter")) {
           event.preventDefault();
           openFilter(filter);
           facets.init(filter);
         }
-        break
+        break;
     }
   });
 
