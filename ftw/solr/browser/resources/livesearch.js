@@ -20,8 +20,8 @@
   var options = {
     source: "ftw_solr_livesearch_reply",
     minLength: 3,
-    position: { my: "right top+5", at: "right bottom", collision: "none" },
     select: selectItem,
+    appendTo: ".LSBox",
     messages: {
       noResults: $("#search-no-results-message").text(),
       results: function( amount ) {
