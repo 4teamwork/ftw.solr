@@ -1,0 +1,323 @@
+.global-nav-search-wrapper .portal-searchbox-wrapper {
+  top: -135px;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+
+@media (min-width: 480px) {
+  .global-nav-search-wrapper .portal-searchbox-wrapper {
+    top: -160px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .global-nav-search-wrapper .portal-searchbox-wrapper {
+    top: auto;
+    left: auto;
+    right: auto;
+    width: 295px;
+  }
+}
+
+.global-nav-search-wrapper .portal-searchbox-wrapper #portal-searchbox .searchSection {
+  padding: 0.5em 1.7em;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 0.5em;
+  display: block;
+}
+
+#currentfolder_item,
+#search-no-results-message,
+#search-amount-results-found-message,
+#search-one-result-found-message {
+  display: none;
+}
+
+.global-nav-search-wrapper .portal-searchbox-wrapper #portal-searchbox form input[name="SearchableText"] {
+  padding-right: 2em;
+  line-height: normal;
+}
+
+.global-nav-search-wrapper .portal-searchbox-wrapper #portal-searchbox #searchGadget {
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .global-nav-search-wrapper .portal-searchbox-wrapper #portal-searchbox #searchGadget {
+    width: 135px;
+  }
+}
+
+.global-nav-search-wrapper .portal-searchbox-wrapper #portal-searchbox #searchGadget.focus {
+  width: 100%;
+}
+
+.global-nav-search-wrapper .portal-searchbox-wrapper #portal-searchbox #searchGadget:focus {
+  width: 100%;
+}
+
+.searchResults > dt {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.searchResults > dd {
+  border-bottom: 1px solid #ddd;
+  padding-top: 0.5em;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+  margin-left: 0;
+}
+
+.searchResults .documentLocation {
+  padding-top: 0.7em;
+  display: block;
+}
+
+.searchinformation-wrapper {
+  padding: 0.5em;
+  margin-bottom: 2em;
+}
+
+.searchinformation-wrapper .amount {
+  font-weight: bold;
+}
+
+.searchinformation-wrapper #selected-facets {
+  display: inline;
+  padding-left: 0;
+}
+
+.searchinformation-wrapper #selected-facets li {
+  display: inline-block;
+  border: 1px solid #74716f;
+  border-radius: 5px;
+  padding: 0.25em;
+  margin-right: .25em;
+  margin-top: 0.25em;
+  margin-bottom: 0;
+}
+
+.searchinformation-wrapper #selected-facets li .facetItemValue {
+  font-weight: bold;
+}
+
+.searchinformation-wrapper #selected-facets li .facetRemoveItem {
+  overflow: hidden;
+  width: 24px;
+  height: 18px;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+#filter-form .searchButton {
+  display: none;
+}
+
+#filter-form .search-facets {
+  display: inline-block;
+  vertical-align: top;
+  padding-top: 10px;
+}
+
+#filter-form > div {
+  clear: both;
+  padding-bottom: .5em;
+  margin-bottom: 1em;
+  padding-top: 13px;
+  border-bottom: 1px solid #bed9f1;
+}
+
+#filter-form > div.no-border {
+  border-bottom: none;
+  border-top: none;
+  margin-bottom: 0;
+}
+
+#filter-form > div:first-child .filter {
+  margin-bottom: 10px;
+}
+
+@media (min-width: 800px) {
+  #filter-form > div .filter {
+    display: inline-block;
+  }
+}
+
+#filter-form > div .filter {
+  margin-right: 1em;
+}
+
+#filter-form > div .filter input.searchPage {
+  line-height: normal;
+}
+
+#filter-form > div .filter span {
+  cursor: pointer;
+  padding-left: 10px;
+  font-weight: bold;
+}
+
+#filter-form > div .filter span.selected {
+  font-weight: normal;
+  cursor: default;
+}
+
+#filter-form > div .filter ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  display: none;
+  position: absolute;
+  padding: 8px 0;
+  background-color: #fff;
+  border: 1px solid #cccccc;
+  box-shadow: 0.5em 1em 2em -1em #cccccc;
+  border-radius: 3px;
+  margin-left: -16px;
+  margin-top: 10px;
+}
+
+#filter-form > div .filter ul li {
+  margin: 0;
+  min-width: 10em;
+}
+
+#filter-form > div .filter ul li a {
+  cursor: pointer;
+  padding: 0.3em 1.5em;
+  display: block;
+}
+
+#filter-form > div .filter ul li a:hover {
+  text-decoration: none;
+}
+
+.ui-autocomplete {
+  padding: 0;
+  border: 1px solid #969391;
+  border-radius: 3px;
+  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.3);
+  margin-top: 20px;
+  max-width: 100%;
+  width: 500px !important;
+}
+
+@media (max-width: 800px) {
+  body .ui-autocomplete {
+  width: 100% !important;
+  left: 0 !important;
+  }
+}
+
+#portal-searchfacets {
+    background-color: initial;
+    padding: initial;
+    min-width: initial;
+    float: initial;
+}
+
+.ui-autocomplete > li.ui-menu-item {
+  display: inline-block;
+}
+
+.ui-autocomplete > li.ui-menu-item > a {
+  padding: 5px 10px;
+  border-top: 1px solid #b7b5b4;
+  box-sizing: border-box;
+  border-radius: 0;
+}
+
+.ui-autocomplete > li.ui-menu-item > a.ui-state-focus {
+  border-width: 1px 0 0;
+  margin: 0;
+  background: #f1f1f1;
+  text-decoration: underline;
+}
+
+.ui-autocomplete > li.ui-menu-item > a:hover, .ui-autocomplete > li.ui-menu-item > a:hover > div {
+  text-decoration: underline;
+}
+
+.ui-autocomplete > li.ui-menu-item > a > img {
+  display: table-cell;
+  float: left;
+  margin-right: 0.2em;
+}
+
+.ui-autocomplete > li.ui-menu-item > a:before {
+  float: left;
+  width: 25px;
+  margin: 0;
+}
+
+.ui-autocomplete > li.ui-menu-item > a > span {
+  float: left;
+  width: 25px;
+}
+
+.ui-autocomplete > li.ui-menu-item > a > div {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ui-autocomplete > li.ui-menu-item > a > div > span {
+  display: block;
+}
+
+.ui-autocomplete > li.ui-menu-item > a > div > .title {
+  font-weight: bold;
+}
+
+.ui-autocomplete > li.ui-menu-item > a > div > .description {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ui-autocomplete > li.ui-menu-item > .group {
+  padding: 10px;
+  display: block;
+  font-weight: bold;
+}
+
+.ui-autocomplete > li.ui-menu-item > a.no-result {
+  text-align: center;
+  padding-left: 10px;
+}
+
+.ui-autocomplete > li.ui-menu-item > a.no-result > div {
+  float: none;
+}
+
+#notFoundSuggestions {
+  zoom: 1;
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  margin-top: 1em;
+  margin-left: -5px;
+}
+
+#notFoundSuggestions:before, #notFoundSuggestions:after {
+  content: "\0020";
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
+#notFoundSuggestions:after {
+  clear: both;
+}
+
+#notFoundSuggestions > li {
+  float: left;
+  padding: 5px;
+}
+
+#notFoundSuggestions > li:before {
+  margin-right: 0;
+}

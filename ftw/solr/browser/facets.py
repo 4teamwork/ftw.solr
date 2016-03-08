@@ -155,6 +155,29 @@ class SearchFacetsView(facets.SearchFacetsView):
         """Return the facet parameters to be queried for as an url-encoded
            string.
         """
-        facets, dependencies = facetParameters(self.context, self.request)
+        facets, dependencies = facetParameters(self)
         return urlencode({'facet': 'true', 'facet.field': facets, },
                          doseq=True)
+
+
+class AvailableSearchFacetsView(SearchFacetsView):
+
+    def facets(self):
+        possible_facets = super(AvailableSearchFacetsView, self).facets()
+        if possible_facets is None:
+            return []
+
+        facets = [{'title': 'portal_type',
+                   'counts': []},
+                  {'title': 'site_section',
+                   'counts': []},
+                  {'title': 'modified',
+                   'counts': []}]
+
+        return [self.update_facet(facet, possible_facets) for facet in facets]
+
+    def update_facet(self, facet, possible_facets):
+        for possible_facet in possible_facets:
+            if facet['title'] == possible_facet['title']:
+                facet.update(possible_facet)
+        return facet

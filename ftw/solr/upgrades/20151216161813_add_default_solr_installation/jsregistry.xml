@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+
+    <javascript enabled="False" id="livesearch.js" />
+
+    <javascript id="++resource++ftw.solr/livesearch.js"
+        insert-after="livesearch.js" compression="none" authenticated="False" />
+
+</object>

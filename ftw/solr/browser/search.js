@@ -21,33 +21,13 @@ jQuery(function ($) {
             $('#search-results').html($data.find('#search-results').html());
             $('h1.documentFirstHeading').html($data.find('h1.documentFirstHeading').html());
             results_container.fadeIn(200);
-            results_container.highlightSearchTerms({
+            results_container.find('.searchResults').highlightSearchTerms({
                 terms: [getParameterByName('SearchableText')],
                 useLocation: false,
                 useReferrer: false
             });
         });
     });
-
-    // Returns query string values from a querystring.
-    // function qs_values(qs) {
-    //     var a = qs.split('&');
-    //     if (a === "") return {};
-    //     var b = {};
-    //     for (var i = 0; i < a.length; ++i)
-    //     {
-    //         var p=a[i].split('=');
-    //         if (!b[p[0]]) {
-    //             b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
-    //         } else {
-    //             if (typeof(b[p[0]])=='string') {
-    //                 b[p[0]] = [b[p[0]]];
-    //             }
-    //             b[p[0]].push(decodeURIComponent(p[1].replace(/\+/g, " ")));
-    //         }
-    //     }
-    //     return b;
-    // }
 
     // We need to update the site-wide search field (at the top right in
     // stock Plone) when the main search field is updated
@@ -63,8 +43,8 @@ jQuery(function ($) {
     });
 
     // Handle clicks in batch navigation and facets
-    $('#portal-searchfacets a, #search-results .listingBar a').live('click', function (e) {
-        History.pushState(null, null, jq(this).attr('href'));
+    $('#portal-searchfacets a, #search-results .listingBar a, .filter .facets a').live('click', function (e) {
+        History.pushState(null, $("title").text(), $(this).attr('href'));
         e.preventDefault();
     });
 

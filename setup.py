@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.4.5.dev0'
+version = '2.0.0.dev0'
 
 tests_require = [
     'ftw.builder',
@@ -32,13 +32,16 @@ setup(name='ftw.solr',
       zip_safe=False,
 
       install_requires=[
-        'setuptools',
+        'collective.js.jqueryui',
+        'collective.monkeypatcher',
         'collective.solr',
         'ftw.upgrade',
-        'collective.monkeypatcher',
+        'plone.api',
         'plone.app.contentlisting',
         'plone.app.search',
         'requests',
+        'setuptools',
+        'z3c.unconfigure',
         ],
 
       tests_require=tests_require,

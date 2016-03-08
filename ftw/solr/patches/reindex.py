@@ -80,8 +80,7 @@ def recursive_index_security(catalog, obj):
             indexes_to_update.append(index_name)
 
     if len(indexes_to_update) > 0:
-        indexer = getQueue()
-        indexer.reindex(obj, indexes_to_update)
+        obj.reindexObject(idxs=indexes_to_update)
 
         # We assume that if the parent is up to date, all children are too.
         # This basically only walks into the tree untill an object is up to date -

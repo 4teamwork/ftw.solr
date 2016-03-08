@@ -79,7 +79,9 @@ msgstr "Type"
 msgid "review_state"
 msgstr "Révision"
 
+msgid "site_area"
+msgstr ""
+
 msgid "site_section"
 msgstr "Séction"
-
 

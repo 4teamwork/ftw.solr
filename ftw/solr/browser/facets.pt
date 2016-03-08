@@ -16,7 +16,7 @@
                   tal:content="item/value" />
             <a class="facetRemoveItem"
                tal:attributes="href string:${request/ACTUAL_URL}?${item/query}"
-               title="Remove this search limit..." i18n:attributes="title" >
+               alt="Remove this search limit..." i18n:attributes="alt" >
                 &otimes;
             </a>
         </li>

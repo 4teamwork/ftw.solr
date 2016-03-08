@@ -1,22 +1,27 @@
 # -*- coding: utf-8 -*-
-
+from collective.solr.exceptions import SolrConnectionException
+from ftw.solr.interfaces import ISearchSettings
 from logging import getLogger
-from plone.app.search import browser
 from plone.app.contentlisting.interfaces import IContentListing
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from plone.app.search import browser
+from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.PloneBatch import Batch
 from Products.CMFPlone.utils import safe_hasattr
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.ZCTextIndex.ParseTree import ParseError
-from plone.app.layout.viewlets import common
-from collective.solr.solr import SolrException
-from collective.solr.browser.facets import FacetMixin
-from zope.component import getMultiAdapter, getUtility
-from plone.registry.interfaces import IRegistry
-from ftw.solr.interfaces import ISearchSettings
+from zope.component import getMultiAdapter
+from zope.component import getUtility
+from zope.deferredimport import deprecated
 
 
 logger = getLogger('ftw.solr')
+
+
+deprecated(
+    "This class is moved to another place. "
+    "Please use ftw.solr.viewlets.searchbox.SearchBoxViewlet instead",
+    SearchBoxViewlet='ftw.solr.viewlets.searchbox:SearchBoxViewlet')
 
 
 class SearchView(browser.Search):
@@ -69,14 +74,14 @@ class SearchView(browser.Search):
         if query is None:
             results = []
         else:
-            query.update({'qt': 'hlsearch'})
+            query.update({'request_handler': 'hlsearch'})
             catalog = getToolByName(self.context, 'portal_catalog')
             try:
                 results = catalog(**query)
             except ParseError:
                 logger.exception('Exception while searching')
                 return []
-            except SolrException:
+            except SolrConnectionException:
                 logger.exception('Exception while searching')
                 return []
 
@@ -164,8 +169,3 @@ class SearchView(browser.Search):
             empty = {'absolute_url': '', 'Title': unicode('…', 'utf-8')}
             breadcrumbs = [breadcrumbs[0], empty] + breadcrumbs[-maxb+1:]
         return breadcrumbs
-
-
-class SearchBoxViewlet(common.SearchBoxViewlet, FacetMixin):
-
-    index = ViewPageTemplateFile('searchbox.pt')

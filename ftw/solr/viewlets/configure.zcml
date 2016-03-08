@@ -1,0 +1,16 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="ftw.solr">
+
+    <!-- The search box -->
+    <browser:viewlet
+        name="ftw.solr.searchbox"
+        manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
+        class=".searchbox.SearchBoxViewlet"
+        permission="zope2.View"
+        template="templates/searchbox.pt"
+        layer="ftw.solr.interfaces.IFtwSolrLayer"
+        />
+
+</configure>

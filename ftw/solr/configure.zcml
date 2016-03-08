@@ -13,10 +13,11 @@
 
     <include package=".patches" />
     <include file="permissions.zcml" />
+    <include file="resources.zcml" />
 
     <include package=".browser" />
     <include package=".portlets" />
-    <include package=".upgrades" />
+    <include package=".viewlets" />
 
     <include zcml:condition="installed ftw.lawgiver" file="lawgiver.zcml" />
 
@@ -24,16 +25,9 @@
     <adapter name="site_section" factory=".indexers.site_section" />
     <adapter name="creator_fullname" factory=".indexers.creator_fullname" />
     <adapter name="snippetText" factory=".indexers.SnippetTextIndexer" />
+    <adapter name="site_area" factory=".indexers.site_area" />
 
     <adapter factory=".flare.PloneFlare" />
-
-    <!-- Contentlisting adapters for solr response/flares -->
-    <adapter
-        factory="plone.app.contentlisting.contentlisting.ContentListing"
-        for="collective.solr.parser.SolrResponse" />
-    <adapter
-        factory="ftw.solr.contentlisting.SolrContentListingObject"
-        for="collective.solr.flare.PloneFlare" />
 
     <genericsetup:registerProfile
         name="default"
@@ -50,5 +44,7 @@
         description="Enables autocomplete instead of live search"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
+
+    <include package=".upgrades" />
 
 </configure>

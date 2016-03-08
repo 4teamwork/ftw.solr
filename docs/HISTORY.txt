@@ -1,10 +1,35 @@
 Changelog
 =========
 
-1.4.5 (unreleased)
+2.0.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix css selector of selected facest.
+  [mathias.leimgruber]
+
+- Implement accessible remove facet link.
+  [mathias.leimgruber]
+
+- Implement accessibility support for solr facets.
+  [Kevin Bieri]
+
+- Make `only in current folder section` selectable in the dropdown menu.
+  [Kevin Bieri]
+
+- Adjust stylings for the new ftw.theming.
+  [elioschmutz]
+
+- Do not reset the page title on facette search.
+  [mathias.leimgruber]
+
+- Use a different request handler for the livesearch.
+  [buchi]
+
+- Implement a new livesearch based on jquery autocomplete widget.
+  [mathias.leimgruber]
+
+- Moved atomic update feature to collective.solr.
+  [mathias.leimgruber]
 
 
 1.4.4 (2015-12-23)
@@ -42,7 +67,7 @@ Changelog
 1.4.0 (2015-02-26)
 ------------------
 
-- Add support for search results from external sites. Solr flares having a 
+- Add support for search results from external sites. Solr flares having a
   getRemoteUrl attribute that starts with 'http' are handled as external
   results. External sites can be indexed with ftw.crawler.
   [buchi]

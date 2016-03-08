@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-11-27 08:14+0000\n"
+"POT-Creation-Date: 2015-12-16 12:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,6 +22,10 @@ msgstr ""
 msgid "Enable Grouping in LiveSearch"
 msgstr ""
 
+#: ./ftw/solr/configure.zcml:46
+msgid "Enables autocomplete instead of live search"
+msgstr ""
+
 #: ./ftw/solr/interfaces.py:39
 msgid "Group Limit"
 msgstr ""
@@ -36,6 +40,10 @@ msgstr ""
 
 #: ./ftw/solr/interfaces.py:14
 msgid "If enabled, livesearch results are grouped by portal type."
+msgstr ""
+
+#: ./ftw/solr/configure.zcml:38
+msgid "Installs the ftw.solr package"
 msgstr ""
 
 #: ./ftw/solr/interfaces.py:65
@@ -70,6 +78,35 @@ msgstr ""
 msgid "Use Path for Breadcrumbs"
 msgstr ""
 
+#: ./ftw/solr/configure.zcml:38
+msgid "ftw.solr"
+msgstr ""
+
+#: ./ftw/solr/configure.zcml:46
+msgid "ftw.solr-autocomplete"
+msgstr ""
+
+#: ./ftw/solr/upgrades/configure.zcml:23
+msgid "ftw.solr.upgrades.1001"
+msgstr ""
+
+#: ./ftw/solr/upgrades/configure.zcml:50
+msgid "ftw.solr.upgrades.1002"
+msgstr ""
+
+#: ./ftw/solr/upgrades/configure.zcml:59
+msgid "ftw.solr.upgrades.1003"
+msgstr ""
+
+#: ./ftw/solr/upgrades/configure.zcml:77
+msgid "ftw.solr.upgrades.1004"
+msgstr ""
+
+#. Default: "Suche eingeschr&auml;nkt nach:"
+#: ./ftw/solr/browser/selected-facets.pt:6
+msgid "heading_search_filtered_by"
+msgstr "Ricerca limitato da:"
+
 #. Default: "Number of different sizes to represent term weight"
 #: ./ftw/solr/portlets/wordcloud_portlet.py:35
 msgid "help_num_sizes"
@@ -95,10 +132,10 @@ msgstr ""
 msgid "help_searchwords"
 msgstr ""
 
-#. Default: "No matching results found."
-#: ./ftw/solr/browser/livesearch.py:15
-msgid "label_no_results_found"
-msgstr ""
+#. Default: "No items found"
+#: ./ftw/solr/browser/livesearch.py:217
+msgid "label_nothing_found"
+msgstr "Nessun articolo trovato"
 
 #. Default: "Number of sizes"
 #: ./ftw/solr/portlets/wordcloud_portlet.py:34
@@ -120,29 +157,65 @@ msgstr ""
 msgid "label_scale_factor"
 msgstr ""
 
+#. Default: "Search"
+#: ./ftw/solr/browser/results.pt:31
+#: ./ftw/solr/viewlets/templates/searchbox.pt:27
+msgid "label_search"
+msgstr "Ricerca"
+
+#. Default: "Search help"
+#: ./ftw/solr/browser/livesearch.py:186
+msgid "label_search_help"
+msgstr "Aiuto per la ricerca"
+
+#. Default: "only in current section"
+#: ./ftw/solr/viewlets/templates/searchbox.pt:38
+msgid "label_searchbox_currentfolder_only"
+msgstr "solo nella sezione corrente"
+
 #. Default: "Search words"
 #: ./ftw/solr/extender.py:36
 msgid "label_searchwords"
 msgstr ""
 
 #. Default: "Show all items"
-#: ./ftw/solr/browser/livesearch.py:16
+#: ./ftw/solr/browser/livesearch.py:201
 msgid "label_show_all"
-msgstr ""
+msgstr "Mostra tutti gli elementi"
 
 #. Default: "Show in search"
 #: ./ftw/solr/extender.py:22
 msgid "label_showinsearch"
-msgstr ""
-
-#. Default: "LiveSearch &#8595;"
-#: ./ftw/solr/browser/livesearch.py:14
-msgid "legend_livesearch"
-msgstr ""
+msgstr "Mostra alla ricerca"
 
 #. Default: "Did you mean… ${suggestion}"
-#: ./ftw/solr/browser/results.pt:42
+#: ./ftw/solr/browser/results.pt:62
 msgid "text_did_you_mean"
-msgstr ""
+msgstr "Intendevi... ${suggestion}"
 
+#. Default: "Search Site"
+#: ./ftw/solr/viewlets/templates/searchbox.pt:11
+msgid "text_search"
+msgstr "Ricerca"
+
+#. Default: "No search results."
+#: ./ftw/solr/viewlets/templates/searchbox.pt:46
+msgid "text_search_help_no_results"
+msgstr "Nessun articolo trovato"
+
+#. Default: "result found, use up and down keys to navigate."
+#: ./ftw/solr/viewlets/templates/searchbox.pt:56
+msgid "text_search_one_result_found"
+msgstr "risultato trovato, utilizzare su e giù i tasti per spostarsi."
+
+#. Default: "results found, use up and down keys to navigate."
+#: ./ftw/solr/viewlets/templates/searchbox.pt:51
+msgid "text_search_results_found"
+msgstr "trovato nessun risultato, usare su e giù i tasti per spostarsi."
+
+#. Default: "Search Site"
+#: ./ftw/solr/browser/results.pt:21
+#: ./ftw/solr/viewlets/templates/searchbox.pt:15
+msgid "title_search_site"
+msgstr "Ricerca"
 

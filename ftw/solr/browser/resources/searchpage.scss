@@ -1,0 +1,156 @@
+// Copy from plonetheme.blueberry
+#portal-searchfacets {
+  padding: $padding-vertical $padding-horizontal;
+  background-color: $color-gray-light;
+  border-radius: $border-radius-primary;
+  margin-bottom: $margin-vertical;
+  // This strange selector is needed becuase this element can not get selected specificly.
+  > span:first-child {
+    font-size: $font-size-h3;
+    display: block;
+
+   @include screen-small() {
+    display: inline-block;
+   }
+  }
+
+  .amount {
+    font-weight: bold;
+  }
+
+  .actionMenu {
+    @include screen-small() {
+      float: right;
+      margin-bottom: 0;
+     }
+
+    float: none;
+    margin-bottom: $margin-vertical;
+
+    a {
+      @extend .fa-icon;
+      @extend .fa-filter;
+
+      &:before {
+        font-size: $font-size-medium;
+        display: inline !important;
+        margin-right: $margin-horizontal;
+      }
+    }
+
+  }
+}
+
+#filter-form {
+  margin-bottom: $margin-vertical;
+
+  > div {
+    @include row();
+  }
+  .LSBox {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: $margin-vertical;
+    margin-right: 0;
+
+    @include screen-small() {
+      width: 40%;
+      margin-right: $margin-horizontal;
+      margin-bottom: 0;
+    }
+
+    .searchPage {
+      min-width: 0;
+      width: 100%;
+    }
+  }
+}
+
+.search-facets {
+  display: inline-block;
+}
+
+.searchPage {
+  width: 100%;
+}
+
+.facets {
+  @include list-group-interactive();
+  display: none;
+}
+
+.filter {
+  display: inline-block;
+  position: relative;
+
+  &.selected > a {
+    cursor: default;
+    font-weight: bold;
+
+    &:hover {
+      color: $color-link;
+      text-decoration: none;
+    }
+  }
+
+  > a {
+    padding: $padding-vertical $padding-horizontal $padding-vertical 0;
+  }
+  > ul {
+    position: absolute;
+    left: 0;
+    top: 1em + 2 * $padding-vertical;
+    box-shadow: $box-shadow-secondary;
+  }
+}
+
+.selected-factes-wrapper > span {
+  font-weight: bold;
+  display: block;
+  margin: $margin-heading-vertical 0;
+}
+
+#selected-facets {
+  @include list();
+
+  > li {
+    @include list-group-item();
+
+    > .facetRemoveItem {
+      @extend .fa-icon;
+      @extend .fa-remove;
+      padding: 0;
+      display: inline;
+      color: $color-danger;
+    }
+
+    > .facetItemTitle {
+      font-weight: bold;
+    }
+  }
+}
+
+
+#notFoundSuggestions {
+  @include clearfix;
+  @include ul(plain);
+  margin-top: 1em;
+  margin-left: -5px;
+
+  > li {
+    float: left;
+    padding: 5px;
+
+    &:before {
+      margin-right: 0;
+    }
+  }
+}
+
+// These elements are used for accessibility
+#currentfolder_item,
+#search-no-results-message,
+#search-amount-results-found-message,
+#search-one-result-found-message {
+  @include hidden-structure();
+}

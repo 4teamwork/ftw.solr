@@ -1,0 +1,22 @@
+<div tal:omit-tag=""
+     tal:define="facets view/facets; selected view/selected"
+     tal:condition="python: selected"
+     i18n:domain="solr">
+
+  <span i18n:translate="heading_search_filtered_by" i18n:domain="ftw.solr">
+    Suche eingeschr&auml;nkt nach: </span>
+
+    <ul id="selected-facets" tal:condition="selected">
+        <li tal:repeat="item selected">
+            <span class="facetItemTitle"
+                  tal:content="item/title"
+                  i18n:translate="" />:
+            <span class="facetItemValue"
+                  tal:content="item/value" />
+            <a class="facetRemoveItem"
+               tal:attributes="href string:${request/ACTUAL_URL}?${item/query}"
+               i18n:translate="">Remove this search limit...</a>
+        </li>
+    </ul>
+
+</div>

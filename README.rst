@@ -4,6 +4,7 @@ Introduction
 ``ftw.solr`` provides various customizations and enhancements on top of
 ``collective.solr`` which integrates the Solr search engine with Plone.
 
+.. contents:: Table of Contents
 
 Features
 ========
@@ -99,7 +100,7 @@ Search Handlers
 ---------------
 
 ``ftw.solr`` requires two custom search handlers that must be configured on the
-Solr server. Search handlers are configured in ``solrconfig.xml`` of your 
+Solr server. Search handlers are configured in ``solrconfig.xml`` of your
 collection.
 
 The ``livesearch`` request handler is used for live search and should limit the
@@ -141,7 +142,7 @@ Highlighting
 Highlighting requires an index named ``snippetText``
 with its own field type which does not do too much text analysis.
 Fields and indexes are configured in ``schema.xml`` of your collection.
- 
+
 Example::
 
     <fieldType name="text_snippets" class="solr.TextField" positionIncrementGap="100">
@@ -203,17 +204,104 @@ Index example::
     <copyField source="SearchableText" dest="wordCloudTerms"/>
 
 
+Search / Livesearch
+-------------------
+
+``ftw.solr`` provides a better livesearch implementation using jQuery Autocomplete widget.
+A new search and result template is also included.
+
+Suggestions
+-----------
+By default suggestions are disabled on the advanced search input field.
+if you want autocomplete while typing you need to install the autocomplete profile of ftw.solr and...
+
+**Prerequisit (solr config)**::
+
+    <!-- Suggester for autocomplete -->
+    <searchComponent class="solr.SpellCheckComponent" name="suggest">
+      <lst name="spellchecker">
+        <str name="name">suggest</str>
+        <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
+        <str name="lookupImpl">org.apache.solr.spelling.suggest.fst.WFSTLookupFactory</str>
+        <str name="field">SearchableText</str>
+        <float name="threshold">0.0005</float>
+      </lst>
+    </searchComponent>
+    <requestHandler class="org.apache.solr.handler.component.SearchHandler" name="/suggest">
+      <lst name="defaults">
+        <str name="spellcheck">true</str>
+        <str name="spellcheck.dictionary">suggest</str>
+        <str name="spellcheck.onlyMorePopular">true</str>
+        <str name="spellcheck.count">10</str>
+      </lst>
+      <arr name="components">
+        <str>suggest</str>
+      </arr>
+    </requestHandler>
+
+
+The portal searchbox no longer provides this feature in favor of the new livesearch autocomplete feature.
+
+
+
 Installation
 ============
 
-Install ``ftw.solr`` by adding it to the list of eggs in your
-buildout or by adding it as a dependency of your policy package. Then run
-buildout and restart your instance.
+Add as dependency
+-----------------
 
-Go to *Site Setup* of your Plone site and activate the 
-``ftw.solr-autocomplete`` add-on.
-Check the Solr control panel provided by ``collective.solr``
-for Solr-specific configuration options.
+Install ``ftw.solr`` by adding it to the list of eggs in your
+buildout or by adding it as a dependency of your policy package.
+
+.. code:: rst
+
+    [instance]
+    eggs +=
+        ftw.solr
+
+Extend your buildout
+--------------------
+
+For production:
+
+.. code:: ini
+
+    [buildout]
+    extends =
+        https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/production.cfg
+        https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/solr.cfg
+
+    deployment-number = 05
+
+For local development:
+
+.. code:: ini
+
+    [buildout]
+    extends =
+        https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/plone-development.cfg
+        https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/plone-development-solr.cfg
+
+Update medatata.xml
+-------------------
+
+Add ``ftw.solr`` to your metadata.xml:
+
+.. code:: xml
+
+    <?xml version="1.0"?>
+    <metadata>
+        <dependencies>
+            <dependency>profile-ftw.solr:default</dependency>
+        </dependencies>
+    </metadata>
+
+Run buildout
+------------
+
+If you configured your solr, you can buildout and restart your instance.
+
+- Install the generic setup profile of ``ftw.solr``.
 
 
 Links

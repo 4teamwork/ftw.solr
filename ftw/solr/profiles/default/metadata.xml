@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <metadata>
-    <version>1004</version>
     <dependencies>
         <dependency>profile-collective.solr:default</dependency>
         <dependency>profile-plone.app.search:default</dependency>
+        <dependency>profile-collective.js.jqueryui:default</dependency>
     </dependencies>
 </metadata>
