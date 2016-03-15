@@ -96,6 +96,11 @@
       color: $color-text-light;
     }
 
+    .mimetype-icon {
+      display: inline-block;
+      float: left;
+    }
+
     span {
       display: block;
       white-space: nowrap;
