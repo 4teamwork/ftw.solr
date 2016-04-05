@@ -16,7 +16,7 @@
         for="OFS.interfaces.IFolder"
         name="available-facets"
         template="available-facets.pt"
-        class=".facets.AvailableSearchFacetsView"
+        class="ftw.solr.browser.facets.SearchFacetsView"
         permission="zope2.View"
         allowed_attributes="facet_parameters" />
 

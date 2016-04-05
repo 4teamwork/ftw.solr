@@ -4,6 +4,9 @@ Changelog
 2.0.0 (unreleased)
 ------------------
 
+- Respect the facets configured in the Solr control panel.
+  [mbaechtold]
+
 - Fix css selector of selected facest.
   [mathias.leimgruber]
 
