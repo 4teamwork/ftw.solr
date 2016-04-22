@@ -11,7 +11,7 @@
            i18n:translate=""
            tal:attributes="tabindex python: '-1' if not facet_counts else nothing;
                            aria-controls string: ${repeat/facet/index}_filter;
-                           aira-owns string: ${repeat/facet/index}_filter"
+                           aria-owns string: ${repeat/facet/index}_filter"
            aria-haspopup="true"></a>
         <ul class="facets"
             tal:condition="facet_counts"
