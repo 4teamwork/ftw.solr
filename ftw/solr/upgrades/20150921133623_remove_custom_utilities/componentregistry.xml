@@ -4,11 +4,12 @@
 
     <utility
       interface="collective.solr.interfaces.ISolrConnectionManager"
-      factory="collective.solr.manager.SolrConnectionManager" />
+      factory="ftw.solr.manager.SolrConnectionManager"
+      remove="True"/>
 
     <utility
       interface="collective.solr.interfaces.ISolrConnectionManager"
-      factory="ftw.solr.manager.SolrConnectionManager" remove="True"/>
+      factory="collective.solr.manager.SolrConnectionManager" />
 
     <utility
       interface="collective.solr.interfaces.ISolrIndexQueueProcessor"
