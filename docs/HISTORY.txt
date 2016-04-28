@@ -4,14 +4,12 @@ Changelog
 1.5.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Respect the facets configured in the Solr control panel.
+  [mbaechtold]
 
 
 1.5.0 (2016-03-31)
 ------------------
-
-- Respect the facets configured in the Solr control panel.
-  [mbaechtold]
 
 - Fix css selector of selected facest.
   [mathias.leimgruber]
