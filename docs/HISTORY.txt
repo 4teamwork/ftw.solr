@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.5.1 (unreleased)
+1.5.1 (2016-04-29)
 ------------------
 
 - Fix faulty upgrade step which removed the Solr connection manager utility
