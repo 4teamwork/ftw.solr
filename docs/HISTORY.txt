@@ -4,7 +4,8 @@ Changelog
 1.5.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Disable special links on facets dropdown.
+  [Kevin Bieri]
 
 
 1.5.1 (2016-04-29)
