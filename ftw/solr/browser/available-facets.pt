@@ -7,6 +7,7 @@
     <tal:facet tal:define="facet_counts facet/counts">
       <div tal:attributes="class python: not facet_counts and 'selected filter' or 'filter'">
         <a href="#"
+           class="link-plain"
            tal:content="facet/title"
            i18n:translate=""
            tal:attributes="tabindex python: '-1' if not facet_counts else nothing;
