@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.5.2 (unreleased)
+1.5.2 (2016-05-20)
 ------------------
 
 - BugFix: Search for "current folder". Checkbox was unlickable.
