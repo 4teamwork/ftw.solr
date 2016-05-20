@@ -4,13 +4,23 @@
 
   var doNotClose = false;
 
+  var focusItem = function(event, ui) {
+    if (ui.item === undefined) {
+      return;
+    }
+
+    if(ui.item.currentFolder) {
+      event.preventDefault();
+     }
+  };
+
   var selectItem = function(event, ui) {
     if(ui.item.currentFolder) {
+      event.preventDefault();
       var checkbox = $(event.currentTarget).find("#live_searchbox_currentfolder_only");
       var original = $("#searchbox_currentfolder_only");
       var toggeledValue = !checkbox.prop("checked");
-      checkbox.prop("checked", toggeledValue);
-      original.prop("checked", toggeledValue);
+      checkbox.trigger("change");
       doNotClose = true;
     } else {
       window.location = ui.item.url;
@@ -21,6 +31,7 @@
     source: "ftw_solr_livesearch_reply",
     minLength: 3,
     select: selectItem,
+    focus: focusItem,
     appendTo: ".LSBox",
     messages: {
       noResults: $("#search-no-results-message").text(),

@@ -4,6 +4,9 @@ Changelog
 1.5.2 (unreleased)
 ------------------
 
+- BugFix: Search for "current folder". Checkbox was unlickable.
+  [mathias.leimgruber]
+
 - Disable special links on facets dropdown.
   [Kevin Bieri]
 
