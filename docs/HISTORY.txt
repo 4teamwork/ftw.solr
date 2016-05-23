@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.5.3 (unreleased)
+1.5.3 (2016-05-23)
 ------------------
 
 - BugFix: Search for "current folder". Label was some kind of unclickable. :-( omg sry.
