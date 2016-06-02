@@ -66,15 +66,7 @@
     $("#searchbox_currentfolder_only", ul).attr("id", "live_searchbox_currentfolder_only");
     $("[for='searchbox_currentfolder_only']", ul).attr("for", "live_searchbox_currentfolder_only");
 
-
-    var searchField = $(".folder_path", ul)
-    // label - we prevent the default behavior so we have to implement this on our own.
-    searchField.next().on("click", function(){
-      var field = $(this).prev();
-      field.prop("checked", !field.prop("checked"));
-    });
-
-    searchField.on("change", function() {
+    $(".folder_path", ul).on("change", function() {
 
       if(this.checked) {
         self.option("source", source + "?path=" + this.value);

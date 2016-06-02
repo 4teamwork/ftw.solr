@@ -30,8 +30,8 @@
                i18n:attributes="value label_search;" />
 
         <ul id="currentfolder_item">
-          <li class="currentFolderItem">
-              <a>
+          <li class="currentFolderItem ui-menu-item">
+              <span>
                   <input type="checkbox"
                          id="searchbox_currentfolder_only"
                          name="path"
@@ -41,7 +41,7 @@
                      i18n:translate="label_searchbox_currentfolder_only">
                      only in current section
                   </label>
-              </a>
+              </span>
           </li>
         </ul>
 
