@@ -57,6 +57,16 @@
             for="*"
             />
 
+        <plone:behavior
+            title="Searchwords"
+            provides="ftw.solr.behaviors.ISearchwords"
+            for="*"
+            />
+
+        <adapter
+            factory=".behaviors.searchwords_indexer"
+            name="searchwords" />
+
     </configure>
 
 </configure>
