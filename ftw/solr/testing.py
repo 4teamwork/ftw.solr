@@ -37,7 +37,7 @@ class SolrLayer(PloneSandboxLayer):
         fti = DexterityFTI('DexterityFolder',
                            klass="plone.dexterity.content.Container",
                            global_allow=True)
-        portal.portal_types._setObject('ClassificationFTI', fti)
+        portal.portal_types._setObject('DexterityFolder', fti)
         fti.lookupSchema()
 
 

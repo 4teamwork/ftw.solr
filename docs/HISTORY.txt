@@ -4,6 +4,8 @@ Changelog
 1.5.4 (unreleased)
 ------------------
 
+- Add IShowInSearch and ISearchwords behaviors. [jone]
+
 - Fix html structure of search in current folder. input in a tag is not allowed.
   [mathias.leimgruber]
 
