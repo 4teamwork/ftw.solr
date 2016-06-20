@@ -4,7 +4,9 @@ Changelog
 1.6.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix faulty upgrade step which incorrectly added the Solr index queue processor
+  utility in 1.5.0.
+  [mbaechtold]
 
 
 1.6.0 (2016-06-07)
