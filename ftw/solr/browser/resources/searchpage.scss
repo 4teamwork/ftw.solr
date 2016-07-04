@@ -94,7 +94,11 @@
   }
 
   > a {
+    @extend .fa-icon-right;
     padding: $padding-vertical $padding-horizontal $padding-vertical 0;
+    &:after {
+      content: "\f107";
+    }
   }
   > ul {
     position: absolute;
