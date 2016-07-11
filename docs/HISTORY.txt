@@ -4,6 +4,9 @@ Changelog
 1.6.1 (unreleased)
 ------------------
 
+- Style selected facettes.
+  [mathias.leimgruber]
+
 - Add icon to facets dropdown menu.
   [Kevin Bieri]
 
