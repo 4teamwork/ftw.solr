@@ -57,7 +57,8 @@ class ISearchwords(Schema):
         description=_(u'help_searchwords',
                       default=u'Specify words for which this item will show up '
                       u'as the first search result. Multiple words can be '
-                      u'specified on new lines.'))
+                      u'specified on new lines.'),
+        required=False)
 
 alsoProvides(ISearchwords, IFormFieldProvider)
 
