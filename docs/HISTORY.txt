@@ -4,6 +4,9 @@ Changelog
 1.6.2 (unreleased)
 ------------------
 
+- Prevent the result text from read out through screenreaders
+  [Kevin Bieri]
+
 - Set searchwords as a non-required field.
   [elioschmutz]
 

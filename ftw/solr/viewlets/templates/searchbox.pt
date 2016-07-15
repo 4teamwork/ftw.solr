@@ -46,17 +46,20 @@
         </ul>
 
         <div id="search-no-results-message"
-             i18n:translate="text_search_help_no_results">
+             i18n:translate="text_search_help_no_results"
+             aria-hidden="true">
             No search results.
         </div>
 
         <div id="search-amount-results-found-message"
-             i18n:translate="text_search_results_found">
+             i18n:translate="text_search_results_found"
+             aria-hidden="true">
             results found, use up and down keys to navigate.
         </div>
 
         <div id="search-one-result-found-message"
-             i18n:translate="text_search_one_result_found">
+             i18n:translate="text_search_one_result_found"
+             aria-hidden="true">
             result found, use up and down keys to navigate.
         </div>
 

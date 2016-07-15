@@ -37,9 +37,19 @@
       results: function( amount ) {
         amount = amount - $(".ui-menu-item .no-result").length;
         if (amount !== 0) {
-          return amount + ( amount > 1 ? $("#search-amount-results-found-message").text() : $("#search-one-result-found-message").text());
+          $("#search-no-results-message").attr("aria-hidden", true);
+          if(amount > 1) {
+            $("#search-amount-results-found-message").attr("aria-hidden", false);
+            return amount + $("#search-amount-results-found-message").text();
+          } else {
+            $("#search-one-result-found-message").attr("aria-hidden", false);
+            return amount + $("#search-one-result-found-message").text();
+          }
 
         } else {
+          $("#search-amount-results-found-message").attr("aria-hidden", true);
+          $("#search-one-result-found-message").attr("aria-hidden", true);
+          $("#search-no-results-message").attr("aria-hidden", false);
           return $("#search-no-results-message").text();
         }
       }
