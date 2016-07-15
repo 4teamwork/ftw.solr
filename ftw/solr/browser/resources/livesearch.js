@@ -125,6 +125,8 @@
 
   var init = function() {
     var searchbox = $(".searchField");
+    if (!$(".searchField").length) { return; }
+
     // Always empty on init
     searchbox.val('');
     var widget = $.ui.autocomplete(options, searchbox);
