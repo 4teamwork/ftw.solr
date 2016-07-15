@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.6.2 (unreleased)
+1.6.2 (2016-07-15)
 ------------------
 
 - Prevent the result text from read out through screenreaders
