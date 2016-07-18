@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.6.3 (unreleased)
+1.6.3 (2016-07-18)
 ------------------
 
 - Abort livesearch init if no searchfield is available to make the script failsafe.
