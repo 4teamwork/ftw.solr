@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-12-16 12:21+0000\n"
+"POT-Creation-Date: 2016-07-22 05:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Enable Grouping in LiveSearch"
 msgstr ""
 
-#: ./ftw/solr/configure.zcml:46
+#: ./ftw/solr/configure.zcml:47
 msgid "Enables autocomplete instead of live search"
 msgstr ""
 
@@ -42,7 +42,7 @@ msgstr ""
 msgid "If enabled, livesearch results are grouped by portal type."
 msgstr ""
 
-#: ./ftw/solr/configure.zcml:38
+#: ./ftw/solr/configure.zcml:39
 msgid "Installs the ftw.solr package"
 msgstr ""
 
@@ -62,6 +62,14 @@ msgstr ""
 msgid "Respect Navigation Root"
 msgstr ""
 
+#: ./ftw/solr/configure.zcml:64
+msgid "Searchwords"
+msgstr ""
+
+#: ./ftw/solr/configure.zcml:58
+msgid "Show In Search"
+msgstr ""
+
 #: ./ftw/solr/interfaces.py:21
 msgid "Specify a list of portal types by which livesearch results are grouped. Groups are shown in the provided order. Results that do not match a portal type in the given list are shown at the bottom."
 msgstr ""
@@ -78,11 +86,16 @@ msgstr ""
 msgid "Use Path for Breadcrumbs"
 msgstr ""
 
-#: ./ftw/solr/configure.zcml:38
+#. Default: "${number} items matching your search terms in ${path_link}"
+#: ./ftw/solr/browser/results.pt:70
+msgid "batch_x_items_matching_your_criteria_in"
+msgstr ""
+
+#: ./ftw/solr/configure.zcml:39
 msgid "ftw.solr"
 msgstr ""
 
-#: ./ftw/solr/configure.zcml:46
+#: ./ftw/solr/configure.zcml:47
 msgid "ftw.solr-autocomplete"
 msgstr ""
 
@@ -128,6 +141,7 @@ msgid "help_scale_factor"
 msgstr ""
 
 #. Default: "Specify words for which this item will show up as the first search result. Multiple words can be specified on new lines."
+#: ./ftw/solr/behaviors.py:57
 #: ./ftw/solr/extender.py:37
 msgid "help_searchwords"
 msgstr ""
@@ -169,11 +183,12 @@ msgid "label_search_help"
 msgstr ""
 
 #. Default: "only in current section"
-#: ./ftw/solr/viewlets/templates/searchbox.pt:38
+#: ./ftw/solr/viewlets/templates/searchbox.pt:40
 msgid "label_searchbox_currentfolder_only"
 msgstr ""
 
 #. Default: "Search words"
+#: ./ftw/solr/behaviors.py:56
 #: ./ftw/solr/extender.py:36
 msgid "label_searchwords"
 msgstr ""
@@ -184,12 +199,13 @@ msgid "label_show_all"
 msgstr ""
 
 #. Default: "Show in search"
+#: ./ftw/solr/behaviors.py:33
 #: ./ftw/solr/extender.py:22
 msgid "label_showinsearch"
 msgstr ""
 
 #. Default: "Did you mean… ${suggestion}"
-#: ./ftw/solr/browser/results.pt:62
+#: ./ftw/solr/browser/results.pt:77
 msgid "text_did_you_mean"
 msgstr ""
 
@@ -199,17 +215,17 @@ msgid "text_search"
 msgstr ""
 
 #. Default: "No search results."
-#: ./ftw/solr/viewlets/templates/searchbox.pt:46
+#: ./ftw/solr/viewlets/templates/searchbox.pt:48
 msgid "text_search_help_no_results"
 msgstr ""
 
 #. Default: "result found, use up and down keys to navigate."
-#: ./ftw/solr/viewlets/templates/searchbox.pt:56
+#: ./ftw/solr/viewlets/templates/searchbox.pt:60
 msgid "text_search_one_result_found"
 msgstr ""
 
 #. Default: "results found, use up and down keys to navigate."
-#: ./ftw/solr/viewlets/templates/searchbox.pt:51
+#: ./ftw/solr/viewlets/templates/searchbox.pt:54
 msgid "text_search_results_found"
 msgstr ""
 

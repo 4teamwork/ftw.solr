@@ -13,6 +13,8 @@ from Products.ZCTextIndex.ParseTree import ParseError
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.deferredimport import deprecated
+import urllib
+import urlparse
 
 
 logger = getLogger('ftw.solr')
@@ -46,7 +48,8 @@ class SearchView(browser.Search):
 
         query = super(SearchView, self).filter_query(query)
         if settings.respect_navroot:
-            # If respect_navroot is enabled, return the filtered query unchanged
+            # If respect_navroot is enabled, return the filtered query
+            # unchanged
             return query
 
         # Otherwise, if there wasn't a path filter in the query before,
@@ -101,7 +104,7 @@ class SearchView(browser.Search):
             joined_snippets = {}
             for uid, snippets in self.solr_response.highlighting.items():
                 joined_snippets[uid] = ' '.join([' '.join(snippet) for snippet
-                                                in snippets.values()]).strip()
+                                                 in snippets.values()]).strip()
             return joined_snippets
         return {}
 
@@ -167,5 +170,23 @@ class SearchView(browser.Search):
         if len(breadcrumbs) > maxb:
             # if we have too long breadcrumbs, emit the middle elements
             empty = {'absolute_url': '', 'Title': unicode('…', 'utf-8')}
-            breadcrumbs = [breadcrumbs[0], empty] + breadcrumbs[-maxb+1:]
+            breadcrumbs = [breadcrumbs[0], empty] + breadcrumbs[-maxb + 1:]
         return breadcrumbs
+
+    def remove_path_link_info(self):
+        query_dict = urlparse.parse_qs(self.request.get('QUERY_STRING', ''))
+
+        if 'path' not in query_dict:
+            return None
+
+        path = query_dict['path']
+
+        # Path may be a list, but wie deal only with the first item anyway
+        path = isinstance(path, list) and path[0] or path
+        item = self.context.unrestrictedTraverse(path)
+        del query_dict['path']
+
+        return {'search_url': '{0}?{1}'.format(self.request.get('ACTUAL_URL'),
+                                               urllib.urlencode(query_dict, doseq=True)),
+                'title': item.Title(),
+                'url': item.absolute_url()}
