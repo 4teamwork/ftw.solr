@@ -47,14 +47,35 @@
         </div>
 
         <div class="searchinformation-wrapper">
-          <div id="portal-searchfacets" class="searchinformations" i18n:domain="plone">
-            <span i18n:translate="batch_x_items_matching_your_criteria">
+          <div id="portal-searchfacets" class="searchinformations" i18n:domain="plone" tal:define="path_info view/remove_path_link_info">
+            <span i18n:translate="batch_x_items_matching_your_criteria"
+                  tal:condition="not: path_info">
               <span i18n:name="number"
                     class="amount"
                     tal:content="batch/sequence_length|string:0">
                 234
               </span>
                 items matching your search terms
+            </span>
+
+            <span i18n:domain="ftw.solr"
+                  i18n:translate="batch_x_items_matching_your_criteria_in"
+                  tal:condition="path_info">
+              <span i18n:name="number"
+                    class="amount"
+                    tal:content="batch/sequence_length|string:0">
+                234
+              </span>
+                items matching your search terms in
+                <span i18n:name="path_link"
+                      tal:condition="path_info"
+                      class="path_filter">
+                    <a tal:attributes="href string:${path_info/url}" tal:content="path_info/title"></a>
+                    <a class="facetRemoveItem"
+                       tal:attributes="href string:${path_info/search_url}"
+                       i18n:domain="solr"
+                       i18n:translate="">Remove this search limit...</a>
+                </span>
             </span>
 
             <metal:suggestions tal:condition="suggestions" i18n:domain="ftw.solr">

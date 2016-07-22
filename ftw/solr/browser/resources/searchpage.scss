@@ -125,25 +125,25 @@
       border-right: 0;
     }
 
-    > .facetRemoveItem {
-      @extend .fa-icon;
-      @extend .fa-remove;
-      padding: 0;
-      display: inline-block;
-      color: $color-danger;
-      font-size: 0;
-
-      &:before {
-        font-size: $font-size-base;
-      }
-
-    }
-
     > .facetItemTitle {
       font-weight: bold;
     }
   }
 }
+
+.facetRemoveItem {
+  @extend .fa-icon;
+  @extend .fa-remove;
+  padding: 0;
+  display: inline-block;
+  color: $color-danger;
+  font-size: 0;
+
+  &:before {
+    font-size: $font-size-base;
+  }
+}
+
 
 
 #notFoundSuggestions {
