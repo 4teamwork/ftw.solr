@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.6.4 (unreleased)
+1.7.0 (2016-07-22)
 ------------------
 
 - Implement link to remove the path from the querystring on the result page.
