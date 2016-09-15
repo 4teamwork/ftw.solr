@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.6.4 (unreleased)
+1.6.4 (2016-09-15)
 ------------------
 
 - Allow hyphons and commas simple terms and simple searches.
