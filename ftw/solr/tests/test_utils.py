@@ -16,11 +16,25 @@ class TestIsSimpleSearch(TestCase):
         self.assertTrue(isSimpleSearch('foo.bar'))
         self.assertTrue(isSimpleSearch('foo.bar baz'))
 
+    def test_simple_search_may_contain_commas(self):
+        self.assertTrue(isSimpleSearch('foo,bar'))
+        self.assertTrue(isSimpleSearch('foo-, bar'))
+
+    def test_simple_search_may_contain_hyphon(self):
+        self.assertTrue(isSimpleSearch('foo-bar'))
+        self.assertTrue(isSimpleSearch('foo- bar'))
+
 
 class TestIsSimpleTerm(TestCase):
 
     def test_simple_terms_may_contain_dots(self):
         self.assertTrue(isSimpleTerm('foo.bar'))
+
+    def test_simple_terms_may_contain_commas(self):
+        self.assertTrue(isSimpleTerm('foo,bar'))
+
+    def test_simple_terms_may_contain_hyphon(self):
+        self.assertTrue(isSimpleTerm('foo-bar'))
 
     def test_simple_terms_may_contain_digits(self):
         self.assertTrue(isSimpleTerm('foo7bar'))
