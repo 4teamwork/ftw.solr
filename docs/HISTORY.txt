@@ -4,8 +4,9 @@ Changelog
 1.6.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Allow hyphons and commas simple terms and simple searches.
+  Fixes issue where a comma/hyphon in a search term causes search_pattern template to be circumvented.
+   [mathias.leimgruber]
 
 1.6.3 (2016-07-18)
 ------------------
