@@ -4,8 +4,9 @@ Changelog
 1.7.1 (unreleased)
 ------------------
 
-- Allow hyphens and commas simple terms and simple searches.
-  Fixes issue where a comma/hyphon in a search term causes search_pattern template to be circumvented.
+- Allow hyphens, commas and single quotes in simple terms and simple searches.
+  Fixes issue where a comma/hyphen/single quote in a search term causes
+  search_pattern template to be circumvented.
   [mathias.leimgruber]
 
 

@@ -4,7 +4,9 @@
 
 from re import compile, UNICODE
 
-simpleTerm = compile(r'^[\w\d\.,-]+$', UNICODE)
+simpleTerm = compile(r"^[\w\d\.',-]+$", UNICODE)
+
+
 def isSimpleTerm(term):
     if isinstance(term, str):
         term = unicode(term, 'utf-8', 'ignore')
@@ -12,7 +14,9 @@ def isSimpleTerm(term):
 
 
 operators = compile(r'(.*)\s+(AND|OR|NOT)\s+', UNICODE)
-simpleCharacters = compile(r'^[\w\d\?\*\s\.,-]+$', UNICODE)
+simpleCharacters = compile(r"^[\w\d\?\*\s\.',-]+$", UNICODE)
+
+
 def isSimpleSearch(term):
     term = term.strip()
     if isinstance(term, str):

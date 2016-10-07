@@ -24,6 +24,10 @@ class TestIsSimpleSearch(TestCase):
         self.assertTrue(isSimpleSearch('foo-bar'))
         self.assertTrue(isSimpleSearch('foo- bar'))
 
+    def test_simple_search_may_contain_single_qotes(self):
+        self.assertTrue(isSimpleSearch("d'bar"))
+        self.assertTrue(isSimpleSearch("it's"))
+
 
 class TestIsSimpleTerm(TestCase):
 
@@ -35,6 +39,9 @@ class TestIsSimpleTerm(TestCase):
 
     def test_simple_terms_may_contain_hyphon(self):
         self.assertTrue(isSimpleTerm('foo-bar'))
+
+    def test_simple_terms_may_contain_single_quote(self):
+        self.assertTrue(isSimpleTerm("d'bar"))
 
     def test_simple_terms_may_contain_digits(self):
         self.assertTrue(isSimpleTerm('foo7bar'))
