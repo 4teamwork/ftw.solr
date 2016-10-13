@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.7.1 (unreleased)
+1.7.1 (2016-10-13)
 ------------------
 
 - Allow hyphens, commas and single quotes in simple terms and simple searches.
