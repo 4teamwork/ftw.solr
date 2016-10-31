@@ -104,7 +104,7 @@
     var title = $("<span>").text(item.title)
                            .addClass("title");
 
-    var description = $("<span>").text(item.description)
+    var description = $("<span>").text($("<div />").html(item.description).text())
                                  .addClass("description");
 
     var itemText = $("<div>").append(title).append(description);

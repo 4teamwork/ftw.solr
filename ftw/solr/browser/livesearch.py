@@ -1,5 +1,6 @@
 from Acquisition import aq_inner
 from ftw.solr import _
+from ftw.solr.browser.search import prepare_SearchableText
 from ftw.solr.interfaces import ILiveSearchSettings
 from itertools import groupby
 from plone import api
@@ -18,13 +19,6 @@ import json
 
 def quotestring(s):
     return '"%s"' % s
-
-
-def quote_bad_chars(s):
-    bad_chars = ["(", ")"]
-    for char in bad_chars:
-        s = s.replace(char, quotestring(char))
-    return s
 
 
 class FtwSolrLiveSearchReplyView(BrowserView):
@@ -51,18 +45,8 @@ class FtwSolrLiveSearchReplyView(BrowserView):
         registry = getUtility(IRegistry)
         self.settings = registry.forInterface(ILiveSearchSettings)
 
-        # XXX really if it contains + * ? or -
-        # it will not be right since the catalog ignores all non-word
-        # characters equally like
-        # so we don't even attept to make that right.
-        # But we strip these and these so that the catalog does
-        # not interpret them as metachars
-        # See http://dev.plone.org/plone/ticket/9422 for an explanation of
-        # '\u3000'
-        multispace = u'\u3000'.encode('utf-8')
-        for char in ('?', '-', '+', '*', multispace):
-            q = q.replace(char, ' ')
-        r = quote_bad_chars(q) + '*'
+        q = prepare_SearchableText(q)
+        r = q + '*'
         self.searchterms = url_quote_plus(r)
 
         site_encoding = plone_utils.getSiteEncoding()

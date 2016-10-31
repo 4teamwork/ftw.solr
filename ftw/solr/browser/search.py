@@ -13,9 +13,9 @@ from Products.ZCTextIndex.ParseTree import ParseError
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.deferredimport import deprecated
+import re
 import urllib
 import urlparse
-
 
 logger = getLogger('ftw.solr')
 
@@ -24,6 +24,23 @@ deprecated(
     "This class is moved to another place. "
     "Please use ftw.solr.viewlets.searchbox.SearchBoxViewlet instead",
     SearchBoxViewlet='ftw.solr.viewlets.searchbox:SearchBoxViewlet')
+
+
+def prepare_SearchableText(searchstring):
+    if not searchstring:
+        return
+
+    if not isinstance(searchstring, unicode):
+        searchstring = searchstring.decode('utf-8')
+
+    # Check https://lucene.apache.org/core/2_9_4/queryparsersyntax.html
+    # Also remove u3000 and single quote, since this was implemented before.
+    # We do not strip the - sign, since the solr default tokenizer can handle
+    # it.
+    return re.sub(ur'[\+\&\|\!\(\)\{\}\[\]\^\"\'\~\*\?\:\,\u3000]+',
+                  ' ',
+                  searchstring,
+                  re.UNICODE).strip().encode('utf-8')
 
 
 class SearchView(browser.Search):
@@ -77,6 +94,10 @@ class SearchView(browser.Search):
         if query is None:
             results = []
         else:
+
+            if 'SearchableText' in query:
+                query['SearchableText'] = prepare_SearchableText(
+                    query['SearchableText'])
             query.update({'request_handler': 'hlsearch'})
             catalog = getToolByName(self.context, 'portal_catalog')
             try:
