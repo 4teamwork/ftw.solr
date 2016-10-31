@@ -4,7 +4,10 @@ Changelog
 1.7.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Explicitly remove invalid characters for solr search before passing the SearchableText to the catalog.
+  Basically this means all Lucene query syntax special characters are stripped.
+  Check https://lucene.apache.org/core/2_9_4/queryparsersyntax.html
+  [mathias.leimgruber]
 
 
 1.7.1 (2016-10-13)

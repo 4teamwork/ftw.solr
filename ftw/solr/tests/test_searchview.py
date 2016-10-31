@@ -12,6 +12,7 @@ from plone.registry.interfaces import IRegistry
 from ftw.solr.interfaces import ISearchSettings
 from collective.solr.parser import SolrResponse
 from plone.app.contentlisting.interfaces import IContentListingObject
+from ftw.solr.browser.search import prepare_SearchableText
 
 
 class TestSearchView(TestCase):
@@ -185,7 +186,6 @@ class TestSearchView(TestCase):
         self.assertEquals(suggestions[0][0], 'bildung')
         self.assertEquals(suggestions[0][1], '&SearchableText=bildung')
 
-
     def test_suggestions_querystring_with_list_parameter(self):
         portal = self.layer['portal']
         request = self.layer['request']
@@ -226,3 +226,49 @@ class TestSearchView(TestCase):
 
         view = getMultiAdapter((portal, request), name=u'search')
         self.assertEquals([], view.suggestions())
+
+
+class TestPrepareSearchableText(TestCase):
+
+    def test_replace_inavlid_chars_with_whitespace(self):
+        self.assertEquals("D abcd", prepare_SearchableText("D'abcd"))
+
+        self.assertEquals("10 000", prepare_SearchableText("10'000"))
+
+        self.assertEquals("hans@peter.com",
+                          prepare_SearchableText("hans@peter.com"))
+
+        self.assertEquals("strange- strange",
+                          prepare_SearchableText("strange-,strange"))
+
+        self.assertEquals("singlequoted",
+                          prepare_SearchableText("'singlequoted'"))
+
+        self.assertEquals("doublequoted",
+                          prepare_SearchableText('"doublequoted"'))
+
+        self.assertEquals("The list  one",
+                          prepare_SearchableText('The list: one'))
+
+    def test_strip_whitespace(self):
+
+        self.assertEquals("strange-", prepare_SearchableText("strange-, "))
+
+        self.assertEquals("text", prepare_SearchableText("    text   "))
+
+        self.assertEquals("text   text",
+                          prepare_SearchableText("  text   text"))
+
+    def test_umlauts(self):
+        self.assertEquals("\xc3\xb6 text",
+                          prepare_SearchableText("    \xc3\xb6 text   "))
+
+    def test_unicode_input(self):
+        self.assertEquals("\xc3\xb6 text",
+                          prepare_SearchableText(u"    \xf6 text   "))
+
+    def test_replace_multispace_with_whitespace(self):
+
+        multispace = u'\u3000'.encode('utf-8')
+        self.assertEquals("text text",
+                          prepare_SearchableText("text" + multispace + "text"))
