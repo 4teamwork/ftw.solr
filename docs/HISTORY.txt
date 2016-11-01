@@ -4,7 +4,7 @@ Changelog
 1.8.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Avoid AttributeError "solr_response" on solr errors. [jone]
 
 
 1.8.0 (2016-10-31)
