@@ -144,6 +144,10 @@ class SearchView(browser.Search):
         if safe_hasattr(self.solr_response, 'spellcheck'):
             suggestions = self.solr_response.spellcheck.get('suggestions', [])
             for term in search_terms:
+
+                if not isinstance(term, unicode):
+                    term = term.decode('utf-8')
+
                 if term in suggestions:
                     suggestion = suggestions[term]['suggestion']
                     query_params['SearchableText'] = suggestion[0]['word']
