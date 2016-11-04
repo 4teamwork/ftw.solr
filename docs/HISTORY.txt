@@ -4,6 +4,9 @@ Changelog
 1.8.1 (unreleased)
 ------------------
 
+- Fix suggestion with umlauts by decode it to unicode.
+  [mathias.leimgruber]
+
 - Avoid AttributeError "solr_response" on solr errors. [jone]
 
 
