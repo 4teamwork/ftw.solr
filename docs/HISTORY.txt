@@ -4,6 +4,9 @@ Changelog
 1.8.2 (unreleased)
 ------------------
 
+- Scan for external links after every search page refresh.
+  [mathias.leimgruber]
+
 - Do not use TALES string expressions for facet links, since it automatically transforms
   chars into html entities. 
   The facet links were like "&amp;amp;amp;amp;" every time you add/remove a facet.
