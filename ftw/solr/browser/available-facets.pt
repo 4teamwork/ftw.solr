@@ -20,7 +20,7 @@
             tal:attributes="id string: ${repeat/facet/index}_filter">
             <li tal:repeat="item facet_counts">
                 <a href="#" class="facet" tal:content="string:${item/title} (${item/count})"
-                   tal:attributes="href string:${request/ACTUAL_URL}?${item/query}" />
+                   tal:attributes="href python:request.ACTUAL_URL + '?' + item['query']" />
             </li>
         </ul>
       </div>
