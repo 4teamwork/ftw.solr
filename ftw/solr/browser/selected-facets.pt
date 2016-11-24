@@ -14,7 +14,7 @@
             <span class="facetItemValue"
                   tal:content="item/value" />
             <a class="facetRemoveItem"
-               tal:attributes="href string:${request/ACTUAL_URL}?${item/query}"
+               tal:attributes="href python:request.ACTUAL_URL + '?' + item['query']"
                i18n:translate="">Remove this search limit...</a>
         </li>
     </ul>
