@@ -33,6 +33,7 @@
           <li class="currentFolderItem ui-menu-item">
               <span>
                   <input type="checkbox"
+                         tabindex="-1"
                          id="searchbox_currentfolder_only"
                          name="path"
                          class="folder_path"

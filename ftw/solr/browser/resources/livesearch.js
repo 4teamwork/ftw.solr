@@ -61,16 +61,20 @@
   var renderMenu = function(ul, items) {
     var self = this;
 
-    items.unshift({
-      firstOfGroup: false,
-      currentFolder: true,
-      title: "Current folder",
-      url: ""
-    });
+    // Only show "Search in current folder" if we are not on plone root.
+    if ($("body.portaltype-plone-site").length !== 1) {
+      items.unshift({
+        firstOfGroup: false,
+        currentFolder: true,
+        title: "Current folder",
+        url: ""
+      });
+    }
 
     $.each( items, function( index, item ) {
       self._renderItemData( ul, item );
     });
+
 
     //Change id/for of copied DOM to prevent duplicated ids
     $("#searchbox_currentfolder_only", ul).attr("id", "live_searchbox_currentfolder_only");
@@ -86,6 +90,7 @@
       $("#currentfolder_item .folder_path").prop("checked", this.checked);
       self.search();
     });
+
   };
 
   var renderItem = function(ul, item) {
