@@ -4,7 +4,8 @@ Changelog
 1.8.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Only append "Search in current folder" option to livesearch if not on plone root.
+  [mathias.leimgruber]
 
 
 1.8.2 (2016-11-24)
