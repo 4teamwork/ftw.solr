@@ -4,6 +4,9 @@ Changelog
 1.8.3 (unreleased)
 ------------------
 
+- Remove hidden input from tabindex.
+  [mathias.leimgruber]
+
 - Only append "Search in current folder" option to livesearch if not on plone root.
   [mathias.leimgruber]
 
