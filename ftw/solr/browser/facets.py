@@ -105,7 +105,7 @@ class SearchFacetsView(facets.SearchFacetsView):
            this assumes that facets are selected using filter queries."""
         info = []
         facets = param(self, 'facet.field')
-        facet_queries = self.facet_queries()
+        facet_queries = self.facet_queries() or []
         fq = param(self, 'fq')
         for idx, query in enumerate(fq):
             field, value = query.split(':', 1)
