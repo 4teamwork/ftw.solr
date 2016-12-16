@@ -4,7 +4,9 @@ Changelog
 1.8.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Make getting the facets more robust which caused projects having customizations
+  of selected facets to crash when displaying the search results.
+  [mbaechtold]
 
 
 1.8.3 (2016-12-15)
