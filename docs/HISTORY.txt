@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.8.4 (unreleased)
+1.8.4 (2016-12-16)
 ------------------
 
 - Make getting the facets more robust which caused projects having customizations
