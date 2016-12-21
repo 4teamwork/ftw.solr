@@ -1,3 +1,8 @@
+.ui-widget {
+  font-family: $font-family-primary;
+  font-size: em($font-size-base);
+}
+
 .LSBox {
   .ui-autocomplete {
     @include screen-small {
@@ -58,6 +63,7 @@
 
       &:before {
         float: left;
+        text-align: left;
       }
 
       &.ui-state-focus {
