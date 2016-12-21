@@ -4,7 +4,8 @@ Changelog
 1.8.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix font for livesearch results.
+  [Kevin Bieri]
 
 
 1.8.2 (2016-11-24)
@@ -14,7 +15,7 @@ Changelog
   [mathias.leimgruber]
 
 - Do not use TALES string expressions for facet links, since it automatically transforms
-  chars into html entities. 
+  chars into html entities.
   The facet links were like "&amp;amp;amp;amp;" every time you add/remove a facet.
   Since we have three facts by default this happened tree times on every click.
   [mathias.leimgruber]
