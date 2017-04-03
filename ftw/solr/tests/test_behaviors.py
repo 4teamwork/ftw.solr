@@ -26,7 +26,6 @@ def disable_behavior(behavior, type='DexterityFolder'):
     transaction.commit()
 
 
-
 class TestShowInSearch(FunctionalTestCase):
 
     def setUp(self):
@@ -73,5 +72,5 @@ class TestSearchwords(FunctionalTestCase):
         factoriesmenu.add('DexterityFolder')
         browser.fill({'Search words': 'Foo Bar\nBaz'}).save()
         browser.open(browser.context, view='edit')
-        self.assertEquals([u'Foo Bar', u'Baz'],
+        self.assertEquals([u'foo bar', u'baz'],
                           index_value_for(browser.context, 'searchwords'))

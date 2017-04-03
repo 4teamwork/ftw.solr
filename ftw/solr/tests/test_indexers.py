@@ -104,3 +104,30 @@ class TestSnippetText(TestCase):
         doc = DummyType()
         wrapped = IndexableObjectWrapper(doc, portal.portal_catalog)
         self.assertEquals(" SearchableText", wrapped.snippetText)
+
+    def test_searchwords_are_index_lowered(self):
+        from Products.CMFCore.interfaces import IContentish
+        from zope.interface import implements
+        from ftw.solr.behaviors import ISearchwords
+
+        class DummyType(object):
+            implements(IContentish, ISearchwords)
+
+            def SearchableText(self_):
+                return "Dummy SearchableText"
+
+            def Title(self_):
+                return "Dummy"
+
+            @property
+            def searchwords(self_):
+                return u"Spam\nEggs"
+
+            def Schema(self_):
+                self.fail("Not an archetypes object.")
+
+        portal = self.layer['portal']
+        doc = DummyType()
+
+        wrapped = IndexableObjectWrapper(doc, portal.portal_catalog)
+        self.assertEquals([u'spam', u'eggs'], wrapped.searchwords)
