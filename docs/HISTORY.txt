@@ -5,6 +5,7 @@ Changelog
 ------------------
 
 - Lower searchwords in ISearchwords indexer, since the value is always lowered in ftw.solr.
+  This applies only for DX content.
   [mathias.leimgruber]
 
 - Fix font for livesearch results.
