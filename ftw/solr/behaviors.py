@@ -69,4 +69,5 @@ def searchwords_indexer(obj):
     if not isinstance(words, unicode):
         words = words.decode('utf-8')
 
-    return filter(None, [word.strip('\r ') for word in words.split('\n')])
+    return filter(None,
+                  [word.strip('\r ').lower() for word in words.split('\n')])
