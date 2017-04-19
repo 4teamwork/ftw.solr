@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.8.5 (unreleased)
+1.8.5 (2017-04-19)
 ------------------
 
 - Lower searchwords in ISearchwords indexer, since the value is always lowered in ftw.solr.
