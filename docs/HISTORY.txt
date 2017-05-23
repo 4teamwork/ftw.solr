@@ -7,6 +7,9 @@ Changelog
 - Hide and order the viewlets for all skins and not only for the "Sunburst Theme"-skin
   [elioschmutz]
 
+- Prevent invalid url if the object has a get parameter in his path.
+  [lknoepfel]
+
 
 1.8.5 (2017-04-19)
 ------------------

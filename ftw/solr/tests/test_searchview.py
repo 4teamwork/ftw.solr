@@ -227,6 +227,26 @@ class TestSearchView(TestCase):
         view = getMultiAdapter((portal, request), name=u'search')
         self.assertEquals([], view.suggestions())
 
+    def test_appended_searchterm_does_preserve_a_valid_url(self):
+        portal = self.layer['portal']
+        request = self.layer['request']
+
+        # Setup browser layers
+        notify(BeforeTraverseEvent(portal, request))
+
+        flare = PloneFlare(portal)
+        flare.request = request
+        flare.getURL = lambda: 'http://nohost/plone/object?this=that#ananans'
+        request.form['SearchableText'] = 'test'
+
+        content_listing = IContentListingObject(flare)
+        # patch away non-relevant check
+        content_listing.is_external = lambda: True
+
+        self.assertEqual(
+            content_listing.result_url(),
+            'http://nohost/plone/object?this=that&searchterm=test#ananans')
+
 
 class TestPrepareSearchableText(TestCase):
 
