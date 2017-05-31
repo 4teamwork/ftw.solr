@@ -81,5 +81,6 @@ class SnippetTextIndexer(object):
 
         # Strip html tags
         text = re.sub('<[^<]+?>', '', text)
-
+        text = text.replace('<', '&lt;')
+        text = text.replace('>', '&gt;')
         return text
