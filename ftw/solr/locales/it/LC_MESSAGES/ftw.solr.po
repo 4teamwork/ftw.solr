@@ -212,7 +212,7 @@ msgstr "Mostra alla ricerca"
 #. Default: "Did you mean… ${suggestion}"
 #: ./ftw/solr/browser/results.pt:83
 msgid "text_did_you_mean"
-msgstr "Intendevi... ${suggestion}"
+msgstr "Intendevi: ${suggestion}"
 
 #. Default: "Search Site"
 #: ./ftw/solr/viewlets/templates/searchbox.pt:11

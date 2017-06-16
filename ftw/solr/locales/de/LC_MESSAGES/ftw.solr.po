@@ -209,7 +209,7 @@ msgstr "In der Suche zeigen"
 #. Default: "Did you mean… ${suggestion}"
 #: ./ftw/solr/browser/results.pt:83
 msgid "text_did_you_mean"
-msgstr "Meinten Sie&hellip; ${suggestion}"
+msgstr "Meinten Sie: ${suggestion}"
 
 #. Default: "Search Site"
 #: ./ftw/solr/viewlets/templates/searchbox.pt:11
