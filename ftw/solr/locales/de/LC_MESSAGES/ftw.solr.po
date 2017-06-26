@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-05-12 14:03+0000\n"
+"POT-Creation-Date: 2017-06-26 15:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -148,8 +148,8 @@ msgstr "Zusätzliche Suchbegriffe, bei welchen dieser Artikel gefunden werden so
 msgid "label_nothing_found"
 msgstr "Keine Ergebnisse gefunden"
 
-#. Default: "No items found. Did you mean...\"${word}\""
-#: ./ftw/solr/browser/livesearch.py:214
+#. Default: "Did you mean: ${word}"
+#: ./ftw/solr/browser/livesearch.py:215
 msgid "label_nothing_found_suggestions"
 msgstr "Meinten Sie: ${word}"
 

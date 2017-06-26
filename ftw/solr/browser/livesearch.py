@@ -214,7 +214,7 @@ class FtwSolrLiveSearchReplyView(BrowserView):
             word, suggestions_params = suggestions[0]
             label_suggestion = _(
                 'label_nothing_found_suggestions',
-                default='Did you mean..."${word}"',
+                default='Did you mean: ${word}',
                 mapping={'word': u'<span class="suggestion">{}</span>'.format(word)})
             params += suggestions_params
         else:
