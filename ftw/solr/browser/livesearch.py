@@ -12,6 +12,7 @@ from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from Products.PythonScripts.standard import html_quote
 from Products.PythonScripts.standard import url_quote_plus
+from urllib import urlencode
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.i18n import translate
@@ -209,9 +210,9 @@ class FtwSolrLiveSearchReplyView(BrowserView):
         params = self.facet_params
 
         # Use first suggestion in not found label.
-        suggestions = self.suggestions()
-        if suggestions:
-            word, suggestions_params = suggestions[0]
+        suggestion = self.first_suggestion()
+        if suggestion:
+            word, suggestions_params = suggestion[0]
             label_suggestion = _(
                 'label_nothing_found_suggestions',
                 default='Did you mean: ${word}',
@@ -233,7 +234,7 @@ class FtwSolrLiveSearchReplyView(BrowserView):
             'cssclass': 'no-result',
         }
 
-    def suggestions(self):
+    def first_suggestion(self):
         """Get suggestions from spellcheck component.
         This a copy of the search.py suggestions method.
         """
@@ -256,13 +257,7 @@ class FtwSolrLiveSearchReplyView(BrowserView):
                 if term in suggestions:
                     suggestion = suggestions[term]['suggestion']
                     query_params['SearchableText'] = suggestion[0]['word']
-                    query_string = ''
-                    for k, v in query_params.items():
-                        if isinstance(v, list):
-                            query_string += '&' + '&'.join(
-                                ['%s=%s' % (k, vv) for vv in v])
-                        else:
-                            query_string += '&%s=%s' % (k, v)
-                    suggested_terms.append((suggestion[0]['word'],
+                    query_string = '&' + urlencode(query_params.items())
+                    suggested_terms.append((query_params['SearchableText'],
                                             query_string))
         return suggested_terms
