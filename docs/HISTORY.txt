@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.8.7 (unreleased)
+1.9.0 (2017-06-28)
 ------------------
 
 - Implement first suggestion on livesearch view, if suggestions are enabled.
