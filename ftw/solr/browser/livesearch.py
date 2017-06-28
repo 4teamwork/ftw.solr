@@ -7,10 +7,12 @@ from plone import api
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.browser.navtree import getNavigationRoot
+from Products.CMFPlone.utils import safe_hasattr
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from Products.PythonScripts.standard import html_quote
 from Products.PythonScripts.standard import url_quote_plus
+from urllib import urlencode
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.i18n import translate
@@ -61,14 +63,18 @@ class FtwSolrLiveSearchReplyView(BrowserView):
         self.searchterm_query = '?searchterm=%s' % url_quote_plus(q)
 
         if self.settings.grouping:
-            results = catalog(SearchableText=r, portal_type=friendly_types,
-                              request_handler='livesearch', path=path,
-                              sort_limit=self.settings.group_search_limit)[:self.settings.group_search_limit]
+            self.solr_response = catalog(
+                SearchableText=r, portal_type=friendly_types,
+                request_handler='livesearch', path=path,
+                sort_limit=self.settings.group_search_limit)
+            results = self.solr_response[:self.settings.group_search_limit]
 
         else:
-            results = catalog(SearchableText=r, portal_type=friendly_types,
-                              request_handler='livesearch', path=path,
-                              sort_limit=self.limit)[:self.limit]
+            self.solr_response = catalog(
+                SearchableText=r, portal_type=friendly_types,
+                request_handler='livesearch', path=path,
+                sort_limit=self.limit)
+            results = self.solr_response[:self.limit]
 
         self.request.response.setHeader(
             'Content-Type', 'application/json;charset=%s' % site_encoding)
@@ -179,7 +185,7 @@ class FtwSolrLiveSearchReplyView(BrowserView):
             'title': translate(label_search_help, context=self.request),
             'first_of_group': False,
             'cssclass': 'no-result'
-            }
+        }
 
     def get_show_more_item(self):
         label_show_all = _('label_show_all', default='Show all items')
@@ -200,8 +206,21 @@ class FtwSolrLiveSearchReplyView(BrowserView):
     def get_nothing_found_item(self):
         label_nothing_found = _('label_nothing_found',
                                 default='No items found')
+        label_suggestion = ''
         params = self.facet_params
-        params += '&SearchableText=' + self.searchterms
+
+        # Use first suggestion in not found label.
+        suggestion = self.first_suggestion()
+        if suggestion:
+            word, suggestions_params = suggestion[0]
+            label_suggestion = _(
+                'label_nothing_found_suggestions',
+                default='Did you mean: ${word}',
+                mapping={'word': u'<span class="suggestion">{}</span>'.format(word)})
+            params += suggestions_params
+        else:
+            params += '&SearchableText=' + self.searchterms
+
         path = self.request.form.get('path', None)
         if path:
             params += '&path=' + url_quote_plus(path)
@@ -210,6 +229,35 @@ class FtwSolrLiveSearchReplyView(BrowserView):
         return {
             'url': url,
             'title': translate(label_nothing_found, context=self.request),
+            'description': translate(label_suggestion, context=self.request),
             'first_of_group': False,
-            'cssclass': 'no-result'
+            'cssclass': 'no-result',
         }
+
+    def first_suggestion(self):
+        """Get suggestions from spellcheck component.
+        This a copy of the search.py suggestions method.
+        """
+
+        if not safe_hasattr(self, 'solr_response'):
+            return []
+
+        suggested_terms = []
+        search_terms = [term.lower() for term in self.request.get(
+            'term', '').split()]
+        query_params = self.request.form.copy()
+
+        if safe_hasattr(self.solr_response, 'spellcheck'):
+            suggestions = self.solr_response.spellcheck.get('suggestions', [])
+            for term in search_terms:
+
+                if not isinstance(term, unicode):
+                    term = term.decode('utf-8')
+
+                if term in suggestions:
+                    suggestion = suggestions[term]['suggestion']
+                    query_params['SearchableText'] = suggestion[0]['word']
+                    query_string = '&' + urlencode(query_params.items())
+                    suggested_terms.append((query_params['SearchableText'],
+                                            query_string))
+        return suggested_terms

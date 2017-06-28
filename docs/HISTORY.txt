@@ -4,7 +4,8 @@ Changelog
 1.8.7 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Implement first suggestion on livesearch view, if suggestions are enabled.
+  [mathias.leimgruber]
 
 
 1.8.6 (2017-06-06)

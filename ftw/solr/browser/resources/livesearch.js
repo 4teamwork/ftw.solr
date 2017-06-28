@@ -109,8 +109,20 @@
     var title = $("<span>").text(item.title)
                            .addClass("title");
 
-    var description = $("<span>").text($("<div />").html(item.description).text())
-                                 .addClass("description");
+    var description;
+    if (item.cssclass == 'no-result'){
+      // Insert description directly, this means html content is interpreted as html.
+      if (item.description){
+        description = $("<span>" + item.description + "</span>");
+      } else {
+        description = $('<span />');
+      }
+
+    } else {
+      // Always insert description as text, since it's indexed data and may contain anything.
+      description = $("<span>").text($("<div />").html(item.description).text());
+    }
+    description.addClass("description");
 
     var itemText = $("<div>").append(title).append(description);
 
