@@ -53,7 +53,8 @@ class SolrContentListingObject(catalog.CatalogContentListingObject):
             url, anchor = url.split('#')
         url = url + self.appendViewAction()
         if search_term:
-            url = url + '?searchterm=' + urllib.quote(search_term)
+            separator = '&' if '?' in url else '?'
+            url = url + separator + 'searchterm=' + urllib.quote(search_term)
         if anchor:
             url = url + '#' + anchor
         return url
