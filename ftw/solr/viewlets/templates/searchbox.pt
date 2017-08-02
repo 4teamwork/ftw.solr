@@ -25,6 +25,7 @@
                class="searchField" />
 
         <input class="searchButton"
+               tabindex="-1"
                type="submit"
                value="Search"
                i18n:attributes="value label_search;" />
