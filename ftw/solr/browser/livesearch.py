@@ -60,7 +60,7 @@ class FtwSolrLiveSearchReplyView(BrowserView):
         self.facet_params = context.restrictedTraverse(
             '@@search-facets/facet_parameters')()
 
-        self.searchterm_query = '?searchterm=%s' % url_quote_plus(q)
+        self.searchterm_query = 'searchterm=%s' % url_quote_plus(q)
 
         if self.settings.grouping:
             self.solr_response = catalog(
@@ -119,7 +119,9 @@ class FtwSolrLiveSearchReplyView(BrowserView):
             url = result.getURL()
             if result.portal_type in self.useViewAction:
                 url += '/view'
-            url = url + self.searchterm_query
+
+            separator = '&' if '?' in url else '?'
+            url = url + separator + self.searchterm_query
             title = self.get_title(result)
             first_of_group = 'first_of_group' in result and result.first_of_group
 
