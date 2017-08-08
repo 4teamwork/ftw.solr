@@ -4,7 +4,11 @@ Changelog
 1.9.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Prevent invalid url if the object has a get parameter in his path.
+  [lknoepfel]
+
+- Remove search viewlet submit from tabindex.
+  [lknoepfel]
 
 
 1.9.0 (2017-06-28)
