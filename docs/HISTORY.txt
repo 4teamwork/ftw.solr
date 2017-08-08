@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.9.1 (unreleased)
+1.9.1 (2017-08-08)
 ------------------
 
 - Prevent invalid url if the object has a get parameter in his path.
