@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.9.3 (unreleased)
+1.9.3 (2017-08-28)
 ------------------
 
 - Fix position of facet closing icon.
