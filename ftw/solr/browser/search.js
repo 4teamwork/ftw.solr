@@ -14,7 +14,8 @@ jQuery(function ($) {
         var State = History.getState();
         var qs = State.url.replace(/^.*\?/, '') + '&ajax=1';
         var results_container = $('#search-results-wrapper');
-        $.get('@@search', qs, function(data) {
+        var endpoint = $('#searchform');
+        $.get(endpoint.attr('action'), qs, function(data) {
             results_container.hide();
             var $data = $(data);
             $('#portal-searchfacets').html($data.find('#portal-searchfacets').html());
