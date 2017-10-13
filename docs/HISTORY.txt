@@ -4,6 +4,9 @@ Changelog
 1.9.4 (unreleased)
 ------------------
 
+- Always quote values of a list containing an operator.
+  [mathias.leimgruber]
+
 - Use searchform action as endpoint in search.js.
   [mathias.leimgruber]
 
