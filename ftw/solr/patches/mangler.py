@@ -145,7 +145,7 @@ def mangleQuery(keywords, config, schema):
         elif 'operator' in args:
             if isinstance(value, (list, tuple)) and len(value) > 1:
                 sep = ' %s ' % args['operator'].upper()
-                value = sep.join(map(str, map(iso8601date, value)))
+                value = sep.join(map(lambda item: '"'+str(item)+'"', map(iso8601date, value)))
                 keywords[key] = '(%s)' % value
             del args['operator']
         elif key == 'allowedRolesAndUsers':
