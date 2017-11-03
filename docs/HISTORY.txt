@@ -1,6 +1,12 @@
 Changelog
 =========
 
+$ (unreleased)
+--------------
+
+- Nothing changed yet.
+
+
 1.9.5 (2017-11-03)
 ------------------
 
