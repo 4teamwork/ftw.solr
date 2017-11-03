@@ -247,6 +247,30 @@ class TestSearchView(TestCase):
             content_listing.result_url(),
             'http://nohost/plone/object?this=that&searchterm=test#ananans')
 
+    def test_breadcrumbs(self):
+        """We get mixed html and plaintext form solr and need to escape the
+        text. The only html we get is <em> and </em>, so we should only keep
+        that unescaped.
+        """
+        portal = self.layer['portal']
+        request = self.layer['request']
+        view = getMultiAdapter((portal, request), name=u'search')
+        self.assertEquals(
+            '&lt;a&gt;foo&lt;/a&gt;',
+            view.escape_snippet_text('<a>foo</a>'))
+
+        self.assertEquals(
+            'a &amp; b',
+            view.escape_snippet_text('a & b'))
+
+        self.assertEquals(
+            'foo &lt; <em>bar</em>',
+            view.escape_snippet_text('foo < <em>bar</em>'))
+
+        self.assertEquals(
+            '1 <em>foo</em> 2 <em>foo</em> 3',
+            view.escape_snippet_text('1 <em>foo</em> 2 <em>foo</em> 3'))
+
 
 class TestPrepareSearchableText(TestCase):
 

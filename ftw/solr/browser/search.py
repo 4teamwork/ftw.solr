@@ -10,6 +10,7 @@ from Products.CMFPlone.PloneBatch import Batch
 from Products.CMFPlone.utils import safe_hasattr
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.ZCTextIndex.ParseTree import ParseError
+from xml.sax.saxutils import escape
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.deferredimport import deprecated
@@ -125,10 +126,23 @@ class SearchView(browser.Search):
         if safe_hasattr(self.solr_response, 'highlighting'):
             joined_snippets = {}
             for uid, snippets in self.solr_response.highlighting.items():
-                joined_snippets[uid] = ' '.join([' '.join(snippet) for snippet
-                                                 in snippets.values()]).strip()
+                joined_snippets[uid] = self.escape_snippet_text(
+                    ' '.join([' '.join(snippet) for snippet
+                              in snippets.values()]).strip())
             return joined_snippets
         return {}
+
+    def escape_snippet_text(self, text):
+        """The solr highlighting feature may return things such as:
+        >>> "Foo <em>bar</em> 1 < 2"
+        So we have mixed HTML (always <em> tags) with bare text and should
+        escape it with:
+        >>> "Foo <em>bar</em> 1 &lt; 2"
+        """
+        text = escape(text)
+        text = text.replace('&lt;em&gt;', '<em>')
+        text = text.replace('&lt;/em&gt;', '</em>')
+        return text
 
     def suggestions(self):
         """Get suggestions from spellcheck component.
