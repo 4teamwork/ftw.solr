@@ -10,8 +10,10 @@ class ReindexSnippetText(UpgradeStep):
         search = getUtility(ISearch)
         objs = search.search('snippetText: *<*')
         for item in objs.results():
-            self.portal.restrictedTraverse(item.path_string +
-                                           '/solr-maintenance/reindex')(
+            obj = self.portal.restrictedTraverse(item.path_string, None)
+            if not obj:
+                continue
+            obj.restrictedTraverse('/solr-maintenance/reindex')(
                 limit=1,
                 idxs=['snippetText'])
         self.install_upgrade_profile()
