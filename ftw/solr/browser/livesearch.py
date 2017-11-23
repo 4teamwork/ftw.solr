@@ -54,7 +54,6 @@ class FtwSolrLiveSearchReplyView(BrowserView):
         site_encoding = plone_utils.getSiteEncoding()
         if path is None:
             path = getNavigationRoot(context)
-        catalog = getToolByName(context, 'portal_catalog')
         friendly_types = plone_utils.getUserFriendlyTypes()
 
         self.facet_params = context.restrictedTraverse(
@@ -62,24 +61,35 @@ class FtwSolrLiveSearchReplyView(BrowserView):
 
         self.searchterm_query = 'searchterm=%s' % url_quote_plus(q)
 
+        sort_limit = self.limit
         if self.settings.grouping:
-            self.solr_response = catalog(
-                SearchableText=r, portal_type=friendly_types,
-                request_handler='livesearch', path=path,
-                sort_limit=self.settings.group_search_limit)
-            results = self.solr_response[:self.settings.group_search_limit]
+            sort_limit = self.settings.group_search_limit
 
-        else:
-            self.solr_response = catalog(
-                SearchableText=r, portal_type=friendly_types,
-                request_handler='livesearch', path=path,
-                sort_limit=self.limit)
-            results = self.solr_response[:self.limit]
+        self.solr_response = self.get_solr_response(
+            SearchableText=r,
+            portal_type=friendly_types,
+            request_handler='livesearch',
+            path=path,
+            sort_limit=sort_limit,
+        )
+        results = self.solr_response[:sort_limit]
 
         self.request.response.setHeader(
             'Content-Type', 'application/json;charset=%s' % site_encoding)
 
         return self.get_results_as_json(results)
+
+    def get_solr_response(self, **query_params):
+        context = aq_inner(self.context)
+        catalog = getToolByName(context, 'portal_catalog')
+        query_params = self.get_query_params(**query_params)
+        return catalog(**query_params)
+
+    def get_query_params(self, **query_params):
+        """
+        Subclasses may inject more query params by overwriting this method.
+        """
+        return query_params
 
     def get_results_as_json(self, results):
         if self.settings.grouping:
