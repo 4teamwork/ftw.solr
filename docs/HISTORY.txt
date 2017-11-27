@@ -4,7 +4,8 @@ Changelog
 1.9.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Refactor `ftw.solr.browser.livesearch.FtwSolrLiveSearchReplyView` for easier
+  subclassing. [mbaechtold]
 
 
 1.9.5 (2017-11-03)
