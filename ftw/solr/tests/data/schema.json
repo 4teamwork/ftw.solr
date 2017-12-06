@@ -1,0 +1,54 @@
+{
+    "responseHeader": {
+        "QTime": 1,
+        "status": 0
+    },
+    "schema": {
+        "copyFields": [],
+        "dynamicFields": [],
+        "fieldTypes": [
+            {
+                "class": "solr.BoolField",
+                "name": "boolean",
+                "sortMissingLast": true
+            },
+            {
+                "class": "solr.LongPointField",
+                "docValues": true,
+                "name": "plong"
+            },
+            {
+                "class": "solr.StrField",
+                "docValues": true,
+                "name": "string",
+                "sortMissingLast": true
+            }
+        ],
+        "fields": [
+            {
+                "docValues": false,
+                "indexed": true,
+                "name": "_root_",
+                "stored": false,
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "name": "_version_",
+                "stored": false,
+                "type": "plong"
+            },
+            {
+                "indexed": true,
+                "multiValued": false,
+                "name": "UID",
+                "required": true,
+                "stored": true,
+                "type": "string"
+            }
+        ],
+        "name": "default-config",
+        "uniqueKey": "UID",
+        "version": 1.6
+    }
+}

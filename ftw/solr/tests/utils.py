@@ -1,8 +1,16 @@
-from os.path import dirname, join
-from ftw.solr import tests
+import os.path
 
 
-def getData(filename):
-    """ return a file object from the test data folder """
-    filename = join(dirname(tests.__file__), 'data', filename)
+def get_data(filename):
+    """Return content from a file in the test data folder """
+    filename = os.path.join(os.path.dirname(__file__), 'data', filename)
     return open(filename, 'r').read()
+
+
+class MockHTTPResponse(object):
+    def __init__(self, status=200, body=''):
+        self.status = status
+        self.body = body
+
+    def read(self):
+        return self.body

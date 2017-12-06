@@ -1,57 +1,53 @@
-from setuptools import setup, find_packages
+# -*- coding: utf-8 -*-
+"""Installer for the ftw.solr package."""
+
+from setuptools import find_packages
+from setuptools import setup
 import os
 
-version = '1.10.1.dev0'
+
+long_description = '\n\n'.join([
+    open('README.rst').read(),
+    open(os.path.join("docs", "HISTORY.txt")).read(),
+])
 
 tests_require = [
-    'ftw.builder',
-    'ftw.testbrowser',
-    'plone.app.dexterity',
     'plone.app.testing',
-    'unittest2',
-    ]
+    'mock',
+]
 
-setup(name='ftw.solr',
-      version=version,
-      description="Solr integration for Plone using collective.solr",
-      long_description=open("README.rst").read() + "\n" + \
-          open(os.path.join("docs", "HISTORY.txt")).read(),
-
-      classifiers=[
+setup(
+    name='ftw.solr',
+    version='2.0a1',
+    description="Solr integration for Plone",
+    long_description=long_description,
+    # Get more from https://pypi.python.org/pypi?%3Aaction=list_classifiers
+    classifiers=[
+        "Environment :: Web Environment",
         "Framework :: Plone",
+        "Framework :: Plone :: 4.3",
         "Programming Language :: Python",
-        ],
-
-      keywords='ftw solr',
-      author='4teamwork AG',
-      author_email='mailto:info@4teamwork.ch',
-      url='https://github.com/4teamwork/ftw.solr',
-      license='GPL2',
-
-      packages=find_packages(exclude=['ez_setup']),
-      namespace_packages=['ftw'],
-      include_package_data=True,
-      zip_safe=False,
-
-      install_requires=[
-        'collective.js.jqueryui',
-        'collective.monkeypatcher',
-        'collective.solr',
-        'ftw.upgrade',
-        'plone.api',
-        'plone.app.contentlisting',
-        'plone.app.search',
-        'requests',
+        "Programming Language :: Python :: 2.7",
+        "Operating System :: OS Independent",
+        "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
+    ],
+    keywords='Plone Solr',
+    author='Thomas Buchberger',
+    author_email='t.buchberger@4teamwork.ch',
+    url='https://pypi.python.org/pypi/ftw.solr',
+    license='GPL version 2',
+    packages=find_packages(exclude=['ez_setup']),
+    namespace_packages=['ftw'],
+    include_package_data=True,
+    zip_safe=False,
+    install_requires=[
+        # -*- Extra requirements: -*-
         'setuptools',
-        'z3c.unconfigure',
-        ],
-
-      tests_require=tests_require,
-      extras_require=dict(tests=tests_require),
-
-      entry_points="""
-      # -*- Entry points: -*-
-      [z3c.autoinclude.plugin]
-      target = plone
-      """,
-      )
+        'collective.indexing',
+    ],
+    extras_require=dict(test=tests_require, tests=tests_require),
+    entry_points="""
+    [z3c.autoinclude.plugin]
+    target = plone
+    """,
+)

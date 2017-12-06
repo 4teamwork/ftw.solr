@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <layers>
   <layer
-      name="ftw.solr"
-      interface="ftw.solr.interfaces.IFtwSolrLayer"
+      name="ftw.solr2"
+      remove="true"
       />
 </layers>

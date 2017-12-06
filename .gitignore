@@ -1,8 +1,11 @@
 *.egg-info
 *.mo
 *.pyc
+*.pyo
 .installed.cfg
 .mr.developer.cfg
+.Python
+pip-selfcheck.json
 bin/
 build/
 buildout.cfg
@@ -10,6 +13,8 @@ coverage/
 develop-eggs/
 dist/
 eggs/
+include/
+lib/
 parts/
 src/
 var/
