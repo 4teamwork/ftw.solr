@@ -20,6 +20,8 @@
 
   <utility factory="ftw.solr.connection.SolrConnectionManager" />
 
+  <utility factory="ftw.solr.search.SolrSearch" />
+
   <genericsetup:registerProfile
       name="default"
       title="ftw.solr"

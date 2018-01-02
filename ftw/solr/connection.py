@@ -58,7 +58,7 @@ class SolrConnection(object):
                 self.reconnect()
                 return self.request(method, path, data=data, headers=headers)
             self.retrying = False
-            return SolrResponse(error=exc)
+            return SolrResponse(exception=exc)
 
     def post(self, path, data=None):
         return self.request('POST', path, data, self.post_headers)
@@ -127,6 +127,9 @@ class SolrConnection(object):
         self.update_commands = []
         self.extract_commands = []
 
+    def search(self, params, request_handler='/select'):
+        return self.post(request_handler, json.dumps(params))
+
     def __repr__(self):
         return "SolrConnection(host='%s', port=%s, base='%s') at 0x%x" % (
             self.host, self.port, self.base, id(self))
@@ -157,20 +160,57 @@ class SolrConnectionManager(object):
         return schema
 
 
-class SolrResponse(dict):
+class SolrResponse(object):
 
-    def __init__(self, body='{}', status=None, error=None):
-        self.body = body
-        self.status = status
-        self.error = error
-        logger.debug('SolrResponse body: %s', body)
-        super(SolrResponse, self).__init__(json.loads(body))
+    def __init__(self, body='null', status=None, exception=None):
+        self.http_status = status
+        self.exception = exception
+        self.status = -1
+        self.qtime = 0
+        self.params = None
+        self.docs = []
+        self.num_found = 0
+        self.start = 0
+        self.body = {}
+        if self.http_status:
+            self.parse(body)
+
+    def parse(self, data):
+        try:
+            data = json.loads(data)
+        except ValueError:
+            data = None
+        if data is None:
+            return
+
+        response_header = data.get(u'responseHeader', {})
+        self.status = response_header.get(u'status', self.status)
+        self.qtime = response_header.get(u'QTime', 0)
+        self.params = json.loads(response_header.get(u'params', {}).get(
+            u'json', 'null'))
+
+        if u'response' in data:
+            self.docs = data[u'response'].get(u'docs', [])
+            self.num_found = data[u'response'].get(u'numFound', 0)
+            self.start = data[u'response'].get(u'start', 0)
+
+        self.body = data
 
     def is_ok(self):
-        if self.status == 200 and self.get(u'responseHeader', {}).get(
-                u'status') == 0:
+        if self.http_status == 200 and self.status == 0:
             return True
         return False
 
+    def get(self, key, default=None):
+        return self.body.get(key, default)
+
+    def __getitem__(self, key):
+        return self.body[key]
+
+    def __contains__(self, key):
+        return key in self.body
+
     def __repr__(self):
-        return "SolrResponse: %s" % super(SolrResponse, self).__repr__()
+        if self.is_ok():
+            return 'SolrResponse(%s docs)' % len(self.docs)
+        return "SolrResponse(status=%s)" % self.http_status
