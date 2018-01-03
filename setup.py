@@ -13,6 +13,8 @@ long_description = '\n\n'.join([
 
 tests_require = [
     'plone.app.testing',
+    'plone.testing',
+    'plone.api',
     'mock',
 ]
 

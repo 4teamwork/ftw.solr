@@ -14,3 +14,8 @@ class MockHTTPResponse(object):
 
     def read(self):
         return self.body
+
+
+class MockBlob(object):
+    def committed(self):
+        return '/folder/file'

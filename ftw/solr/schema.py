@@ -1,18 +1,10 @@
-from ftw.solr.interfaces import ISolrConnectionManager
-from zope.component import queryUtility
 
 
 class SolrSchema(object):
 
-    def __init__(self, manager=None):
-        self._manager = manager
+    def __init__(self, manager):
+        self.manager = manager
         self.retrieve()
-
-    @property
-    def manager(self):
-        if self._manager is None:
-            self._manager = queryUtility(ISolrConnectionManager)
-        return self._manager
 
     def retrieve(self):
         """Retrieve the Solr schema"""
@@ -23,16 +15,16 @@ class SolrSchema(object):
         self.name = schema.get(u'name')
         self.version = schema.get(u'version')
         self.fields = {}
-        for field in schema.get(u'fields'):
+        for field in schema.get(u'fields', []):
             self.fields[field[u'name']] = field
         self.copy_fields = {}
-        for field in schema.get(u'copyFields'):
+        for field in schema.get(u'copyFields', []):
             self.copy_fields[field[u'dest']] = field
         self.dynamic_fields = {}
-        for field in schema.get(u'dynamicFields'):
+        for field in schema.get(u'dynamicFields', []):
             self.dynamic_fields[field[u'name']] = field
         self.field_types = {}
-        for ftype in schema.get(u'fieldTypes'):
+        for ftype in schema.get(u'fieldTypes', []):
             self.field_types[ftype[u'name']] = ftype
 
     def __nonzero__(self):

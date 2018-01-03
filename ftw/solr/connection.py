@@ -32,33 +32,35 @@ class SolrConnection(object):
 
     post_headers = {'Content-Type': 'application/json'}
 
-    def __init__(self, host='localhost', port=8983, base='/api/cores/ftwsolr',
+    def __init__(self, host='localhost', port=8983, base='/solr',
                  timeout=None):
         self.timeout = timeout
         self.host = host
         self.port = port
         self.base = base
         self.conn = HTTPConnection(self.host, self.port, timeout=self.timeout)
-        self.retrying = False
         self.update_commands = []
         self.extract_commands = []
+        self.reconnect_before_request = False
 
     def request(self, method, path, data=None, headers={}):
         try:
+            if self.reconnect_before_request:
+                self.reconnect()
             self.conn.request(
                 method, self.base + path, body=data, headers=headers)
             resp = self.conn.getresponse()
             body = resp.read()
             status = resp.status
-            self.retrying = False
+            self.reconnect_before_request = False
             return SolrResponse(body, status)
         except (socket.error, HTTPException) as exc:
-            if not self.retrying:
-                self.retrying = True
-                self.reconnect()
+            if not self.reconnect_before_request:
+                self.reconnect_before_request = True
                 return self.request(method, path, data=data, headers=headers)
-            self.retrying = False
-            return SolrResponse(exception=exc)
+            else:
+                self.reconnect_before_request = False
+                return SolrResponse(exception=exc)
 
     def post(self, path, data=None):
         return self.request('POST', path, data, self.post_headers)
@@ -97,7 +99,6 @@ class SolrConnection(object):
             resp = self.post('/update', data=data)
             if not resp.is_ok():
                 logger.error('Update commands failed.')
-                import pdb; pdb.set_trace()
             self.update_commands = []
 
         if self.extract_commands:
@@ -213,4 +214,6 @@ class SolrResponse(object):
     def __repr__(self):
         if self.is_ok():
             return 'SolrResponse(%s docs)' % len(self.docs)
+        elif self.exception is not None:
+            return 'SolrResponse(exception=%r)' % self.exception
         return "SolrResponse(status=%s)" % self.http_status
