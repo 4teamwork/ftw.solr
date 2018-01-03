@@ -1,8 +1,10 @@
+from Products.CMFCore.utils import getToolByName
 from ftw.solr.converters import CONVERTERS
 from ftw.solr.interfaces import ISolrIndexHandler
 from logging import getLogger
 from plone.indexer.interfaces import IIndexableObject
-from Products.CMFCore.utils import getToolByName
+from plone.namedfile.interfaces import INamedBlobFile
+from plone.rfc822.interfaces import IPrimaryFieldInfo
 from zope.component import queryMultiAdapter
 from zope.interface import implementer
 import logging
@@ -149,4 +151,38 @@ class ATBlobFileIndexHandler(DefaultIndexHandler):
         field = self.context.getPrimaryField()
         blob = field.get(self.context).blob
 
+        conn.extract(blob, data)
+
+
+@implementer(ISolrIndexHandler)
+class DexterityItemIndexHandler(DefaultIndexHandler):
+
+    def add(self, attributes):
+        conn = self.manager.connection
+        if conn is None:
+            return
+
+        try:
+            info = IPrimaryFieldInfo(self.context, None)
+        except TypeError:
+            info = None
+        if info is not None and INamedBlobFile.providedBy(info.value):
+            blob = info.value._blob
+        else:
+            return super(DexterityItemIndexHandler, self).add(attributes)
+
+        if attributes and 'SearchableText' not in attributes:
+            return super(DexterityItemIndexHandler, self).add(attributes)
+
+        schema = self.manager.schema
+        if not schema:
+            logger.warning(
+                'Unable to fetch schema, skipping indexing of %r',
+                self.context)
+            return
+        if attributes is None:
+            attributes = schema.fields.keys()
+        attributes.remove('SearchableText')
+
+        data = self.get_data(attributes)
         conn.extract(blob, data)

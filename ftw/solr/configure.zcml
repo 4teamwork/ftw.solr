@@ -17,6 +17,9 @@
   <adapter for="plone.app.blob.interfaces.IATBlobFile
                 ftw.solr.interfaces.ISolrConnectionManager"
            factory="ftw.solr.handlers.ATBlobFileIndexHandler" />
+  <adapter for="plone.dexterity.interfaces.IDexterityItem
+                ftw.solr.interfaces.ISolrConnectionManager"
+           factory="ftw.solr.handlers.DexterityItemIndexHandler" />
 
   <utility factory="ftw.solr.connection.SolrConnectionManager" />
 
