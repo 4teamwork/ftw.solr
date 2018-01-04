@@ -17,22 +17,6 @@ def escape(string):
     return string
 
 
-def allowed_roles_and_users(user):
-    result = user.getRoles()
-    if 'Anonymous' in result:
-        # The anonymous user has no further roles
-        return ['Anonymous']
-    result = list(result)
-    if base_hasattr(user, 'getGroups'):
-        groups = ['user:%s' % x for x in user.getGroups()]
-        if groups:
-            result = result + groups
-    # Order the arguments from small to large sets
-    result.insert(0, 'user:%s' % user.getId())
-    result.append('Anonymous')
-    return result
-
-
 @implementer(ISolrSearch)
 class SolrSearch(object):
     """A search utility for Solr """
@@ -53,9 +37,12 @@ class SolrSearch(object):
         params['query'] = query
         params['offset'] = start
         params['limit'] = rows
-        user = getSecurityManager().getUser()
-        params['filter'] = 'allowedRolesAndUsers:(%s)' % escape(' OR '.join(
-            allowed_roles_and_users(user)))
+        if filter is None:
+            filter = []
+        if not isinstance(filter, list):
+            filter = [filter]
+        params['filter'] = filter
+        params['filter'].insert(0, self.security_filter())
         return conn.search(params, request_handler=request_handler)
 
     def security_filter(self):
