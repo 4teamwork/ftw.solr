@@ -5,9 +5,10 @@ from Products.CMFCore.interfaces import ICatalogAware
 from Products.CMFPlone.utils import base_hasattr
 from Products.Five.browser import BrowserView
 from time import clock
+from time import strftime
 from time import time
-from zope.component import queryUtility
 from zope.component import getMultiAdapter
+from zope.component import queryUtility
 import logging
 
 logger = getLogger('ftw.solr.maintenance')
@@ -37,6 +38,10 @@ def checkpoint_iterator(function, interval=100):
 class SolrMaintenanceView(BrowserView):
     """Helper view for indexing content in Solr."""
 
+    def __init__(self, context, request):
+        super(SolrMaintenanceView, self).__init__(context, request)
+        self.request.RESPONSE.setHeader('Content-Type', 'text/plain')
+
     def optimize(self):
         """Optimize the Solr index."""
         conn = self.manager.connection
@@ -61,11 +66,12 @@ class SolrMaintenanceView(BrowserView):
         def commit():
             conn = self.manager.connection
             conn.commit(extract_after_commit=False)
-            logger.info(
+            self.log(
                 'Intermediate commit (%d items processed, last batch in %s)',
                 processed, lap.next())
 
         cpi = checkpoint_iterator(commit)
+        self.log('Reindexing Solr...')
         for path, obj in find_objects(self.context):
 
             if not ICatalogAware.providedBy(obj):
@@ -78,11 +84,15 @@ class SolrMaintenanceView(BrowserView):
             cpi.next()
 
         commit()
-        logger.info('Solr index rebuilt.')
-        logger.info(
+        self.log('Solr index rebuilt.')
+        self.log(
             'Processed %d items in %s (%s cpu time).',
             processed, real.next(), cpu.next())
-        return 'Solr index rebuilt.'
+
+    def log(self, msg, *args):
+        logger.info(msg, *args)
+        self.request.RESPONSE.write(
+            strftime('%Y-%m-%d %H:%M:%S ') + msg % args + '\n')
 
     @property
     def manager(self):
