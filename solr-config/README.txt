@@ -52,6 +52,11 @@ Configure analyzer field type and field name for spellchecker::
       <str name="field">SearchableText</str>
       ...
 
+Enable spellcheck component in /select search handler::
+
+    <arr name="last-components">
+      <str>spellcheck</str>
+    </arr>
 
 Remove or comment out update processors part.
 
