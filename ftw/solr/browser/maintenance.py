@@ -60,7 +60,7 @@ class SolrMaintenanceView(BrowserView):
 
         def commit():
             conn = self.manager.connection
-            conn.commit()
+            conn.commit(extract_after_commit=False)
             logger.info(
                 'Intermediate commit (%d items processed, last batch in %s)',
                 processed, lap.next())

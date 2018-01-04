@@ -76,7 +76,7 @@ class TestConnection(unittest.TestCase):
         conn = SolrConnection(base='/solr/mycore')
         conn.flush = MagicMock(name='flush')
         conn.commit()
-        conn.flush.assert_called_once_with()
+        conn.flush.assert_called_once_with(extract_after_commit=True)
         self.assertEqual(
             conn.update_commands, ['"commit": {"waitSearcher": false}'])
 
@@ -97,6 +97,16 @@ class TestConnection(unittest.TestCase):
         conn.extract(MockBlob(), {'id': '1'})
         conn.flush()
         tr.commit()
+        conn.post.assert_called_once_with(
+            '/update/extract?literal.id=1&commitWithin=10000'
+            '&stream.file=%2Ffolder%2Ffile')
+        self.assertEqual(conn.extract_commands, [])
+
+    def test_flush_operation_without_after_commit_hook(self):
+        conn = SolrConnection(base='/solr/mycore')
+        conn.post = MagicMock(name='post')
+        conn.extract(MockBlob(), {'id': '1'})
+        conn.flush(extract_after_commit=False)
         conn.post.assert_called_once_with(
             '/update/extract?literal.id=1&commitWithin=10000'
             '&stream.file=%2Ffolder%2Ffile')

@@ -87,12 +87,12 @@ class SolrConnection(object):
         self.update_commands.append(
             '"delete": ' + json.dumps({'query': query}))
 
-    def commit(self, wait_searcher=False):
+    def commit(self, wait_searcher=False, extract_after_commit=True):
         self.update_commands.append(
             '"commit": ' + json.dumps({'waitSearcher': wait_searcher}))
-        self.flush()
+        self.flush(extract_after_commit=extract_after_commit)
 
-    def flush(self):
+    def flush(self, extract_after_commit=True):
         """Send queued update commands to Solr."""
         if self.update_commands:
             data = '{%s}' % ','.join(self.update_commands)
@@ -115,8 +115,11 @@ class SolrConnection(object):
                     if not resp.is_ok():
                         logger.error(
                             'Failed indexing blob %s', file_)
-            transaction.get().addAfterCommitHook(
-                hook, args=[self.extract_commands])
+            if extract_after_commit:
+                transaction.get().addAfterCommitHook(
+                    hook, args=[self.extract_commands])
+            else:
+                hook(True, self.extract_commands)
             self.extract_commands = []
 
     def abort(self):
