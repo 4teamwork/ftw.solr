@@ -25,6 +25,11 @@
 
   <utility factory="ftw.solr.search.SolrSearch" />
 
+  <adapter
+      factory="ftw.solr.contentlisting.SolrContentListing"
+      for="ftw.solr.connection.SolrResponse"
+      />
+
   <genericsetup:registerProfile
       name="default"
       title="ftw.solr"
