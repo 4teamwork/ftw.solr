@@ -7,7 +7,7 @@ from zope.component import queryUtility
 from zope.interface import implementer
 
 
-logger = getLogger('ftw.solr.connection')
+logger = getLogger('ftw.solr.indexer')
 
 
 @implementer(ISolrIndexQueueProcessor)
