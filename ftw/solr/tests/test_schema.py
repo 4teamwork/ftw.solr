@@ -18,9 +18,26 @@ class TestSchema(unittest.TestCase):
         schema.retrieve()
         self.assertEqual(schema.version, 1.6)
         self.assertEqual(schema.unique_key, 'UID')
-        self.assertEqual(
-            schema.fields.keys(), [u'_version_', u'_root_', u'UID'])
+        self.assertItemsEqual(
+            schema.fields.keys(),
+            [
+                u'Title',
+                u'modified',
+                u'SearchableText',
+                u'allowedRolesAndUsers',
+                u'_version_',
+                u'_root_',
+                u'UID',
+                u'path',
+            ])
         self.assertEqual(schema.copy_fields.keys(), [])
         self.assertEqual(schema.dynamic_fields.keys(), [])
-        self.assertEqual(
-            schema.field_types.keys(), [u'boolean', u'string', u'plong'])
+        self.assertItemsEqual(
+            schema.field_types.keys(),
+            [
+                u'boolean',
+                u'string',
+                u'plong',
+                u'text',
+                u'pdate',
+            ])

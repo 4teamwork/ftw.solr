@@ -22,6 +22,16 @@
                 "docValues": true,
                 "name": "string",
                 "sortMissingLast": true
+            },
+            {
+                "class": "solr.DatePointField",
+                "docValues": true,
+                "name": "pdate",
+                "sortMissingLast": true
+            },
+            {
+                "class": "solr.TextField",
+                "name": "text"
             }
         ],
         "fields": [
@@ -40,11 +50,40 @@
             },
             {
                 "indexed": true,
-                "multiValued": false,
                 "name": "UID",
                 "required": true,
-                "stored": true,
                 "type": "string"
+            },
+            {
+                "indexed": true,
+                "name": "path",
+                "stored": false,
+                "type": "string"
+            },
+            {
+                "indexed": true,
+                "name": "Title",
+                "stored": false,
+                "type": "string"
+            },
+            {
+                "indexed": true,
+                "multiValued": true,
+                "name": "allowedRolesAndUsers",
+                "type": "string",
+                "stored": "false"
+            },
+            {
+                "indexed": true,
+                "name": "SearchableText",
+                "stored": true,
+                "type": "text"
+            },
+            {
+                "indexed": true,
+                "name": "modified",
+                "stored": false,
+                "type": "pdate"
             }
         ],
         "name": "default-config",
