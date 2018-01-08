@@ -1,20 +1,10 @@
 from AccessControl.SecurityManagement import getSecurityManager
 from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.query import escape
 from Products.CMFPlone.utils import base_hasattr
 from zope.component import queryUtility
 from zope.interface import implementer
-
-
-SPECIAL_CHARS = [
-    '+', '-', '&&', '||', '!', '(', ')', '{', '}', '[', ']', '^', '"', '~',
-    '*', '?', ':', '/']
-
-
-def escape(string):
-    for char in SPECIAL_CHARS:
-        string = string.replace(char, '\\' + char)
-    return string
 
 
 @implementer(ISolrSearch)

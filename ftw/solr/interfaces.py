@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
+from collective.indexing.interfaces import IIndexQueueProcessor
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
-from collective.indexing.interfaces import IIndexQueueProcessor
+from zope.schema import Text
 
 
 class IFtwSolrLayer(IDefaultBrowserLayer):
@@ -29,3 +30,29 @@ class ISolrSearch(Interface):
 
     def search(query, **parameters):
         """Perform a search with the given querystring and extra parameters"""
+
+
+class ISolrSettings(Interface):
+
+    local_query_parameters = Text(
+        title=u'Local Query Parameters',
+        description=u"Prefixes the query string with local parameters. Must "
+                    u"begin with '{!' and end with '}'.",
+        default=u'{!boost b=recip(ms(NOW,modified),3.858e-10,10,1)}',
+    )
+
+    simple_search_pattern = Text(
+        title=u'Simple Search Pattern',
+        description=u'Pattern for simple search queries.'
+                    u'{term} will be replaced with the search term stripped of'
+                    u' any wildcard symbols.',
+        default=u'Title:{term}^100 OR Title:{term}*^10 '
+                u'OR SearchableText:{term}^10 OR SearchableText:{term}*',
+    )
+
+    complex_search_pattern = Text(
+        title=u'Complex Search Pattern',
+        description=u'Pattern for complex search queries containing boolean '
+                    u'operators. {term} will be replaced with the search term',
+        default=u'Title:({term})^10 OR SearchableText:({term})',
+    )
