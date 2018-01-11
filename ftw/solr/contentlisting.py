@@ -23,7 +23,7 @@ class SolrContentListing(object):
         return self.resp.num_found
 
     def __iter__(self):
-        for doc in self.docs:
+        for doc in self.resp.docs:
             yield SolrContentListingObject(doc)
 
     def add_snippets(self, doc):
