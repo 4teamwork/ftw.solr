@@ -55,6 +55,8 @@ def split_simple_search(term):
 
 def make_query(term):
     term = term.strip()
+    if isinstance(term, str):
+        term = term.decode('utf8')
     term = escape(term)
     registry = getUtility(IRegistry)
     settings = registry.forInterface(ISolrSettings)
