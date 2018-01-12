@@ -39,6 +39,7 @@ class ISolrSettings(Interface):
         description=u"Prefixes the query string with local parameters. Must "
                     u"begin with '{!' and end with '}'.",
         default=u'{!boost b=recip(ms(NOW,modified),3.858e-10,10,1)}',
+        required=False,
     )
 
     simple_search_pattern = Text(
