@@ -8,14 +8,16 @@ import unittest
 
 class TestSchema(unittest.TestCase):
 
-    def test_schema_retrieval(self):
+    def setUp(self):
         conn = MagicMock(name='SolrConnection')
         conn.get = MagicMock(name='get', return_value=SolrResponse(
             body=get_data('schema.json'), status=200))
         manager = MagicMock(name='SolrConnectionManager')
         type(manager).connection = PropertyMock(return_value=conn)
-        schema = SolrSchema(manager)
-        schema.retrieve()
+        self.schema = SolrSchema(manager)
+
+    def test_schema_retrieval(self):
+        schema = self.schema
         self.assertEqual(schema.version, 1.6)
         self.assertEqual(schema.unique_key, 'UID')
         self.assertItemsEqual(
@@ -41,3 +43,9 @@ class TestSchema(unittest.TestCase):
                 u'text',
                 u'pdate',
             ])
+
+    def test_get_field_class_of_existing_field(self):
+        self.assertEqual(self.schema.field_class('UID'), 'solr.StrField')
+
+    def test_get_field_class_of_not_existing_field(self):
+        self.assertEqual(self.schema.field_class('foo'), None)

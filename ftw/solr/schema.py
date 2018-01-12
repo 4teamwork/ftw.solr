@@ -31,3 +31,7 @@ class SolrSchema(object):
         if self.unique_key is not None:
             return True
         return False
+
+    def field_class(self, name):
+        return self.field_types.get(
+                self.fields.get(name, {}).get(u'type'), {}).get(u'class')
