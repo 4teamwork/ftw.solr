@@ -98,7 +98,7 @@ class SolrConnection(object):
             data = '{%s}' % ','.join(self.update_commands)
             resp = self.post('/update', data=data)
             if not resp.is_ok():
-                logger.error('Update commands failed.')
+                logger.error('Update command failed. %s', resp.error_msg())
             self.update_commands = []
 
         if self.extract_commands:
@@ -120,8 +120,8 @@ class SolrConnection(object):
                     resp = self.post(
                         '/update/extract?%s' % urlencode(params, doseq=True))
                     if not resp.is_ok():
-                        logger.error(
-                            'Failed indexing blob %s', file_)
+                        logger.error('Extract command for blob %s failed. %s',
+                                     file_, resp.error_msg())
             if extract_after_commit:
                 transaction.get().addAfterCommitHook(
                     hook, args=[self.extract_commands])
@@ -211,6 +211,19 @@ class SolrResponse(object):
         if self.http_status == 200 and self.status == 0:
             return True
         return False
+
+    def error_msg(self):
+        if self.exception is not None:
+            return 'An exception occured: %s' % str(self.exception)
+        elif self.http_status:
+            if u'error' in self.body and u'msg' in self.body[u'error']:
+                return 'Server responded with code %s, %s.' % (
+                    self.http_status,
+                    self.body[u'error'][u'msg'].encode('utf8'))
+            else:
+                return 'Server responded with code %s.' % self.http_status
+        else:
+            return 'An unknown error occured.'
 
     def get(self, key, default=None):
         return self.body.get(key, default)
