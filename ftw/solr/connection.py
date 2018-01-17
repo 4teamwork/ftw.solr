@@ -107,7 +107,14 @@ class SolrConnection(object):
                     return
                 for blob, data in extract_commands:
                     file_ = blob.committed()
-                    params = {'literal.%s' % k: v for k, v in data.items()}
+                    params = {}
+                    for k, v in data.items():
+                        k = k.encode('utf8')
+                        if isinstance(v, unicode):
+                            v = v.encode('utf8')
+                        elif isinstance(v, list):
+                            v = [vv.encode('utf8') for vv in v]
+                        params['literal.%s' % k] = v
                     params['stream.file'] = file_
                     params['commitWithin'] = '10000'
                     resp = self.post(
