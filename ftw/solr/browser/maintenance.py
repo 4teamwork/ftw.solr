@@ -45,7 +45,7 @@ class SolrMaintenanceView(BrowserView):
     def optimize(self):
         """Optimize the Solr index."""
         conn = self.manager.connection
-        conn.post('/update', data={'optimize': {'waitSearcher': False}})
+        conn.optimize()
         return 'Solr index optimized.'
 
     def clear(self):

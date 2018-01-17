@@ -92,6 +92,10 @@ class SolrConnection(object):
             '"commit": ' + json.dumps({'waitSearcher': wait_searcher}))
         self.flush(extract_after_commit=extract_after_commit)
 
+    def optimize(self, wait_searcher=False):
+        self.update_commands.append(
+            '"optimize": ' + json.dumps({'waitSearcher': wait_searcher}))
+
     def flush(self, extract_after_commit=True):
         """Send queued update commands to Solr."""
         if self.update_commands:
