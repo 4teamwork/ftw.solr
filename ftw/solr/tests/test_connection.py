@@ -156,10 +156,11 @@ class TestConnectionManager(unittest.TestCase):
         self.assertIn('unique_key', dir(schema))
         self.assertIn('fields', dir(schema))
 
-    def test_manager_reuses_schema(self):
+    def test_manager_reuses_existing_schema(self):
         manager = SolrConnectionManager()
         config = SolrConnectionConfig('myhost', 8983, '/solr/mycore')
         provideUtility(config, ISolrConnectionConfig)
         schema1 = manager.schema
+        schema1.unique_key = u'UID'  # Make it a 'valid' schema
         schema2 = manager.schema
         self.assertEqual(schema1, schema2)

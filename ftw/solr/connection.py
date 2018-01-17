@@ -165,7 +165,7 @@ class SolrConnectionManager(object):
     @property
     def schema(self):
         schema = getattr(local_data, 'schema', None)
-        if schema is None:
+        if not schema:
             schema = SolrSchema(manager=self)
             setattr(local_data, 'schema', schema)
         return schema
