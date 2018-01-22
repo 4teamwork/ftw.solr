@@ -10,6 +10,8 @@ from time import time
 from zope.component import getMultiAdapter
 from zope.component import queryUtility
 import logging
+import transaction
+
 
 logger = getLogger('ftw.solr.maintenance')
 logger.setLevel(logging.DEBUG)
@@ -55,7 +57,7 @@ class SolrMaintenanceView(BrowserView):
         conn.commit()
         return 'Solr index cleared.'
 
-    def reindex(self):
+    def reindex(self, commit_interval=100):
         """Reindex content in Solr."""
 
         processed = 0
@@ -63,14 +65,18 @@ class SolrMaintenanceView(BrowserView):
         lap = timer()
         cpu = timer(clock)
 
+        transaction.doom()
+        zodb_conn = self.context._p_jar
+
         def commit():
             conn = self.manager.connection
             conn.commit(extract_after_commit=False)
+            zodb_conn.cacheGC()
             self.log(
                 'Intermediate commit (%d items processed, last batch in %s)',
                 processed, lap.next())
 
-        cpi = checkpoint_iterator(commit)
+        cpi = checkpoint_iterator(commit, interval=commit_interval)
         self.log('Reindexing Solr...')
         for path, obj in find_objects(self.context):
 
