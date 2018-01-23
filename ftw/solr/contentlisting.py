@@ -1,9 +1,10 @@
+from DateTime import DateTime
+from OFS.Traversable import path2url
+from plone.app.contentlisting.contentlisting import BaseContentListingObject
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.app.contentlisting.interfaces import IContentListingObject
-from zope.interface import implementer
 from zope.component.hooks import getSite
-from OFS.Traversable import path2url
-from DateTime import DateTime
+from zope.interface import implementer
 
 
 @implementer(IContentListing)
@@ -36,7 +37,7 @@ class SolrContentListing(object):
 
 
 @implementer(IContentListingObject)
-class SolrContentListingObject(object):
+class SolrContentListingObject(BaseContentListingObject):
 
     def __init__(self, doc):
         self.doc = doc
@@ -47,6 +48,8 @@ class SolrContentListingObject(object):
             if isinstance(val, unicode):
                 val = val.encode('utf8')
             return val
+        elif name.startswith(u'_'):
+            raise AttributeError
         else:
             return None
             raise AttributeError
@@ -55,8 +58,8 @@ class SolrContentListingObject(object):
     def snippets(self):
         return self.doc.get('_snippets_')
 
-    def getPath(self):
-        return self.path
+    def getId(self):
+        return self.doc.id
 
     def getObject(self, REQUEST=None, restricted=True):
         site = getSite()
@@ -69,6 +72,12 @@ class SolrContentListingObject(object):
             return parent.restrictedTraverse(path[-1])
         return site.unrestrictedTraverse(path)
 
+    def getDataOrigin(self):
+        return self.doc
+
+    def getPath(self):
+        return self.path
+
     def getURL(self, relative=False):
         path = self.getPath()
         path = path.encode('utf-8')
@@ -77,6 +86,24 @@ class SolrContentListingObject(object):
         except AttributeError:
             url = path2url(path.split('/'))
         return url
+
+    def uuid(self):
+        return self.doc.UID
+
+    def getIcon(self):
+        return self.doc.getIcon
+
+    def getSize(self):
+        return self.doc.getSize
+
+    def review_state(self):
+        return self.doc.review_state
+
+    def PortalType(self):
+        return self.doc.portal_type
+
+    def CroppedDescription(self):
+        return self.doc.Description
 
     def CreationDate(self, zone=None):
         created = self.doc.get('created')
