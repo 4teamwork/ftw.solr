@@ -83,7 +83,8 @@ class TestMakeQuery(unittest.TestCase):
     def test_search_word_with_special_chars(self):
         self.assertEqual(
             make_query('C++'),
-            u'Title:C\+\+^10 OR SearchableText:C\+\+ OR SearchableText:C\+\+*')
+            u'(Title:"C\\+\\+"^20 OR SearchableText:"C\\+\\+"^5 OR SearchableText:"C\\+\\+*"^2) OR '
+            u'(Title:C\\+\\+^10 OR SearchableText:C\\+\\+ OR SearchableText:C\\+\\+*)')
 
     def test_query_with_local_parameters(self):
         self.settings.local_query_parameters = u'{!boost b=recip(ms(NOW,modified),3.858e-10,10,1)}'

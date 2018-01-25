@@ -57,19 +57,18 @@ def make_query(term):
     term = term.strip()
     if isinstance(term, str):
         term = term.decode('utf8')
-    term = escape(term)
     registry = getUtility(IRegistry)
     settings = registry.forInterface(ISolrSettings)
     if is_simple_search(term):
         words = split_simple_search(term)
         pattern = settings.simple_search_term_pattern
-        term_queries = [pattern.format(term=w) for w in words]
+        term_queries = [pattern.format(term=escape(w)) for w in words]
         if len(term_queries) > 1:
             term_queries = [u'(%s)' % q for q in term_queries]
         query = u' AND '.join(term_queries)
-        if len(words) > 1:
+        if len(words) > 1 or not term.isalnum():
             query = '(%s) OR (%s)' % (
-                settings.simple_search_phrase_pattern.format(phrase=term),
+                settings.simple_search_phrase_pattern.format(phrase=escape(term)),
                 query,
             )
     else:
