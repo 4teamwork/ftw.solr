@@ -62,11 +62,16 @@ def make_query(term):
     settings = registry.forInterface(ISolrSettings)
     if is_simple_search(term):
         words = split_simple_search(term)
-        pattern = settings.simple_search_pattern
-        queries = [pattern.format(term=w) for w in words]
-        if len(queries) > 1:
-            queries = [u'(%s)' % q for q in queries]
-        query = u' OR '.join(queries)
+        pattern = settings.simple_search_term_pattern
+        term_queries = [pattern.format(term=w) for w in words]
+        if len(term_queries) > 1:
+            term_queries = [u'(%s)' % q for q in term_queries]
+        query = u' AND '.join(term_queries)
+        if len(words) > 1:
+            query = '(%s) OR (%s)' % (
+                settings.simple_search_phrase_pattern.format(phrase=term),
+                query,
+            )
     else:
         pattern = settings.complex_search_pattern
         query = pattern.format(term=term)

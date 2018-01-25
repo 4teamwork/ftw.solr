@@ -42,13 +42,22 @@ class ISolrSettings(Interface):
         required=False,
     )
 
-    simple_search_pattern = Text(
-        title=u'Simple Search Pattern',
-        description=u'Pattern for simple search queries.'
+    simple_search_term_pattern = Text(
+        title=u'Simple Search Term Pattern',
+        description=u'Pattern applied to every term of a simple search query.'
                     u'{term} will be replaced with the search term stripped of'
                     u' any wildcard symbols.',
         default=u'Title:{term}^100 OR Title:{term}*^10 '
                 u'OR SearchableText:{term}^10 OR SearchableText:{term}*',
+    )
+
+    simple_search_phrase_pattern = Text(
+        title=u'Simple Search Phrase Pattern',
+        description=u'Pattern used with the whole search term in a simple '
+                    u'search query. {phrase} will be replaced with the search '
+                    u'term stripped of any wildcard symbols.',
+        default=u'Title:{phrase}^200 OR Title:{phrase}*^20 '
+                u'OR SearchableText:{phrase}^20 OR SearchableText:{phrase}*^2',
     )
 
     complex_search_pattern = Text(

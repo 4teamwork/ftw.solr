@@ -53,8 +53,12 @@ class TestMakeQuery(unittest.TestCase):
         registry.registerInterface(ISolrSettings)
         provideUtility(registry, IRegistry)
         self.settings = registry.forInterface(ISolrSettings)
-        self.settings.simple_search_pattern = u'Title:{term}^10 OR SearchableText:{term} OR SearchableText:{term}*'
-        self.settings.complex_search_pattern = u'Title:({term})^10 OR SearchableText:({term})'
+        self.settings.simple_search_term_pattern = (
+            u'Title:{term}^10 OR SearchableText:{term} OR SearchableText:{term}*')
+        self.settings.simple_search_phrase_pattern = (
+            u'Title:"{phrase}"^20 OR SearchableText:"{phrase}"^5 OR SearchableText:"{phrase}*"^2')
+        self.settings.complex_search_pattern = (
+            u'Title:({term})^10 OR SearchableText:({term})')
         self.settings.local_query_parameters = u''
 
     def test_single_search_word(self):
@@ -65,9 +69,11 @@ class TestMakeQuery(unittest.TestCase):
     def test_multiple_search_words(self):
         self.assertEqual(
             make_query('foo bar baz'),
-            u'(Title:foo^10 OR SearchableText:foo OR SearchableText:foo*) OR '
-            u'(Title:bar^10 OR SearchableText:bar OR SearchableText:bar*) OR '
-            u'(Title:baz^10 OR SearchableText:baz OR SearchableText:baz*)')
+            u'(Title:"foo bar baz"^20 OR SearchableText:"foo bar baz"^5 OR '
+            u'SearchableText:"foo bar baz*"^2) OR ('
+            u'(Title:foo^10 OR SearchableText:foo OR SearchableText:foo*) AND '
+            u'(Title:bar^10 OR SearchableText:bar OR SearchableText:bar*) AND '
+            u'(Title:baz^10 OR SearchableText:baz OR SearchableText:baz*))')
 
     def test_search_words_with_binary_operator(self):
         self.assertEqual(
