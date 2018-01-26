@@ -56,8 +56,8 @@ class ISolrSettings(Interface):
         description=u'Pattern used with the whole search term in a simple '
                     u'search query. {phrase} will be replaced with the search '
                     u'term stripped of any wildcard symbols.',
-        default=u'Title:{phrase}^200 OR Title:{phrase}*^20 '
-                u'OR SearchableText:{phrase}^20 OR SearchableText:{phrase}*^2',
+        default=u'Title:"{phrase}"^200 OR Title:"{phrase}*"^20 '
+                u'OR SearchableText:"{phrase}"^20 OR SearchableText:"{phrase}*"^2',
     )
 
     complex_search_pattern = Text(
