@@ -32,7 +32,6 @@ class TestQueryHelpers(unittest.TestCase):
         self.assertFalse(is_simple_search('foo AND bar'))
         self.assertFalse(is_simple_search('foo OR bar'))
         self.assertFalse(is_simple_search('"foo bar" OR baz'))
-        self.assertFalse(is_simple_search('one two three four'))
 
     def test_split_simple_search(self):
         self.assertEqual(split_simple_search('foo'), ['foo'])
@@ -54,11 +53,13 @@ class TestMakeQuery(unittest.TestCase):
         provideUtility(registry, IRegistry)
         self.settings = registry.forInterface(ISolrSettings)
         self.settings.simple_search_term_pattern = (
-            u'Title:{term}^10 OR SearchableText:{term} OR SearchableText:{term}*')
+            u'Title:{term}^10 OR SearchableText:{term} OR '
+            u'SearchableText:{term}*')
         self.settings.simple_search_phrase_pattern = (
-            u'Title:"{phrase}"^20 OR SearchableText:"{phrase}"^5 OR SearchableText:"{phrase}*"^2')
+            u'Title:"{phrase}"^20 OR SearchableText:"{phrase}"^5 OR '
+            u'SearchableText:"{phrase}*"^2')
         self.settings.complex_search_pattern = (
-            u'Title:({term})^10 OR SearchableText:({term})')
+            u'Title:({phrase})^10 OR SearchableText:({phrase})')
         self.settings.local_query_parameters = u''
 
     def test_single_search_word(self):
@@ -83,12 +84,30 @@ class TestMakeQuery(unittest.TestCase):
     def test_search_word_with_special_chars(self):
         self.assertEqual(
             make_query('C++'),
-            u'(Title:"C\\+\\+"^20 OR SearchableText:"C\\+\\+"^5 OR SearchableText:"C\\+\\+*"^2) OR '
-            u'(Title:C\\+\\+^10 OR SearchableText:C\\+\\+ OR SearchableText:C\\+\\+*)')
+            u'(Title:"C\\+\\+"^20 OR SearchableText:"C\\+\\+"^5 OR '
+            u'SearchableText:"C\\+\\+*"^2) OR '
+            u'(Title:C\\+\\+^10 OR SearchableText:C\\+\\+ OR '
+            u'SearchableText:C\\+\\+*)')
 
     def test_query_with_local_parameters(self):
-        self.settings.local_query_parameters = u'{!boost b=recip(ms(NOW,modified),3.858e-10,10,1)}'
+        self.settings.local_query_parameters = (
+            u'{!boost b=recip(ms(NOW,modified),3.858e-10,10,1)}')
         self.assertEqual(
             make_query('foo'),
             u'{!boost b=recip(ms(NOW,modified),3.858e-10,10,1)}'
             u'Title:foo^10 OR SearchableText:foo OR SearchableText:foo*')
+
+    def test_long_phrase_gets_truncated_to_10_terms(self):
+        self.settings.simple_search_term_pattern = u'Title:{term}'
+        self.settings.simple_search_phrase_pattern = u'Title:"{phrase}"'
+        self.assertEqual(
+            make_query(
+                'one two three four five six seven eight nine ten eleven'),
+            u'(Title:"one two three four five six seven eight nine ten '
+            u'eleven") OR ((Title:one) AND (Title:two) AND (Title:three) AND '
+            u'(Title:four) AND (Title:five) AND (Title:six) AND (Title:seven) '
+            u'AND (Title:eight) AND (Title:nine) AND (Title:ten))')
+
+    def test_query_string_is_unicode(self):
+        self.assertTrue(isinstance(make_query('über'), unicode))
+        self.assertTrue(isinstance(make_query(u'über'), unicode))

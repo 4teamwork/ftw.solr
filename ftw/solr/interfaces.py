@@ -45,24 +45,26 @@ class ISolrSettings(Interface):
     simple_search_term_pattern = Text(
         title=u'Simple Search Term Pattern',
         description=u'Pattern applied to every term of a simple search query.'
-                    u'{term} will be replaced with the search term stripped of'
-                    u' any wildcard symbols.',
+                    u'{term} will be replaced with the search term.',
         default=u'Title:{term}^100 OR Title:{term}*^10 '
                 u'OR SearchableText:{term}^10 OR SearchableText:{term}*',
     )
 
     simple_search_phrase_pattern = Text(
         title=u'Simple Search Phrase Pattern',
-        description=u'Pattern used with the whole search term in a simple '
+        description=u'Pattern used with the whole search phrase in a simple '
                     u'search query. {phrase} will be replaced with the search '
-                    u'term stripped of any wildcard symbols.',
-        default=u'Title:"{phrase}"^200 OR Title:"{phrase}*"^20 '
-                u'OR SearchableText:"{phrase}"^20 OR SearchableText:"{phrase}*"^2',
+                    u'phrase. Use this to boost the whole phrase more than the'
+                    u'single terms.',
+        default=u'Title:"{phrase}"^500 OR Title:"{phrase}*"^200 '
+                u'OR SearchableText:"{phrase}"^200 '
+                u'OR SearchableText:"{phrase}*"^20',
     )
 
     complex_search_pattern = Text(
         title=u'Complex Search Pattern',
         description=u'Pattern for complex search queries containing boolean '
-                    u'operators. {term} will be replaced with the search term',
-        default=u'Title:({term})^10 OR SearchableText:({term})',
+                    u'operators. {phrase} will be replaced with the search '
+                    u'query.',
+        default=u'Title:({phrase})^10 OR SearchableText:({phrase})',
     )
