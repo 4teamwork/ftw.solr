@@ -7,7 +7,9 @@
 
   <i18n:registerTranslations directory="locales" />
 
-  <!--<includeDependencies package="." />-->
+  <!-- Dependencies -->
+  <include package="plone.app.layout" />
+  <include package="plone.app.contentlisting" />
 
   <include package=".browser" />
 
@@ -28,6 +30,17 @@
   <adapter
       factory="ftw.solr.contentlisting.SolrContentListing"
       for="ftw.solr.connection.SolrResponse"
+      />
+  <adapter
+      factory="ftw.solr.contentlisting.SolrContentListingObject"
+      for="ftw.solr.contentlisting.SolrDocument"
+      />
+  <adapter
+      for="*
+           zope.publisher.interfaces.browser.IBrowserRequest
+           ftw.solr.contentlisting.SolrDocument"
+      factory="plone.app.layout.icons.icons.CatalogBrainContentIcon"
+      provides="plone.app.layout.icons.interfaces.IContentIcon"
       />
 
   <genericsetup:registerProfile

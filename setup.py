@@ -48,6 +48,8 @@ setup(
         # -*- Extra requirements: -*-
         'setuptools',
         'collective.indexing',
+        'plone.app.contentlisting',
+        'plone.app.layout',
     ],
     extras_require=dict(test=tests_require, tests=tests_require),
     entry_points="""
