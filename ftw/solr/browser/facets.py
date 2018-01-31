@@ -44,7 +44,10 @@ class SearchFacetsView(facets.SearchFacetsView):
 
     def facets(self):
         """Prepare and return facetting info for the given SolrResponse """
-        info = super(SearchFacetsView, self).facets()
+
+        # Facets should always return a list. But it returns None if there are no
+        # facets. This will cause problems because of inconsistent types.
+        info = super(SearchFacetsView, self).facets() or []
         facet_queries = self.facet_queries()
         if not facet_queries:
             return info
