@@ -1,3 +1,7 @@
+from zope.component.hooks import getSite
+from zope.globalrequest import getRequest
+
+
 class SolrDocument(object):
 
     def __init__(self, data, fields=None):
@@ -24,12 +28,29 @@ class SolrDocument(object):
         else:
             raise AttributeError
 
-    def Title(self):
-        return self.data.get('Title')
-
     @property
     def getId(self):
         return self.data.get('id')
+
+    def getPath(self):
+        return self.path
+
+    def getURL(self, relative=False):
+        request = getRequest()
+        return request.physicalPathToURL(self.getPath(), relative)
+
+    def getObject(self, REQUEST=None, restricted=True):
+        site = getSite()
+        path = self.getPath()
+        if not path:
+            return None
+        path = path.split('/')
+        if restricted:
+            parent = site.unrestrictedTraverse(path[:-1], None)
+            if parent is None:
+                return None
+            return parent.restrictedTraverse(path[-1], None)
+        return site.unrestrictedTraverse(path, None)
 
 
 def unicode2bytes(data):

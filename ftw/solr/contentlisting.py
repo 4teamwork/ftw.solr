@@ -1,6 +1,5 @@
 from DateTime import DateTime
 from ftw.solr.document import SolrDocument
-from OFS.Traversable import path2url
 from plone.app.contentlisting.contentlisting import BaseContentListingObject
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.app.contentlisting.interfaces import IContentListingObject
@@ -69,7 +68,7 @@ class SolrContentListingObject(BaseContentListingObject):
         return self.doc.get('_snippets_')
 
     def Title(self):
-        return self.doc.Title()
+        return self.doc.Title
 
     def Description(self):
         return self.doc.get('Description')
@@ -119,17 +118,7 @@ class SolrContentListingObject(BaseContentListingObject):
         return self.doc.id
 
     def getObject(self, REQUEST=None, restricted=True):
-        site = getSite()
-        path = self.getPath()
-        if not path:
-            return None
-        path = path.split('/')
-        if restricted:
-            parent = site.unrestrictedTraverse(path[:-1], None)
-            if parent is None:
-                return None
-            return parent.restrictedTraverse(path[-1], None)
-        return site.unrestrictedTraverse(path, None)
+        return self.doc.getObject(REQUEST=REQUEST, restricted=restricted)
 
     def getDataOrigin(self):
         return self.doc
@@ -138,14 +127,7 @@ class SolrContentListingObject(BaseContentListingObject):
         return self.path
 
     def getURL(self, relative=False):
-        path = self.getPath()
-        path = path.encode('utf-8')
-        request = getRequest()
-        try:
-            url = request.physicalPathToURL(path, relative)
-        except AttributeError:
-            url = path2url(path.split('/'))
-        return url
+        return self.doc.getURL(relative=relative)
 
     def uuid(self):
         return self.doc.UID
