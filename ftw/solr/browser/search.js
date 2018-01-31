@@ -33,6 +33,7 @@ jQuery(function ($) {
             } catch(err) {
               // Ignore - may be the feature is disabled
             }
+            $(window).trigger("searchResultsUpdated");
         });
     });
 
