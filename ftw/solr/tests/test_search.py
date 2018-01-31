@@ -82,6 +82,11 @@ class TestSearch(unittest.TestCase):
         self.assertEqual(args[0][u'offset'], 20)
         self.assertEqual(args[0][u'limit'], 10)
 
+    def test_search_with_sort(self):
+        self.solr.search(sort='modified desc')
+        args, kwargs = self.conn.search.call_args
+        self.assertEqual(args[0][u'sort'], 'modified desc')
+
     def test_search_with_custom_parameters(self):
         self.solr.search(**{u'hl': u'on', u'hl.fl': u'SearchableText'})
         args, kwargs = self.conn.search.call_args

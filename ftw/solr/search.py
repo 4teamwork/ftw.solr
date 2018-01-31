@@ -21,12 +21,14 @@ class SolrSearch(object):
         return self._manager
 
     def search(self, request_handler=u'/select', query=u'*:*', filters=None,
-               start=0, rows=1000, **params):
+               start=0, rows=1000, sort=None, **params):
         conn = self.manager.connection
         params = {u'params': params}
         params[u'query'] = query
         params[u'offset'] = start
         params[u'limit'] = rows
+        if sort is not None:
+            params[u'sort'] = sort
         if filters is None:
             filters = []
         if not isinstance(filters, list):
