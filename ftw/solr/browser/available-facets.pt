@@ -11,13 +11,13 @@
            tal:content="facet/title"
            i18n:translate=""
            tal:attributes="tabindex python: '-1' if not facet_counts else nothing;
-                           aria-controls string: ${repeat/facet/index}_filter;
-                           aria-owns string: ${repeat/facet/index}_filter"
+                           aria-controls string:filter_${repeat/facet/index};
+                           aria-owns string:filter_${repeat/facet/index}"
            aria-haspopup="true"></a>
         <ul class="facets"
             tal:condition="facet_counts"
             aria-hidden="true"
-            tal:attributes="id string:${repeat/facet/index}_filter">
+            tal:attributes="id string:filter_${repeat/facet/index}">
             <li tal:repeat="item facet_counts">
                 <a href="#" class="facet" tal:content="string:${item/title} (${item/count})"
                    tal:attributes="href python:request.ACTUAL_URL + '?' + item['query']" />
