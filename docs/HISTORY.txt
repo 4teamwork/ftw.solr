@@ -4,6 +4,9 @@ Changelog
 1.10.1 (unreleased)
 -------------------
 
+- Fix bad return value for facet infos.
+  [elioschmutz]
+
 - Fix disallowed html tag id name.
   [elioschmutz]
 
