@@ -1,6 +1,7 @@
-from ftw.solr.connection import SolrConnectionManager
+from ftw.solr.connection import local_data
 from ftw.solr.connection import SolrConnection
 from ftw.solr.connection import SolrConnectionConfig
+from ftw.solr.connection import SolrConnectionManager
 from ftw.solr.connection import SolrResponse
 from ftw.solr.tests.utils import get_data
 from ftw.solr.tests.utils import MockHTTPResponse
@@ -137,6 +138,10 @@ class TestConnectionManager(unittest.TestCase):
 
     layer = zca.UNIT_TESTING
 
+    def setUp(self):
+        if hasattr(local_data, 'connection'):
+            del local_data.connection
+
     def test_manager_creates_new_connection(self):
         manager = SolrConnectionManager()
         config = SolrConnectionConfig('myhost', 8983, '/solr/mycore')
@@ -153,6 +158,11 @@ class TestConnectionManager(unittest.TestCase):
         conn1 = manager.connection
         conn2 = manager.connection
         self.assertEqual(conn1, conn2)
+
+    def test_manager_returns_none_with_no_config(self):
+        manager = SolrConnectionManager()
+        conn = manager.connection
+        self.assertEqual(conn, None)
 
     def test_manager_creates_new_schema(self):
         manager = SolrConnectionManager()

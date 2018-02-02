@@ -150,20 +150,24 @@ class SolrConnection(object):
             self.host, self.port, self.base, id(self))
 
 
+_no_connection_marker = object()
+
+
 @implementer(ISolrConnectionManager)
 class SolrConnectionManager(object):
 
     @property
     def connection(self):
-        conn = getattr(local_data, 'connection', None)
-        if conn is None:
+        conn = getattr(local_data, 'connection', _no_connection_marker)
+        if conn is _no_connection_marker:
             config = queryUtility(ISolrConnectionConfig)
             if config is not None:
                 conn = SolrConnection(
                     host=config.host, port=config.port, base=config.base)
-                setattr(local_data, 'connection', conn)
             else:
-                logger.error('Solr configuration missing.')
+                conn = None
+                logger.warning('Solr configuration missing.')
+            setattr(local_data, 'connection', conn)
         return conn
 
     @property
