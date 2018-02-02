@@ -28,7 +28,8 @@ class ISolrIndexHandler(Interface):
 class ISolrSearch(Interface):
     """Solr search utility"""
 
-    def search(query, **parameters):
+    def search(request_handler=u'/select', query=u'*:*', filters=None,
+               start=0, rows=1000, sort=None, **params):
         """Perform a search with the given querystring and extra parameters"""
 
 
