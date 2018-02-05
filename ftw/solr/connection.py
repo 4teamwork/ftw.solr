@@ -193,6 +193,8 @@ class SolrResponse(object):
         self.body = {}
         if self.http_status:
             self.parse(body)
+        if not self.is_ok():
+            logger.error('Solr response error. %s', self.error_msg())
 
     def parse(self, data):
         try:
