@@ -52,17 +52,6 @@ class SolrContentListingObject(BaseContentListingObject):
     def __init__(self, doc):
         self.doc = doc
 
-    def __getattr__(self, name):
-        if name in self.doc:
-            val = self.doc[name]
-            if isinstance(val, unicode):
-                val = val.encode('utf8')
-            return val
-        elif name.startswith(u'_'):
-            raise AttributeError
-        else:
-            return None
-
     @property
     def snippets(self):
         return self.doc.get('_snippets_')
@@ -124,7 +113,7 @@ class SolrContentListingObject(BaseContentListingObject):
         return self.doc
 
     def getPath(self):
-        return self.path
+        return self.doc.path
 
     def getURL(self, relative=False):
         return self.doc.getURL(relative=relative)
@@ -135,7 +124,6 @@ class SolrContentListingObject(BaseContentListingObject):
     def getIcon(self):
         return queryMultiAdapter((getSite(), getRequest(), self.doc),
                                  interface=IContentIcon)()
-        return self.doc.getObjIcon
 
     def getSize(self):
         return self.doc.getObjSize
