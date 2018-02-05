@@ -33,6 +33,10 @@ class ISolrSearch(Interface):
         """Perform a search with the given querystring and extra parameters"""
 
 
+class ISolrDocument(Interface):
+    """Solr document"""
+
+
 class ISolrSettings(Interface):
 
     local_query_parameters = Text(

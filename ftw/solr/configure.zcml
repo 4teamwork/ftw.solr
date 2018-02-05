@@ -33,7 +33,7 @@
       />
   <adapter
       factory="ftw.solr.contentlisting.SolrContentListingObject"
-      for="ftw.solr.contentlisting.SolrDocument"
+      for="ftw.solr.interfaces.ISolrDocument"
       />
   <adapter
       for="*

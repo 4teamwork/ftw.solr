@@ -1,7 +1,10 @@
+from ftw.solr.interfaces import ISolrDocument
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
+from zope.interface import implementer
 
 
+@implementer(ISolrDocument)
 class SolrDocument(object):
 
     def __init__(self, data, fields=None):
@@ -21,10 +24,7 @@ class SolrDocument(object):
 
     def __getattr__(self, name):
         if name in self.data:
-            val = self.data[name]
-            if isinstance(val, unicode):
-                val = val.encode('utf8')
-            return val
+            return self.data[name]
         else:
             raise AttributeError
 
