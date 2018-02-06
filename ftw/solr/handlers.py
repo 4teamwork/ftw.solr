@@ -7,11 +7,9 @@ from plone.namedfile.interfaces import INamedBlobFile
 from plone.rfc822.interfaces import IPrimaryFieldInfo
 from zope.component import queryMultiAdapter
 from zope.interface import implementer
-import logging
 
 
 logger = getLogger('ftw.solr.handlers')
-logger.setLevel(logging.DEBUG)
 
 
 @implementer(ISolrIndexHandler)
