@@ -57,7 +57,7 @@ class SolrContentListingObject(BaseContentListingObject):
         return self.doc.get('_snippets_')
 
     def Title(self):
-        return self.doc.Title
+        return self.doc.get('Title')
 
     def Description(self):
         return self.doc.get('Description')
@@ -104,7 +104,7 @@ class SolrContentListingObject(BaseContentListingObject):
             return dt.ISO8601()
 
     def getId(self):
-        return self.doc.id
+        return self.doc.get('id')
 
     def getObject(self, REQUEST=None, restricted=True):
         return self.doc.getObject(REQUEST=REQUEST, restricted=restricted)
@@ -113,26 +113,26 @@ class SolrContentListingObject(BaseContentListingObject):
         return self.doc
 
     def getPath(self):
-        return self.doc.path
+        return self.doc.get('path')
 
     def getURL(self, relative=False):
         return self.doc.getURL(relative=relative)
 
     def uuid(self):
-        return self.doc.UID
+        return self.doc.get('UID')
 
     def getIcon(self):
         return queryMultiAdapter((getSite(), getRequest(), self.doc),
                                  interface=IContentIcon)()
 
     def getSize(self):
-        return self.doc.getObjSize
+        return self.doc.get('getObjSize')
 
     def review_state(self):
-        return self.doc.review_state
+        return self.doc.get('review_state')
 
     def PortalType(self):
-        return self.doc.portal_type
+        return self.doc.get('portal_type')
 
     def CroppedDescription(self):
-        return self.doc.Description
+        return self.doc.get('Description')
