@@ -57,7 +57,7 @@ class SolrMaintenanceView(BrowserView):
         conn.commit()
         return 'Solr index cleared.'
 
-    def reindex(self, commit_interval=100):
+    def reindex(self, commit_interval=100, idxs=None):
         """Reindex content in Solr."""
 
         processed = 0
@@ -83,9 +83,8 @@ class SolrMaintenanceView(BrowserView):
             if not ICatalogAware.providedBy(obj):
                 continue
 
-            attributes = None
             handler = getMultiAdapter((obj, self.manager), ISolrIndexHandler)
-            handler.add(attributes)
+            handler.add(idxs)
             processed += 1
             cpi.next()
 
