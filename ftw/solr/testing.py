@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from Products.CMFPlone.utils import getFSVersionTuple
 from ftw.testing.layer import COMPONENT_REGISTRY_ISOLATION
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
@@ -26,6 +27,8 @@ class FtwSolrLayer(PloneSandboxLayer):
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'ftw.solr:default')
+        if getFSVersionTuple() >= (5, 1):
+            applyProfile(portal, 'plone.app.contenttypes:default')
 
 
 class FtwSolrDexterityLayer(PloneSandboxLayer):

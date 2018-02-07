@@ -12,6 +12,7 @@ long_description = '\n\n'.join([
 ])
 
 tests_require = [
+    'plone.app.contenttypes',
     'plone.app.testing',
     'plone.app.dexterity',
     'plone.testing',
