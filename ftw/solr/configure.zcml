@@ -5,6 +5,7 @@
     xmlns:plone="http://namespaces.plone.org/plone"
     xmlns:five="http://namespaces.zope.org/five"
     xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="ftw.solr">
 
   <five:registerPackage package="." initialize=".initialize" />
@@ -22,9 +23,11 @@
   <adapter for="*
                 ftw.solr.interfaces.ISolrConnectionManager"
            factory="ftw.solr.handlers.DefaultIndexHandler" />
-  <adapter for="plone.app.blob.interfaces.IATBlobFile
-                ftw.solr.interfaces.ISolrConnectionManager"
-           factory="ftw.solr.handlers.ATBlobFileIndexHandler" />
+  <configure zcml:condition="installed plone.app.blob">
+      <adapter for="plone.app.blob.interfaces.IATBlobFile
+                    ftw.solr.interfaces.ISolrConnectionManager"
+               factory="ftw.solr.handlers.ATBlobFileIndexHandler" />
+  </configure>
   <adapter for="plone.dexterity.interfaces.IDexterityItem
                 ftw.solr.interfaces.ISolrConnectionManager"
            factory="ftw.solr.handlers.DexterityItemIndexHandler" />
