@@ -1,0 +1,25 @@
+{
+  "UID": "9398dad21bcd49f8a197cd50d10ea778",
+  "Title": "My Document",
+  "SearchableText": "my-document My Document",
+  "path_parent": "/plone/my-folder-1/my-document.docx",
+  "Description": "Foo bar baz.",
+  "path": "/plone/my-folder-1/my-document.docx",
+  "_version_": 1588410098528550912,
+  "created": "2017-08-01T11:17:00.009Z",
+  "modified": "2017-12-31T11:17:00.137Z",
+  "id": "my-document.docx",
+  "portal_type": "Document",
+  "getIcon": "icon_dokument_word.gif",
+  "getObjSize": "374 KB",
+  "allowedRolesAndUsers": [
+    "Contributor",
+    "Editor",
+    "Manager",
+    "Reader",
+    "Site Administrator",
+    "_View_Permission",
+    "user:admin"
+  ],
+  "review_state": "private"
+}

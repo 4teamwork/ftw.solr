@@ -1,72 +1,65 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:browser="http://namespaces.zope.org/browser"
-    xmlns:cmf="http://namespaces.zope.org/cmf"
-    xmlns:five="http://namespaces.zope.org/five"
-    xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:plone="http://namespaces.plone.org/plone"
-    xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="ftw.solr">
 
-    <i18n:registerTranslations directory="locales" />
-    <cmf:registerDirectory name="ftw_solr" />
+  <!-- Dependencies -->
+  <include package="plone.app.layout" />
+  <include package="plone.app.contentlisting" />
 
-    <include package=".patches" />
-    <include file="permissions.zcml" />
-    <include file="resources.zcml" />
+  <include package=".browser" />
 
-    <include package=".browser" />
-    <include package=".portlets" />
-    <include package=".viewlets" />
+  <adapter for="*
+                ftw.solr.interfaces.ISolrConnectionManager"
+           factory="ftw.solr.handlers.DefaultIndexHandler" />
+  <adapter for="plone.app.blob.interfaces.IATBlobFile
+                ftw.solr.interfaces.ISolrConnectionManager"
+           factory="ftw.solr.handlers.ATBlobFileIndexHandler" />
+  <adapter for="plone.dexterity.interfaces.IDexterityItem
+                ftw.solr.interfaces.ISolrConnectionManager"
+           factory="ftw.solr.handlers.DexterityItemIndexHandler" />
 
-    <include zcml:condition="installed ftw.lawgiver" file="lawgiver.zcml" />
+  <utility factory="ftw.solr.connection.SolrConnectionManager" />
 
-    <!-- Indexers -->
-    <adapter name="site_section" factory=".indexers.site_section" />
-    <adapter name="creator_fullname" factory=".indexers.creator_fullname" />
-    <adapter name="snippetText" factory=".indexers.SnippetTextIndexer" />
-    <adapter name="site_area" factory=".indexers.site_area" />
+  <utility factory="ftw.solr.search.SolrSearch" />
 
-    <adapter factory=".flare.PloneFlare" />
+  <adapter
+      factory="ftw.solr.contentlisting.SolrContentListing"
+      for="ftw.solr.connection.SolrResponse"
+      />
+  <adapter
+      factory="ftw.solr.contentlisting.SolrContentListingObject"
+      for="ftw.solr.interfaces.ISolrDocument"
+      />
+  <adapter
+      for="*
+           zope.publisher.interfaces.browser.IBrowserRequest
+           ftw.solr.contentlisting.SolrDocument"
+      factory="plone.app.layout.icons.icons.CatalogBrainContentIcon"
+      provides="plone.app.layout.icons.interfaces.IContentIcon"
+      />
 
-    <genericsetup:registerProfile
-        name="default"
-        title="ftw.solr"
-        directory="profiles/default"
-        description="Installs the ftw.solr package"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
+  <genericsetup:registerProfile
+      name="default"
+      title="ftw.solr"
+      directory="profiles/default"
+      description="Installs the ftw.solr add-on."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
-    <genericsetup:registerProfile
-        name="autocomplete"
-        title="ftw.solr-autocomplete"
-        directory="profiles/autocomplete"
-        description="Enables autocomplete instead of live search"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="ftw.solr (uninstall)"
+      directory="profiles/uninstall"
+      description="Uninstalls the ftw.solr add-on."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
-    <include package=".upgrades" />
-
-    <configure zcml:condition="installed plone.app.dexterity">
-        <include package="plone.behavior" file="meta.zcml" />
-
-        <plone:behavior
-            title="Show In Search"
-            provides="ftw.solr.behaviors.IShowInSearch"
-            for="*"
-            />
-
-        <plone:behavior
-            title="Searchwords"
-            provides="ftw.solr.behaviors.ISearchwords"
-            for="*"
-            />
-
-        <adapter
-            factory=".behaviors.searchwords_indexer"
-            name="searchwords" />
-
-    </configure>
+  <utility
+      factory=".setuphandlers.HiddenProfiles"
+      name="ftw.solr-hiddenprofiles"
+      />
 
 </configure>

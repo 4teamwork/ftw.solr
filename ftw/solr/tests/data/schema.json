@@ -1,0 +1,93 @@
+{
+    "responseHeader": {
+        "QTime": 1,
+        "status": 0
+    },
+    "schema": {
+        "copyFields": [],
+        "dynamicFields": [],
+        "fieldTypes": [
+            {
+                "class": "solr.BoolField",
+                "name": "boolean",
+                "sortMissingLast": true
+            },
+            {
+                "class": "solr.LongPointField",
+                "docValues": true,
+                "name": "plong"
+            },
+            {
+                "class": "solr.StrField",
+                "docValues": true,
+                "name": "string",
+                "sortMissingLast": true
+            },
+            {
+                "class": "solr.DatePointField",
+                "docValues": true,
+                "name": "pdate",
+                "sortMissingLast": true
+            },
+            {
+                "class": "solr.TextField",
+                "name": "text"
+            }
+        ],
+        "fields": [
+            {
+                "docValues": false,
+                "indexed": true,
+                "name": "_root_",
+                "stored": false,
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "name": "_version_",
+                "stored": false,
+                "type": "plong"
+            },
+            {
+                "indexed": true,
+                "name": "UID",
+                "required": true,
+                "type": "string"
+            },
+            {
+                "indexed": true,
+                "name": "path",
+                "stored": false,
+                "type": "string"
+            },
+            {
+                "indexed": true,
+                "name": "Title",
+                "stored": false,
+                "type": "string"
+            },
+            {
+                "indexed": true,
+                "multiValued": true,
+                "name": "allowedRolesAndUsers",
+                "type": "string",
+                "stored": "false"
+            },
+            {
+                "indexed": true,
+                "name": "SearchableText",
+                "stored": true,
+                "type": "text"
+            },
+            {
+                "indexed": true,
+                "name": "modified",
+                "stored": false,
+                "type": "pdate"
+            }
+        ],
+        "name": "default-config",
+        "uniqueKey": "UID",
+        "version": 1.6
+    }
+}

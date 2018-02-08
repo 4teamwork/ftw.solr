@@ -1,76 +1,14 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
     i18n_domain="ftw.solr">
 
-    <browser:page
-        for="OFS.interfaces.IFolder"
-        name="search-facets"
-        template="facets.pt"
-        class=".facets.SearchFacetsView"
-        permission="zope2.View"
-        allowed_attributes="facet_parameters"
-        layer="ftw.solr.interfaces.IFtwSolrLayer" />
-
-    <browser:page
-        for="OFS.interfaces.IFolder"
-        name="available-facets"
-        template="available-facets.pt"
-        class="ftw.solr.browser.facets.SearchFacetsView"
-        permission="zope2.View"
-        allowed_attributes="facet_parameters" />
-
-    <browser:page
-        for="OFS.interfaces.IFolder"
-        name="selected-facets"
-        template="selected-facets.pt"
-        class=".facets.SearchFacetsView"
-        permission="zope2.View"
-        allowed_attributes="facet_parameters" />
-
-    <browser:page
-        for="*"
-        name="search"
-        class=".search.SearchView"
-        permission="zope2.View"
-        layer="ftw.solr.interfaces.IFtwSolrLayer" />
-
-    <browser:page
-        for="*"
-        name="ftw_solr_livesearch_reply"
-        class=".livesearch.FtwSolrLiveSearchReplyView"
-        permission="zope2.View"
-        layer="ftw.solr.interfaces.IFtwSolrLayer" />
-
-    <browser:page
-        for="*"
-        name="suggest-terms"
-        class=".suggest.SuggestView"
-        layer="ftw.solr.interfaces.IFtwSolrLayer"
-        permission="zope2.View"/>
-
-    <browser:page
-        for="*"
-        name="wordcloud"
-        class=".wordcloud.WordCloudView"
-        permission="zope2.View"
-        layer="ftw.solr.interfaces.IFtwSolrLayer" />
-
-    <browser:resourceDirectory
-        name="ftw.solr"
-        directory="resources" />
-
-    <browser:resource
-        name="search.js"
-        file="search.js"
-        layer="ftw.solr.interfaces.IFtwSolrLayer" />
-
-    <browser:resource
-        name="jquery.history.js"
-        file="jquery.history.js" />
-
-    <browser:resource
-        name="ftw.solr.suggest.js"
-        file="suggest.js" />
+  <browser:page
+      for="*"
+      name="solr-maintenance"
+      class=".maintenance.SolrMaintenanceView"
+      allowed_attributes="clear optimize reindex"
+      permission="cmf.ManagePortal" />
 
 </configure>

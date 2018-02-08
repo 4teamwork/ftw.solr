@@ -2,6 +2,6 @@
 <layers>
   <layer
       name="ftw.solr"
-      interface="ftw.solr.interfaces.IFtwSolrLayer"
+      remove="true"
       />
 </layers>

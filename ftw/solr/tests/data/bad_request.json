@@ -1,0 +1,19 @@
+{
+  "responseHeader": {
+    "status": 400,
+    "QTime": 1,
+    "params": {
+      "json": "{\n  \"query\": \":\"\n}"
+    }
+  },
+  "error": {
+    "metadata": [
+      "error-class",
+      "org.apache.solr.common.SolrException",
+      "root-error-class",
+      "org.apache.solr.parser.ParseException"
+    ],
+    "msg": "org.apache.solr.search.SyntaxError: Cannot parse ':': Encountered \" \":\" \": \"\" at line 1, column 0.\nWas expecting one of:\n    <NOT> ...\n    \"+\" ...\n    \"-\" ...\n    <BAREOPER> ...\n    \"(\" ...\n    \"*\" ...\n    <QUOTED> ...\n    <TERM> ...\n    <PREFIXTERM> ...\n    <WILDTERM> ...\n    <REGEXPTERM> ...\n    \"[\" ...\n    \"{\" ...\n    <LPARAMS> ...\n    \"filter(\" ...\n    <NUMBER> ...\n    <TERM> ...\n    ",
+    "code": 400
+  }
+}

@@ -1,5 +1,0 @@
-recursive-include ftw *
-recursive-include docs *
-include *.txt
-include *.rst
-global-exclude *.pyc
