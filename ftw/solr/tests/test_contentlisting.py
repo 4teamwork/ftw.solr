@@ -106,11 +106,13 @@ class TestContentListingObject(unittest.TestCase):
         self.assertTrue(isinstance(self.obj.getDataOrigin(), SolrDocument))
 
     def test_icontentlistingobject_getpath(self):
-        self.assertEqual(self.obj.getPath(), '/my-folder-1/my-document.docx')
+        self.assertEqual(
+            self.obj.getPath(), '/plone/my-folder-1/my-document.docx')
 
     def test_icontentlistingobject_geturl(self):
         self.assertEqual(
-            self.obj.getURL(), 'http://nohost/my-folder-1/my-document.docx')
+            self.obj.getURL(),
+            'http://nohost/plone/my-folder-1/my-document.docx')
 
     def test_icontentlistingobject_uuid(self):
         self.assertEqual(

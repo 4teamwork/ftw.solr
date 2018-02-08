@@ -44,13 +44,20 @@ class SolrDocument(object):
         path = self.getPath()
         if not path:
             return None
-        path = path.split('/')
+        segments = path.split('/')
         if restricted:
-            parent = site.unrestrictedTraverse(path[:-1], None)
+            parent = site.unrestrictedTraverse(segments[:-1], None)
             if parent is None:
                 return None
-            return parent.restrictedTraverse(path[-1], None)
-        return site.unrestrictedTraverse(path, None)
+            obj = parent.restrictedTraverse(segments[-1], None)
+        else:
+            obj = site.unrestrictedTraverse(segments, None)
+        # If there's no object at the given path we can still get one through
+        # acquisition, but that's not what we want.
+        if obj is not None and '/'.join(obj.getPhysicalPath()) == path:
+            return obj
+        else:
+            return None
 
 
 def unicode2bytes(data):
