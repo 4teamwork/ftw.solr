@@ -9,8 +9,11 @@ class SolrSchema(object):
     def retrieve(self):
         """Retrieve the Solr schema"""
         conn = self.manager.connection
-        resp = conn.get('/schema')
-        schema = resp.get(u'schema', {})
+        if conn is None:
+            schema = {}
+        else:
+            resp = conn.get('/schema')
+            schema = resp.get(u'schema', {})
         self.unique_key = schema.get(u'uniqueKey')
         self.name = schema.get(u'name')
         self.version = schema.get(u'version')
