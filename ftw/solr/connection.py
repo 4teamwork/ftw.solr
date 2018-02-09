@@ -118,6 +118,8 @@ class SolrConnection(object):
                             v = v.encode('utf8')
                         elif isinstance(v, list):
                             v = [vv.encode('utf8') for vv in v]
+                        elif isinstance(v, bool):
+                            v = 'true' if v else 'false'
                         params['literal.%s' % k] = v
                     params['stream.file'] = file_
                     params['commitWithin'] = '10000'

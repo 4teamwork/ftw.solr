@@ -119,6 +119,15 @@ class TestConnection(unittest.TestCase):
             '&stream.file=%2Ffolder%2Ffile')
         self.assertEqual(conn.extract_commands, [])
 
+    def test_extract_with_boolean_query_params(self):
+        conn = SolrConnection(base='/solr/mycore')
+        conn.post = MagicMock(name='post')
+        conn.extract(MockBlob(), {'id': '1', 'b1': True, 'b2': False})
+        conn.flush(extract_after_commit=False)
+        args, kwargs = conn.post.call_args
+        self.assertIn('literal.b1=true', args[0])
+        self.assertIn('literal.b2=false', args[0])
+
     def test_abort_operation_clears_queue(self):
         conn = SolrConnection(base='/solr/mycore')
         conn.add({'id': '1'})
