@@ -43,7 +43,7 @@ class SolrConnection(object):
         self.extract_commands = []
         self.reconnect_before_request = False
 
-    def request(self, method, path, data=None, headers={}):
+    def request(self, method, path, data=None, headers={}, log_error=True):
         try:
             if self.reconnect_before_request:
                 self.reconnect()
@@ -53,20 +53,21 @@ class SolrConnection(object):
             body = resp.read()
             status = resp.status
             self.reconnect_before_request = False
-            return SolrResponse(body, status)
+            return SolrResponse(body, status, log_error=log_error)
         except (socket.error, HTTPException) as exc:
             if not self.reconnect_before_request:
                 self.reconnect_before_request = True
                 return self.request(method, path, data=data, headers=headers)
             else:
                 self.reconnect_before_request = False
-                return SolrResponse(exception=exc)
+                return SolrResponse(exception=exc, log_error=log_error)
 
-    def post(self, path, data=None):
-        return self.request('POST', path, data, self.post_headers)
+    def post(self, path, data=None, log_error=True):
+        return self.request(
+            'POST', path, data, self.post_headers, log_error=log_error)
 
-    def get(self, path):
-        return self.request('GET', path)
+    def get(self, path, log_error=True):
+        return self.request('GET', path, log_error=log_error)
 
     def reconnect(self):
         self.conn.close()
@@ -100,7 +101,7 @@ class SolrConnection(object):
         """Send queued update commands to Solr."""
         if self.update_commands:
             data = '{%s}' % ','.join(self.update_commands)
-            resp = self.post('/update', data=data)
+            resp = self.post('/update', data=data, log_error=False)
             if not resp.is_ok():
                 logger.error('Update command failed. %s', resp.error_msg())
             self.update_commands = []
@@ -124,7 +125,8 @@ class SolrConnection(object):
                     params['stream.file'] = file_
                     params['commitWithin'] = '10000'
                     resp = self.post(
-                        '/update/extract?%s' % urlencode(params, doseq=True))
+                        '/update/extract?%s' % urlencode(params, doseq=True),
+                        log_error=False)
                     if not resp.is_ok():
                         logger.error(
                             'Extract command for UID=%s with blob %s failed. '
@@ -185,7 +187,8 @@ class SolrConnectionManager(object):
 
 class SolrResponse(object):
 
-    def __init__(self, body='null', status=None, exception=None):
+    def __init__(self, body='null', status=None, exception=None,
+                 log_error=True):
         self.http_status = status
         self.exception = exception
         self.status = -1
@@ -197,7 +200,7 @@ class SolrResponse(object):
         self.body = {}
         if self.http_status:
             self.parse(body)
-        if not self.is_ok():
+        if log_error and not self.is_ok():
             logger.error('Solr response error. %s', self.error_msg())
 
     def parse(self, data):
