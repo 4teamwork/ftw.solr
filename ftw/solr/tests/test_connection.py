@@ -94,7 +94,7 @@ class TestConnection(unittest.TestCase):
         conn.add({'id': '1'})
         conn.flush()
         conn.post.assert_called_once_with(
-            '/update', data='{"add": {"doc": {"id": "1"}}}')
+            '/update', data='{"add": {"doc": {"id": "1"}}}', log_error=False)
         self.assertEqual(conn.update_commands, [])
 
     def test_flush_operation_posts_extract_commands_and_clears_queue(self):
@@ -106,7 +106,7 @@ class TestConnection(unittest.TestCase):
         tr.commit()
         conn.post.assert_called_once_with(
             '/update/extract?literal.id=1&commitWithin=10000'
-            '&stream.file=%2Ffolder%2Ffile')
+            '&stream.file=%2Ffolder%2Ffile', log_error=False)
         self.assertEqual(conn.extract_commands, [])
 
     def test_flush_operation_without_after_commit_hook(self):
@@ -116,7 +116,7 @@ class TestConnection(unittest.TestCase):
         conn.flush(extract_after_commit=False)
         conn.post.assert_called_once_with(
             '/update/extract?literal.id=1&commitWithin=10000'
-            '&stream.file=%2Ffolder%2Ffile')
+            '&stream.file=%2Ffolder%2Ffile', log_error=False)
         self.assertEqual(conn.extract_commands, [])
 
     def test_extract_with_boolean_query_params(self):
