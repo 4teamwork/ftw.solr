@@ -126,8 +126,10 @@ class SolrConnection(object):
                     resp = self.post(
                         '/update/extract?%s' % urlencode(params, doseq=True))
                     if not resp.is_ok():
-                        logger.error('Extract command for blob %s failed. %s',
-                                     file_, resp.error_msg())
+                        logger.error(
+                            'Extract command for UID=%s with blob %s failed. '
+                            '%s',
+                            data.get(u'UID'), file_, resp.error_msg())
             if extract_after_commit:
                 transaction.get().addAfterCommitHook(
                     hook, args=[self.extract_commands])
