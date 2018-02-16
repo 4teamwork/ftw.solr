@@ -50,6 +50,7 @@ setup(
         'collective.indexing',
         'plone.app.contentlisting',
         'plone.app.layout',
+        'plone.namedfile[blobs]',
     ],
     extras_require=dict(test=tests_require, tests=tests_require),
     entry_points="""
