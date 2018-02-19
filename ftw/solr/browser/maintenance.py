@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrIndexHandler
 from logging import getLogger
@@ -97,11 +98,17 @@ class SolrMaintenanceView(BrowserView):
             processed, real.next(), cpu.next())
 
     def reindex_cataloged(self, commit_interval=100, idxs=None, start=0,
-                          end=-1):
+                          end=-1, query=None):
         """Reindex all cataloged content in Solr."""
-        site = getSite()
+        query = query or {}
+        for key, value in self.request.form.items():
+            if key in ['UID', 'path', 'created', 'modified', 'portal_type',
+                       'object_provides', 'sort_on', 'sort_order']:
+                query[key] = value
+        if 'sort_on' not in query:
+            query['sort_on'] = 'path'
         catalog = getToolByName(self.context, 'portal_catalog')
-        items = catalog.unrestrictedSearchResults(sort_on='path')
+        items = catalog.unrestrictedSearchResults(**query)
 
         try:
             start = int(start)
@@ -130,6 +137,7 @@ class SolrMaintenanceView(BrowserView):
 
         cpi = checkpoint_iterator(commit, interval=commit_interval)
         self.log('Reindexing Solr...')
+        site = getSite()
         for item in items[start:end]:
             path = item.getPath()
             obj = site.unrestrictedTraverse(path, None)

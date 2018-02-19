@@ -14,6 +14,9 @@ Changelog
 - Fix security filter: Properly quote roles/users with spaces.
   [buchi]
 
+- Add option to reindex Solr from a catalog query.
+  [buchi]
+
 
 2.0.0 (2018-02-15)
 ------------------
