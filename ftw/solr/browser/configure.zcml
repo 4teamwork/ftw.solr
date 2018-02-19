@@ -8,7 +8,7 @@
       for="*"
       name="solr-maintenance"
       class=".maintenance.SolrMaintenanceView"
-      allowed_attributes="clear optimize reindex reindex_cataloged"
+      allowed_attributes="clear optimize reindex reindex_cataloged diff"
       permission="cmf.ManagePortal" />
 
 </configure>

@@ -7,6 +7,10 @@ Changelog
 - Declare dependency on plone.namedfile[blobs].
   [lgraf]
 
+- Add diff function to maintenance view to compare UIDs in portal catalog with
+  UIDs in Solr.
+  [buchi]
+
 
 2.0.0 (2018-02-15)
 ------------------
