@@ -52,6 +52,12 @@ class TestSearch(unittest.TestCase):
             u'user\\:%s' % TEST_USER_ID,
             self.solr.security_filter())
 
+    def test_security_filter_quotes_roles_and_users_with_spaces(self):
+        portal = self.layer['portal']
+        setRoles(portal, TEST_USER_ID, ['Records Manager', 'Member'])
+        security_filter = self.solr.security_filter()
+        self.assertIn('"Records Manager"', security_filter)
+
     def test_search_with_query(self):
         self.solr.search(query=u'Title:foo')
         args, kwargs = self.conn.search.call_args

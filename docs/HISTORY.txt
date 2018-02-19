@@ -11,6 +11,9 @@ Changelog
   UIDs in Solr.
   [buchi]
 
+- Fix security filter: Properly quote roles/users with spaces.
+  [buchi]
+
 
 2.0.0 (2018-02-15)
 ------------------
