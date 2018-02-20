@@ -148,6 +148,28 @@ class SolrMaintenanceView(BrowserView):
             'Processed %d items in %s (%s cpu time).',
             processed, real.next(), cpu.next())
 
+    def diff(self):
+        """Diff with portal catalog"""
+        catalog = getToolByName(self.context, 'portal_catalog')
+        items = catalog.unrestrictedSearchResults()
+        catalog_uids = set([item.UID for item in items])
+
+        conn = self.manager.connection
+        resp = conn.search(
+            {u'query': u'*:*', u'limit': 10000000, u'params': {u'fl': 'UID'}})
+        solr_uids = set([doc['UID'] for doc in resp.docs])
+
+        self.log('Portal Catalog contains %s items.', len(catalog_uids))
+        self.log('Solr contains %s items.',  len(solr_uids))
+        not_in_catalog = solr_uids - catalog_uids
+        if not_in_catalog:
+            self.log('Items not in Portal Catalog: %s', ', '.join(not_in_catalog))
+        not_in_solr = catalog_uids - solr_uids
+        if not_in_solr:
+            self.log('Items not in Solr: %s', ', '.join(not_in_solr))
+        if not not_in_catalog and not not_in_solr:
+            self.log('Solr and Portal Catalog contain the same items. :-)')
+
     def log(self, msg, *args):
         logger.info(msg, *args)
         self.request.RESPONSE.write(
