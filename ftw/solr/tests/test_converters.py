@@ -37,6 +37,10 @@ class TestDateTimeConverter(unittest.TestCase):
         self.assertIsInstance(dt, unicode)
         self.assertEqual(dt, u'2017-10-21T00:00:00.000Z')
 
+    def test_invalid_date_converts_to_none(self):
+        self.assertEqual(to_iso8601('30'), None)
+        self.assertEqual(to_iso8601(30), None)
+
 
 class TestStringConverter(unittest.TestCase):
 
