@@ -49,4 +49,6 @@ class SolrSearch(object):
             if groups:
                 roles = roles + groups
         roles.append(u'user:%s' % user.getId())
-        return u'allowedRolesAndUsers:(%s)' % escape(u' OR '.join(roles))
+        # Roles with spaces need to be quoted
+        roles = [u'"%s"' % escape(r) if ' ' in r else escape(r) for r in roles]
+        return u'allowedRolesAndUsers:(%s)' % u' OR '.join(roles)
