@@ -19,6 +19,8 @@ def to_iso8601(value, multivalued=False):
         )
     elif isinstance(value, date):
         value = value.strftime('%Y-%m-%dT%H:%M:%S.000Z').decode()
+    else:
+        value = None
     return value
 
 
