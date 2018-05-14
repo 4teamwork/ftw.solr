@@ -4,7 +4,9 @@ Changelog
 2.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Set Content-Type 'application/x-www-form-urlencoded' for requests to
+  /update/extract endpoint to ensure compatibility with Solr 7.3.
+  [lgraf]
 
 
 2.1.1 (2018-02-20)
