@@ -106,7 +106,9 @@ class TestConnection(unittest.TestCase):
         tr.commit()
         conn.post.assert_called_once_with(
             '/update/extract?literal.id=1&commitWithin=10000'
-            '&stream.file=%2Ffolder%2Ffile', log_error=False)
+            '&stream.file=%2Ffolder%2Ffile',
+            headers={'Content-Type': 'application/x-www-form-urlencoded'},
+            log_error=False)
         self.assertEqual(conn.extract_commands, [])
 
     def test_flush_operation_without_after_commit_hook(self):
@@ -116,7 +118,9 @@ class TestConnection(unittest.TestCase):
         conn.flush(extract_after_commit=False)
         conn.post.assert_called_once_with(
             '/update/extract?literal.id=1&commitWithin=10000'
-            '&stream.file=%2Ffolder%2Ffile', log_error=False)
+            '&stream.file=%2Ffolder%2Ffile',
+            headers={'Content-Type': 'application/x-www-form-urlencoded'},
+            log_error=False)
         self.assertEqual(conn.extract_commands, [])
 
     def test_extract_with_boolean_query_params(self):

@@ -62,12 +62,13 @@ class SolrConnection(object):
                 self.reconnect_before_request = False
                 return SolrResponse(exception=exc, log_error=log_error)
 
-    def post(self, path, data=None, log_error=True):
+    def post(self, path, data=None, headers={}, log_error=True):
+        headers = headers if headers else self.post_headers
         return self.request(
-            'POST', path, data, self.post_headers, log_error=log_error)
+            'POST', path, data, headers, log_error=log_error)
 
-    def get(self, path, log_error=True):
-        return self.request('GET', path, log_error=log_error)
+    def get(self, path, headers={}, log_error=True):
+        return self.request('GET', path, headers=headers, log_error=log_error)
 
     def reconnect(self):
         self.conn.close()
@@ -126,6 +127,7 @@ class SolrConnection(object):
                     params['commitWithin'] = '10000'
                     resp = self.post(
                         '/update/extract?%s' % urlencode(params, doseq=True),
+                        headers={'Content-Type': 'application/x-www-form-urlencoded'},  # noqa
                         log_error=False)
                     if not resp.is_ok():
                         logger.error(
