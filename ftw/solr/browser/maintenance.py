@@ -60,7 +60,7 @@ class SolrMaintenanceView(BrowserView):
         conn.commit()
         return 'Solr index cleared.'
 
-    def reindex(self, commit_interval=100, idxs=None):
+    def reindex(self, commit_interval=100, idxs=None, doom=True):
         """Reindex content in Solr."""
 
         processed = 0
@@ -68,7 +68,9 @@ class SolrMaintenanceView(BrowserView):
         lap = timer()
         cpu = timer(clock)
 
-        transaction.doom()
+        if doom:
+            transaction.doom()
+
         zodb_conn = self.context._p_jar
 
         def commit():
@@ -98,7 +100,7 @@ class SolrMaintenanceView(BrowserView):
             processed, real.next(), cpu.next())
 
     def reindex_cataloged(self, commit_interval=100, idxs=None, start=0,
-                          end=-1, query=None):
+                          end=-1, query=None, doom=True):
         """Reindex all cataloged content in Solr."""
         query = query or {}
         for key, value in self.request.form.items():
@@ -124,7 +126,9 @@ class SolrMaintenanceView(BrowserView):
         lap = timer()
         cpu = timer(clock)
 
-        transaction.doom()
+        if doom:
+            transaction.doom()
+
         zodb_conn = self.context._p_jar
 
         def commit():

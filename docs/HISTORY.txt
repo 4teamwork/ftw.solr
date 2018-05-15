@@ -8,6 +8,9 @@ Changelog
   /update/extract endpoint to ensure compatibility with Solr 7.3.
   [lgraf]
 
+- Maintenance view: Allow reindexing without dooming the transaction.
+  [lgraf]
+
 
 2.1.1 (2018-02-20)
 ------------------
