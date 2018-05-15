@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.2 (unreleased)
+2.1.2 (2018-05-15)
 ------------------
 
 - Set Content-Type 'application/x-www-form-urlencoded' for requests to
