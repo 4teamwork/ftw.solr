@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.5.1.1 (unreleased)
--------------------
+1.5.1.1 (2018-07-12)
+--------------------
 
 - Fix use of highlightSearchTerms on livesearch if searching for multiple terms.
   jquery.highlightsearchterms needs a list of searchterms to work properly.
