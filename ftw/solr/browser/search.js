@@ -5,7 +5,7 @@ jQuery(function ($) {
         // If there's a history hash get the parameter from there.
         var search = History.getHash() ? History.getHash() : window.location.search;
         var match = RegExp('[?&]' + name + '=([^&]*)').exec(search);
-        return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+        return match && decodeURIComponent(match[1].replace(/\+/g, ' ')).split(' ');
     }
 
     var History = window.History;
