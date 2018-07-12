@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.7.1.1 (unreleased)
+1.7.1.1 (2018-07-12)
 --------------------
 
 - Fix use of highlightSearchTerms on livesearch if searching for multiple terms.
