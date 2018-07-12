@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.5.1.2 (unreleased)
+1.5.1.2 (2018-07-12)
 --------------------
 
 - Fix an issue introduced in 1.5.1.1.
