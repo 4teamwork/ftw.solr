@@ -23,7 +23,7 @@ jQuery(function ($) {
             $('h1.documentFirstHeading').html($data.find('h1.documentFirstHeading').html());
             results_container.fadeIn(200);
             results_container.find('.searchResults').highlightSearchTerms({
-                terms: [getParameterByName('SearchableText')],
+                terms: getParameterByName('SearchableText'),
                 useLocation: false,
                 useReferrer: false
             });
