@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from ftw.solr.converters import to_iso8601
 from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrIndexHandler
 from logging import getLogger
@@ -165,22 +166,79 @@ class SolrMaintenanceView(BrowserView):
         catalog = getToolByName(self.context, 'portal_catalog')
         items = catalog.unrestrictedSearchResults()
         catalog_uids = set([item.UID for item in items])
+        catalog_modified = set(
+            [(item.UID, to_iso8601(item.modified)) for item in items])
 
         conn = self.manager.connection
-        resp = conn.search(
-            {u'query': u'*:*', u'limit': 10000000, u'params': {u'fl': 'UID'}})
-        solr_uids = set([doc['UID'] for doc in resp.docs])
+        resp = conn.search({
+            u'query': u'*:*',
+            u'limit': 10000000,
+            u'params': {u'fl': ['UID', 'modified']},
+        })
+        solr_uids = set([doc['UID'].encode('utf8') for doc in resp.docs])
+        solr_modified = set(
+            [(doc['UID'], doc.get('modified', u'2000-01-01T00:00:00.000Z'))
+             for doc in resp.docs])
 
         self.log('Portal Catalog contains %s items.', len(catalog_uids))
         self.log('Solr contains %s items.',  len(solr_uids))
         not_in_catalog = solr_uids - catalog_uids
         if not_in_catalog:
-            self.log('Items not in Portal Catalog: %s', ', '.join(not_in_catalog))
+            self.log(
+                'Items not in Portal Catalog: %s', ', '.join(not_in_catalog))
         not_in_solr = catalog_uids - solr_uids
         if not_in_solr:
             self.log('Items not in Solr: %s', ', '.join(not_in_solr))
         if not not_in_catalog and not not_in_solr:
             self.log('Solr and Portal Catalog contain the same items. :-)')
+        not_in_sync = [item[0] for item in catalog_modified - solr_modified]
+        if not_in_sync:
+            self.log(
+                'Items not in sync with catalog: %s', ', '.join(not_in_sync))
+        return not_in_catalog, not_in_solr, not_in_sync
+
+    def sync(self, commit_interval=100, idxs=None, doom=True):
+        """Sync Solr with portal catalog"""
+        catalog = getToolByName(self.context, 'portal_catalog')
+        not_in_catalog, not_in_solr, not_in_sync = self.diff()
+
+        if not not_in_sync:
+            return
+
+        processed = 0
+        real = timer()
+        lap = timer()
+        cpu = timer(clock)
+
+        if doom:
+            transaction.doom()
+
+        zodb_conn = self.context._p_jar
+
+        def commit():
+            conn = self.manager.connection
+            conn.commit(extract_after_commit=False)
+            zodb_conn.cacheGC()
+            self.log(
+                'Intermediate commit (%d items processed, last batch in %s)',
+                processed, lap.next())
+
+        cpi = checkpoint_iterator(commit, interval=commit_interval)
+        self.log('Syncing Solr...')
+        for uid in not_in_sync:
+            catalog_item = catalog.unrestrictedSearchResults(UID=uid)[0]
+            obj = catalog_item.getObject()
+
+            handler = getMultiAdapter((obj, self.manager), ISolrIndexHandler)
+            handler.add(idxs)
+            processed += 1
+            cpi.next()
+
+        commit()
+        self.log('Solr index synced.')
+        self.log(
+            'Processed %d items in %s (%s cpu time).',
+            processed, real.next(), cpu.next())
 
     def log(self, msg, *args):
         logger.info(msg, *args)
