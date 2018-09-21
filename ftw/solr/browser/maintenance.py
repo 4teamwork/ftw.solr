@@ -202,9 +202,10 @@ class SolrMaintenanceView(BrowserView):
         catalog = getToolByName(self.context, 'portal_catalog')
         not_in_catalog, not_in_solr, not_in_sync = self.diff()
 
-        if not not_in_sync:
+        if not not_in_sync and not not_in_catalog:
             return
 
+        # (Re)index items in Solr that are not in sync
         processed = 0
         real = timer()
         lap = timer()
@@ -235,6 +236,13 @@ class SolrMaintenanceView(BrowserView):
             cpi.next()
 
         commit()
+
+        # Delete items in Solr that are not in the catalog
+        conn = self.manager.connection
+        for uid in not_in_catalog:
+            conn.delete(uid)
+        conn.commit()
+
         self.log('Solr index synced.')
         self.log(
             'Processed %d items in %s (%s cpu time).',
