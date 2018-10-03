@@ -41,6 +41,14 @@ def checkpoint_iterator(function, interval=100):
         yield None
 
 
+def solr_date(date):
+    """Solr date representation. Fractional seconds are stripped if 0."""
+    value = to_iso8601(date)
+    if value.endswith('.000Z'):
+        value = value[:-5] + 'Z'
+    return value
+
+
 class SolrMaintenanceView(BrowserView):
     """Helper view for indexing content in Solr."""
 
@@ -167,7 +175,7 @@ class SolrMaintenanceView(BrowserView):
         items = catalog.unrestrictedSearchResults()
         catalog_uids = set([item.UID for item in items])
         catalog_modified = set(
-            [(item.UID, to_iso8601(item.modified)) for item in items])
+            [(item.UID, solr_date(item.modified)) for item in items])
 
         conn = self.manager.connection
         resp = conn.search({

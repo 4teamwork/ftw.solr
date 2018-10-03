@@ -4,7 +4,8 @@ Changelog
 2.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix diff for items with a modification date that has no fractional seconds.
+  [buchi]
 
 
 2.2.0 (2018-09-21)
