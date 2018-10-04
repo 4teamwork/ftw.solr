@@ -33,6 +33,8 @@ class TestCollectiveIndexingIntegration(unittest.TestCase):
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
 
         # Prepare nested folders so 'View' isn't mapped to the 'Reader' role.
+        # First subtree has a leaf node folder with 'View' acquired, whereas
+        # the second subtree has a leaf node folder with AQ disabled for 'View'
         self.folder = api.content.create(
             type='Folder', title='My Folder',
             id='folder', container=self.portal)
@@ -43,8 +45,20 @@ class TestCollectiveIndexingIntegration(unittest.TestCase):
             id='subfolder', container=self.folder)
         self.subfolder.manage_permission('View', roles=['Other'], acquire=True)
 
+        self.folder2 = api.content.create(
+            type='Folder', title='My Folder 2',
+            id='folder2', container=self.portal)
+        self.folder2.manage_permission('View', roles=['Other'], acquire=False)
+
+        self.subfolder2_without_aq = api.content.create(
+            type='Folder', title='My Subfolder without acquired permission',
+            id='subfolder2_without_aq', container=self.folder2)
+        self.subfolder2_without_aq.manage_permission('View', roles=['Other'], acquire=False)
+
         self.folder.reindexObjectSecurity()
+        self.folder2.reindexObjectSecurity()
         self.subfolder.reindexObjectSecurity()
+        self.subfolder2_without_aq.reindexObjectSecurity()
 
         # Flush queue to avoid having the above objects getting indexed at
         # the end of the transaction, after we already installed the mocks
@@ -134,3 +148,17 @@ class TestCollectiveIndexingIntegration(unittest.TestCase):
         getQueue().process()
 
         self.assertEqual(0, len(self.connection.add.mock_calls))
+
+    def test_reindex_object_security_stops_recursion_early_if_possible(self):
+        # Both folder2 and subfolder_without_aq haven't previously had 'View'
+        # mapped to any roles. subfolder_without_aq has Acquisition diabled
+        # for 'View', and should therefore be skipped during reindex because
+        # it's effective security index contents don't change.
+        self.folder2.manage_permission('View', roles=['Reader'], acquire=False)
+
+        self.folder2.reindexObjectSecurity()
+        getQueue().process()
+
+        self.connection.add.assert_called_once_with({
+            u'allowedRolesAndUsers': {'set': [u'Reader']},
+            u'UID': IUUID(self.folder2)})

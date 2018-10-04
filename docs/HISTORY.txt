@@ -1,8 +1,11 @@
 Changelog
 =========
 
-2.2.1 (unreleased)
+2.3.0 (unreleased)
 ------------------
+
+- Patch reindexObjectSecurity to optimize indexing of large trees.
+  [lgraf]
 
 - Fix diff for items with a modification date that has no fractional seconds.
   [buchi]

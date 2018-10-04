@@ -3,11 +3,18 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:five="http://namespaces.zope.org/five"
     i18n_domain="ftw.solr">
+
+  <five:registerPackage package="." initialize=".initialize" />
 
   <!-- Dependencies -->
   <include package="plone.app.layout" />
   <include package="plone.app.contentlisting" />
+
+  <!-- Load collective.indexing's ZCML to make sure its Catalog patches are
+  applied before ftw.solr's -->
+  <include package="collective.indexing" />
 
   <include package=".browser" />
 
