@@ -18,6 +18,7 @@ tests_require = [
     'plone.api',
     'pytz',
     'mock',
+    'ftw.testing',
 ]
 
 setup(
