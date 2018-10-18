@@ -18,11 +18,12 @@ tests_require = [
     'plone.api',
     'pytz',
     'mock',
+    'ftw.testing',
 ]
 
 setup(
     name='ftw.solr',
-    version='2.2.1.dev0',
+    version='2.3.0.dev0',
     description="Solr integration for Plone",
     long_description=long_description,
     # Get more from https://pypi.python.org/pypi?%3Aaction=list_classifiers
