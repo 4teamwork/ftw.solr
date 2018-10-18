@@ -10,6 +10,9 @@ Changelog
 - Fix diff for items with a modification date that has no fractional seconds.
   [buchi]
 
+- Provide an error message when raising an AttributeError in SolrDocument.
+  [buchi]
+
 
 2.2.0 (2018-09-21)
 ------------------

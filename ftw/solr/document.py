@@ -26,7 +26,8 @@ class SolrDocument(object):
         if name in self.data:
             return self.data[name]
         else:
-            raise AttributeError
+            raise AttributeError("'%s' object has no attribute '%s'" % (
+                self.__class__.__name__, name))
 
     @property
     def getId(self):
