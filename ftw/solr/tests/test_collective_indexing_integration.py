@@ -141,6 +141,75 @@ class TestCollectiveIndexingIntegration(unittest.TestCase):
         # XXX: Why isn't call order stable here?
         self.connection.add.assert_has_calls(expected_calls, any_order=True)
 
+    def test_system_roles_dont_mistakenly_terminate_recursion(self):
+        """This test makes sure that the special shortcut treatment of the
+        'Authenticated' and 'Anonymous' roles in the allowedRolesAndUsers
+        indexer doesn't mistakenly stop down propagation of security
+        reindexing in our reindexObjectSecurity patch.
+        """
+        # Prepare a situation as follows:
+        #
+        # - folder2 has the View permission assigned to Authenticated and
+        #   Reader roles
+        # - Its child, subfolder2_without_aq, only has View assigned to Reader,
+        #   and it doesn't acquire the View permission
+        # - Give the user the local role Reader on the container folder2
+        # - Because of local role inheritance, the user also has Reader on
+        #   subfolder2_without_aq. This is the *only* setting by which he
+        #   gets the 'View' permission on subfolder2_without_aq
+        self.folder2.manage_permission(
+            'View', roles=['Authenticated', 'Reader'], acquire=False)
+        self.subfolder2_without_aq.manage_permission(
+            'View', roles=['Reader'], acquire=False)
+
+        self.folder2.manage_setLocalRoles(TEST_USER_ID, ['Reader'])
+
+        # Guard assertion: Make sure the user doesn't have any local roles
+        # other than Owner on subfolder2_without_aq
+        self.assertEqual(
+            (('test_user_1_', ('Owner',)),),
+            self.subfolder2_without_aq.get_local_roles())
+
+        self.folder2.reindexObjectSecurity()
+        self.subfolder2_without_aq.reindexObjectSecurity()
+        getQueue().process()
+
+        expected_calls = [
+            # folder2 only has the Authenticated role indexed (but not Reader)
+            # because of the shortcut in the allowedRolesAndUsers indexer
+            call({
+                'allowedRolesAndUsers': {'set': [u'Authenticated']},
+                u'UID': IUUID(self.folder2)}),
+            # subfolder2_without_aq has TEST_USER_ID in its
+            # allowedRolesAndUsers because he gets View via the inherited
+            # Reader local role
+            call({
+                'allowedRolesAndUsers': {'set': [u'user:test_user_1_', u'Reader']},
+                u'UID': IUUID(self.subfolder2_without_aq)})
+        ]
+        self.assertEqual(2, len(self.connection.add.mock_calls))
+        self.connection.add.assert_has_calls(expected_calls, any_order=True)
+        self.connection.add.reset_mock()
+
+        # Now remove the Reader local role for TEST_USER_ID
+        self.folder2.manage_setLocalRoles(TEST_USER_ID, ['Authenticated'])
+
+        self.folder2.reindexObjectSecurity()
+        getQueue().process()
+
+        expected_calls = [
+            call({
+                'allowedRolesAndUsers': {'set': [u'Authenticated']},
+                u'UID': IUUID(self.folder2)}),
+            # TEST_USER_ID should be gone from allowedRolesAndUsers, because
+            # he doesn't inherit the Reader local role anymore
+            call({
+                'allowedRolesAndUsers': {'set': [u'Reader']},
+                u'UID': IUUID(self.subfolder2_without_aq)})
+        ]
+        self.assertEqual(2, len(self.connection.add.mock_calls))
+        self.connection.add.assert_has_calls(expected_calls, any_order=True)
+
     def test_reindex_object_security_honors_skip_self(self):
         self.subfolder.manage_permission('View', roles=['Reader'], acquire=False)
 
