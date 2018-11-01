@@ -4,7 +4,9 @@ Changelog
 2.3.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix reindexObjectSecurity patch to account for special handling of system
+  roles in allowedRolesAndUsers indexer.
+  [lgraf]
 
 
 2.3.0 (2018-10-18)

@@ -45,6 +45,29 @@ def is_index_up_to_date(catalog, obj, index_name):
         indexed_values = catalog.getIndexDataForRID(catalog.getrid(path))
         value_before = indexed_values.get(index_name, None)
         value_after = indexer()
+
+        if any(r in value_after for r in ('Anonymous', 'Authenticated')):
+            # Account for the shortcut in the allowedRolesAndUsers indexer
+            # regarding these system roles:
+            #
+            # If any of these roles are present in the allowed roles, the
+            # resulting value to be indexed gets simplified to just that
+            # role name.
+            #
+            # This can lead to situations where the effective set of allowed
+            # roles and principals changed, but the indexed value stays the
+            # same. That's fine for that specific object, but the change may
+            # make it necessary to reindex security for a child further down
+            # the line.
+            #
+            # But because we use is_index_up_to_date() to determine
+            # when to stop recursion, we would stop recursion too early in
+            # that case.
+            #
+            # We therefore always assume the indexed value has changed if we
+            # see any of these two roles in the new indexed value.
+            return False
+
         if not is_index_value_equal(value_before, value_after):
             return False
 
@@ -86,6 +109,11 @@ def recursive_index_security(catalog, obj, skip_self=False):
 
     Because of this, downstream propagation can be stopped as soon as an
     object is encountered whose indexed security didn't change.
+
+    (Note: This assumes that the indexed allowed roles of an object correspond
+    exactly to the real allowed roles - if the real roles change, so does the
+    indexed value. This isn't strictly the case - we take care of that in
+    is_index_up_to_date(), see the corresponding comment there.)
 
     ---
 
