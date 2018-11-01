@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.3.1 (unreleased)
+2.3.1 (2018-11-01)
 ------------------
 
 - Fix reindexObjectSecurity patch to account for special handling of system
