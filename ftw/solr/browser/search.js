@@ -1,12 +1,13 @@
-jQuery(function ($) {
 
-    function getParameterByName(name) {
-        // Returns the value of the query string parameter with the given name.
-        // If there's a history hash get the parameter from there.
-        var search = History.getHash() ? History.getHash() : window.location.search;
-        var match = RegExp('[?&]' + name + '=([^&]*)').exec(search);
-        return match && decodeURIComponent(match[1].replace(/\+/g, ' ')).split(' ');
-    }
+function getParameterByName(name) {
+    // Returns the value of the query string parameter with the given name.
+    // If there's a history hash get the parameter from there.
+    var search = History.getHash() ? History.getHash() : window.location.search;
+    var match = RegExp('[?&]' + name + '=([^&]*)').exec(search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' ').replace(/\*|%2a/gi, '')).split(' ');
+}
+
+jQuery(function ($) {
 
     var History = window.History;
 

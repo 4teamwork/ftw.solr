@@ -213,6 +213,7 @@ jQuery(function($) {
     // Highlight search results, but ignore referrals from our own domain
     // in all cases.
     $('.searchResults').highlightSearchTerms({
+        terms: getParameterByName('SearchableText'),
         includeOwnDomain: false
     });
 });
