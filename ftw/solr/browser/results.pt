@@ -166,6 +166,10 @@
                 <cite class="documentLocation link-location"
                       tal:define="is_rtl context/@@plone_portal_state/is_rtl;"
                       tal:condition="breadcrumbs">
+
+                  <p class="hiddenStructure" i18n:translate="">
+                    Link path:
+                  </p>
                   <span tal:repeat="crumb breadcrumbs"
                         tal:attributes="dir python:is_rtl and 'rtl' or 'ltr';">
                     <tal:item tal:define="is_last repeat/crumb/end;
@@ -195,6 +199,10 @@
               </dd>
             </tal:results>
           </dl>
+
+          <h2 class="hiddenStructure" i18n:translate="">
+            Batch navigation
+          </h2>
           <div metal:use-macro="context/batch_macros/macros/navigation" />
         </metal:results>
       </div>

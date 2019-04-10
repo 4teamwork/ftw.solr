@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-26 15:01+0000\n"
+"POT-Creation-Date: 2019-04-10 08:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -10,6 +10,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 "Preferred-Encodings: utf-8 latin1\n"
+
+#: ./ftw/solr/browser/results.pt:203
+msgid "Batch navigation"
+msgstr "Paginierung"
 
 #: ./ftw/solr/interfaces.py:71
 msgid "Constrain searches to navigation root"
@@ -42,6 +46,10 @@ msgstr ""
 #: ./ftw/solr/configure.zcml:39
 msgid "Installs the ftw.solr package"
 msgstr ""
+
+#: ./ftw/solr/browser/results.pt:170
+msgid "Link path:"
+msgstr "Link-Pfad:"
 
 #: ./ftw/solr/interfaces.py:65
 msgid "Max. Breadcrumbs"
@@ -144,12 +152,12 @@ msgid "help_searchwords"
 msgstr "Zusätzliche Suchbegriffe, bei welchen dieser Artikel gefunden werden soll. Ein Begriff pro Zeile."
 
 #. Default: "No items found"
-#: ./ftw/solr/browser/livesearch.py:206
+#: ./ftw/solr/browser/livesearch.py:219
 msgid "label_nothing_found"
 msgstr "Keine Ergebnisse gefunden"
 
 #. Default: "Did you mean: ${word}"
-#: ./ftw/solr/browser/livesearch.py:215
+#: ./ftw/solr/browser/livesearch.py:228
 msgid "label_nothing_found_suggestions"
 msgstr "Meinten Sie: ${word}"
 
@@ -180,12 +188,12 @@ msgid "label_search"
 msgstr "Suche"
 
 #. Default: "Search help"
-#: ./ftw/solr/browser/livesearch.py:175
+#: ./ftw/solr/browser/livesearch.py:188
 msgid "label_search_help"
 msgstr "Hilfe zur Suche"
 
 #. Default: "only in current section"
-#: ./ftw/solr/viewlets/templates/searchbox.pt:41
+#: ./ftw/solr/viewlets/templates/searchbox.pt:42
 msgid "label_searchbox_currentfolder_only"
 msgstr "Nur auf Unterseiten"
 
@@ -196,7 +204,7 @@ msgid "label_searchwords"
 msgstr "Suchbegriffe"
 
 #. Default: "Show all items"
-#: ./ftw/solr/browser/livesearch.py:190
+#: ./ftw/solr/browser/livesearch.py:203
 msgid "label_show_all"
 msgstr "Alle Ergebnisse anzeigen"
 
@@ -217,17 +225,17 @@ msgid "text_search"
 msgstr "Website durchsuchen"
 
 #. Default: "No search results."
-#: ./ftw/solr/viewlets/templates/searchbox.pt:49
+#: ./ftw/solr/viewlets/templates/searchbox.pt:50
 msgid "text_search_help_no_results"
 msgstr "Keine Ergebnisse gefunden"
 
 #. Default: "result found, use up and down keys to navigate."
-#: ./ftw/solr/viewlets/templates/searchbox.pt:61
+#: ./ftw/solr/viewlets/templates/searchbox.pt:62
 msgid "text_search_one_result_found"
 msgstr "Resultat gefunden, benutze die Pfeiltasten Hoch und Runter um zu navigieren."
 
 #. Default: "results found, use up and down keys to navigate."
-#: ./ftw/solr/viewlets/templates/searchbox.pt:55
+#: ./ftw/solr/viewlets/templates/searchbox.pt:56
 msgid "text_search_results_found"
 msgstr "Resultate gefunden, benutze die Pfeiltasten Hoch und Runter um zu navigieren."
 
