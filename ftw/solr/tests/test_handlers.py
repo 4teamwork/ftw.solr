@@ -97,6 +97,11 @@ class TestDefaultIndexHandler(unittest.TestCase):
             u'path': {'set': u'/plone/doc'},
         })
 
+    def test_add_with_attributes_without_data_does_nothing(self):
+        self.manager.connection.add = MagicMock(name='add')
+        self.handler.add(['Description'])
+        self.assertFalse(self.manager.connection.add.called)
+
     def test_delete(self):
         self.manager.connection.delete = MagicMock(name='delete')
         self.handler.delete()

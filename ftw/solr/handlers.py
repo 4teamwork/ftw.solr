@@ -50,6 +50,8 @@ class DefaultIndexHandler(object):
         if attributes:
             id_ = data[unique_key]
             data = {k: {'set': v} for k, v in data.items() if k != unique_key}
+            if not data:
+                return
             data[unique_key] = id_
 
         conn.add(data)
