@@ -163,38 +163,42 @@
 
                 <tal:breadcrumbs define="breadcrumbs python: view.breadcrumbs(item)"
                                  condition="breadcrumbs">
-                <cite class="documentLocation link-location"
+                <div class="documentLocation link-location"
                       tal:define="is_rtl context/@@plone_portal_state/is_rtl;"
                       tal:condition="breadcrumbs">
-                  <span tal:repeat="crumb breadcrumbs"
-                        tal:attributes="dir python:is_rtl and 'rtl' or 'ltr';">
-                    <tal:item tal:define="is_last repeat/crumb/end;
-                                          url crumb/absolute_url;
-                                          title crumb/Title">
-                      <a href="#"
-                         tal:omit-tag="not: url"
-                         tal:attributes="href url"
-                         tal:content="title">
-                        crumb
-                      </a>
-                      <span class="breadcrumbSeparator" tal:condition="not: is_last">
-                        <tal:ltr condition="not: is_rtl">&rsaquo;</tal:ltr>
-                        <tal:rtl condition="is_rtl">&lsaquo;</tal:rtl>
-                      </span>
-                    </tal:item>
-                  </span>
 
-                </cite>
-                <cite class="documentLocation link-location" tal:condition="not:breadcrumbs">
+                  <p class="hiddenStructure" i18n:translate="">
+                    Link path:
+                  </p>
+                  <ul>
+                    <li tal:repeat="crumb breadcrumbs"
+                          tal:attributes="dir python:is_rtl and 'rtl' or 'ltr';">
+                      <tal:item tal:define="url crumb/absolute_url;
+                                            title crumb/Title">
+                        <a href="#"
+                           tal:omit-tag="not: url"
+                           tal:attributes="href url"
+                           tal:content="title">
+                          crumb
+                        </a>
+                      </tal:item>
+                    </li>
+                  </ul>
+                </div>
+                <div class="documentLocation link-location" tal:condition="not:breadcrumbs">
                     <a href="#"
                        tal:attributes="href python:item.getRemoteUrl"
                        tal:content="python:item.getRemoteUrl"></a>
-                </cite>
+                </div>
                 </tal:breadcrumbs>
 
               </dd>
             </tal:results>
           </dl>
+
+          <h2 class="hiddenStructure" i18n:translate="">
+            Batch navigation
+          </h2>
           <div metal:use-macro="context/batch_macros/macros/navigation" />
         </metal:results>
       </div>

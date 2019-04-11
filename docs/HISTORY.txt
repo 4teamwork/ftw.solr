@@ -4,6 +4,10 @@ Changelog
 1.10.1 (unreleased)
 -------------------
 
+- Accessibility: Don't use "cite" for breadcrumbs in results, use a list [mathias.leimgruber]
+
+- Accessibility: Add heading for searchresult and hint for link path. [mathias.leimgruber]
+
 - Fix use of highlightSearchTerms on livesearch if searching for multiple terms.
   jquery.highlightsearchterms needs a list of searchterms to work properly.
   [elioschmutz]

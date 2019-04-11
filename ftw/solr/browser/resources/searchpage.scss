@@ -168,3 +168,23 @@
 #search-one-result-found-message {
   @include hidden-structure();
 }
+
+.searchResults .documentLocation {
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-size: $font-size-small;
+    > li {
+      display: inline;
+
+      &:before {
+        content: "›";
+        display: inline;
+      }
+      &:first-child:before {
+        content: "";
+      }
+    }    
+  }
+}
