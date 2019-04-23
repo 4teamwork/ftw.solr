@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.11.1 (unreleased)
+1.12.0 (2019-04-23)
 -------------------
 
 - Use binary adder from collective.solr. They work since version 5.0.3 [mathias.leimgruber]
