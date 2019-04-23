@@ -80,6 +80,33 @@ Ajax-ified search form
 The search form is fully ajax-ified which leads to faster search results when
 changing search criteria.
 
+
+Tika
+----
+
+Until ftw.solr 1.11.0 we unregistered the BinaryAdder from collective.solr, since there were unresolved issues with this feature.
+Since collective.solr 5.0.3 this issue is solved.
+By default ftw.solr (from 1.12.0 on) is using solr's tika integration to extract text from content.
+If you have ftw.tika installed, please unregister the ftw.tika portal transform or don't install it at all.
+Otherwise the content will be indexed twice. With ftw.tika and in solr (also with the integrated tika in solr).
+
+To use ftw.tika's transform please unregister the adders from collective.solr by placing the following code into your project:
+
+
+    <include package="z3c.unconfigure" file="meta.zcml" />
+    <unconfigure>
+      <adapter
+          factory="collective.solr.indexer.BinaryAdder"
+          name="File"
+          />
+      <adapter
+          factory="collective.solr.indexer.BinaryAdder"
+          name="Image"
+          />
+    </unconfigure>
+
+
+
 Solr connection configuration in ZCML
 -------------------------------------
 
