@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.3.2 (unreleased)
+2.3.2 (2019-04-29)
 ------------------
 
 - Fix partial reindexing (atomic updates) for fields without a value.
