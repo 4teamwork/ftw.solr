@@ -79,13 +79,14 @@ class TestConnection(unittest.TestCase):
         conn.commit()
         conn.flush.assert_called_once_with(extract_after_commit=True)
         self.assertEqual(
-            conn.update_commands, ['"commit": {"waitSearcher": false}'])
+            conn.update_commands,
+            ['"commit": {"softCommit": true, "waitSearcher": true}'])
 
     def test_optimize_operation_queues_update_command(self):
         conn = SolrConnection(base='/solr/mycore')
         conn.optimize()
         self.assertEqual(
-            conn.update_commands, ['"optimize": {"waitSearcher": false}'])
+            conn.update_commands, ['"optimize": {"waitSearcher": true}'])
 
     def test_flush_operation_posts_update_commands_and_clears_queue(self):
         conn = SolrConnection(base='/solr/mycore')
