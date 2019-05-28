@@ -79,6 +79,7 @@ class SolrConnection(object):
 
     def extract(self, blob, data):
         """Add blob using Solr's Extracting Request Handler."""
+        self.update_commands.append('"add": ' + json.dumps({'doc': data}))
         self.extract_commands.append((blob, data))
 
     def delete(self, id_):

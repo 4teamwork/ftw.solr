@@ -105,7 +105,12 @@ class TestConnection(unittest.TestCase):
         conn.extract(MockBlob(), {'id': '1'})
         conn.flush()
         tr.commit()
-        conn.post.assert_called_once_with(
+        args, kwargs = conn.post.call_args_list[0]
+        self.assertEqual(args, ('/update',))
+        self.assertEqual(
+            kwargs,
+            {'data': '{"add": {"doc": {"id": "1"}}}', 'log_error': False})
+        conn.post.assert_called_with(
             '/update/extract?literal.id=1&commitWithin=10000'
             '&stream.file=%2Ffolder%2Ffile',
             headers={'Content-Type': 'application/x-www-form-urlencoded'},
@@ -117,7 +122,12 @@ class TestConnection(unittest.TestCase):
         conn.post = MagicMock(name='post')
         conn.extract(MockBlob(), {'id': '1'})
         conn.flush(extract_after_commit=False)
-        conn.post.assert_called_once_with(
+        args, kwargs = conn.post.call_args_list[0]
+        self.assertEqual(args, ('/update',))
+        self.assertEqual(
+            kwargs,
+            {'data': '{"add": {"doc": {"id": "1"}}}', 'log_error': False})
+        conn.post.assert_called_with(
             '/update/extract?literal.id=1&commitWithin=10000'
             '&stream.file=%2Ffolder%2Ffile',
             headers={'Content-Type': 'application/x-www-form-urlencoded'},

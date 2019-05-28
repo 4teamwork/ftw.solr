@@ -8,6 +8,10 @@ Changelog
   time (NRT) searching.
   [buchi]
 
+- Additionaly index metadata of files using an update command to make them
+  visible as soon as possible.
+  [buchi]
+
 
 2.3.2 (2019-04-29)
 ------------------
