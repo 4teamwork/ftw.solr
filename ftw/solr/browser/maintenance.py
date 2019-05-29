@@ -66,7 +66,7 @@ class SolrMaintenanceView(BrowserView):
         """Clear all data from Solr index."""
         conn = self.manager.connection
         conn.delete_by_query('*:*')
-        conn.commit()
+        conn.commit(soft_commit=False)
         return 'Solr index cleared.'
 
     def reindex(self, commit_interval=100, idxs=None, doom=True):
@@ -84,7 +84,7 @@ class SolrMaintenanceView(BrowserView):
 
         def commit():
             conn = self.manager.connection
-            conn.commit(extract_after_commit=False)
+            conn.commit(soft_commit=False, extract_after_commit=False)
             zodb_conn.cacheGC()
             self.log(
                 'Intermediate commit (%d items processed, last batch in %s)',
@@ -142,7 +142,7 @@ class SolrMaintenanceView(BrowserView):
 
         def commit():
             conn = self.manager.connection
-            conn.commit(extract_after_commit=False)
+            conn.commit(soft_commit=False, extract_after_commit=False)
             zodb_conn.cacheGC()
             self.log(
                 'Intermediate commit (%d items processed, last batch in %s)',
@@ -226,7 +226,7 @@ class SolrMaintenanceView(BrowserView):
 
         def commit():
             conn = self.manager.connection
-            conn.commit(extract_after_commit=False)
+            conn.commit(soft_commit=False, extract_after_commit=False)
             zodb_conn.cacheGC()
             self.log(
                 'Intermediate commit (%d items processed, last batch in %s)',
@@ -249,7 +249,7 @@ class SolrMaintenanceView(BrowserView):
         conn = self.manager.connection
         for uid in not_in_catalog:
             conn.delete(uid)
-        conn.commit()
+        conn.commit(soft_commit=False)
 
         self.log('Solr index synced.')
         self.log(
