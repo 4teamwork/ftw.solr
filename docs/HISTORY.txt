@@ -12,6 +12,9 @@ Changelog
   visible as soon as possible.
   [buchi]
 
+- Flush optimize command.
+  [buchi]
+
 
 2.3.2 (2019-04-29)
 ------------------

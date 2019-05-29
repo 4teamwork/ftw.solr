@@ -82,9 +82,11 @@ class TestConnection(unittest.TestCase):
             conn.update_commands,
             ['"commit": {"softCommit": true, "waitSearcher": true}'])
 
-    def test_optimize_operation_queues_update_command(self):
+    def test_optimize_operation_queues_update_command_and_flushes_queue(self):
         conn = SolrConnection(base='/solr/mycore')
+        conn.flush = MagicMock(name='flush')
         conn.optimize()
+        conn.flush.assert_called_once()
         self.assertEqual(
             conn.update_commands, ['"optimize": {"waitSearcher": true}'])
 
