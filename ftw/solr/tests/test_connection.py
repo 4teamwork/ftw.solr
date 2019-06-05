@@ -79,13 +79,16 @@ class TestConnection(unittest.TestCase):
         conn.commit()
         conn.flush.assert_called_once_with(extract_after_commit=True)
         self.assertEqual(
-            conn.update_commands, ['"commit": {"waitSearcher": false}'])
+            conn.update_commands,
+            ['"commit": {"softCommit": true, "waitSearcher": true}'])
 
-    def test_optimize_operation_queues_update_command(self):
+    def test_optimize_operation_queues_update_command_and_flushes_queue(self):
         conn = SolrConnection(base='/solr/mycore')
+        conn.flush = MagicMock(name='flush')
         conn.optimize()
+        conn.flush.assert_called_once()
         self.assertEqual(
-            conn.update_commands, ['"optimize": {"waitSearcher": false}'])
+            conn.update_commands, ['"optimize": {"waitSearcher": true}'])
 
     def test_flush_operation_posts_update_commands_and_clears_queue(self):
         conn = SolrConnection(base='/solr/mycore')
@@ -104,7 +107,12 @@ class TestConnection(unittest.TestCase):
         conn.extract(MockBlob(), {'id': '1'})
         conn.flush()
         tr.commit()
-        conn.post.assert_called_once_with(
+        args, kwargs = conn.post.call_args_list[0]
+        self.assertEqual(args, ('/update',))
+        self.assertEqual(
+            kwargs,
+            {'data': '{"add": {"doc": {"id": "1"}}}', 'log_error': False})
+        conn.post.assert_called_with(
             '/update/extract?literal.id=1&commitWithin=10000'
             '&stream.file=%2Ffolder%2Ffile',
             headers={'Content-Type': 'application/x-www-form-urlencoded'},
@@ -116,7 +124,12 @@ class TestConnection(unittest.TestCase):
         conn.post = MagicMock(name='post')
         conn.extract(MockBlob(), {'id': '1'})
         conn.flush(extract_after_commit=False)
-        conn.post.assert_called_once_with(
+        args, kwargs = conn.post.call_args_list[0]
+        self.assertEqual(args, ('/update',))
+        self.assertEqual(
+            kwargs,
+            {'data': '{"add": {"doc": {"id": "1"}}}', 'log_error': False})
+        conn.post.assert_called_with(
             '/update/extract?literal.id=1&commitWithin=10000'
             '&stream.file=%2Ffolder%2Ffile',
             headers={'Content-Type': 'application/x-www-form-urlencoded'},

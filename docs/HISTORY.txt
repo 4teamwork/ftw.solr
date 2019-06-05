@@ -4,7 +4,16 @@ Changelog
 2.3.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Perform soft commits and wait for new searcher by default to allow near real
+  time (NRT) searching.
+  [buchi]
+
+- Additionaly index metadata of files using an update command to make them
+  visible as soon as possible.
+  [buchi]
+
+- Flush optimize command.
+  [buchi]
 
 
 2.3.2 (2019-04-29)

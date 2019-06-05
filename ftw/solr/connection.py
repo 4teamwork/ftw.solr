@@ -79,6 +79,7 @@ class SolrConnection(object):
 
     def extract(self, blob, data):
         """Add blob using Solr's Extracting Request Handler."""
+        self.update_commands.append('"add": ' + json.dumps({'doc': data}))
         self.extract_commands.append((blob, data))
 
     def delete(self, id_):
@@ -89,14 +90,17 @@ class SolrConnection(object):
         self.update_commands.append(
             '"delete": ' + json.dumps({'query': query}))
 
-    def commit(self, wait_searcher=False, extract_after_commit=True):
+    def commit(self, wait_searcher=True, soft_commit=True,
+               extract_after_commit=True):
         self.update_commands.append(
-            '"commit": ' + json.dumps({'waitSearcher': wait_searcher}))
+            '"commit": ' + json.dumps(
+                {'waitSearcher': wait_searcher, 'softCommit': soft_commit}))
         self.flush(extract_after_commit=extract_after_commit)
 
-    def optimize(self, wait_searcher=False):
+    def optimize(self, wait_searcher=True):
         self.update_commands.append(
             '"optimize": ' + json.dumps({'waitSearcher': wait_searcher}))
+        self.flush()
 
     def flush(self, extract_after_commit=True):
         """Send queued update commands to Solr."""
