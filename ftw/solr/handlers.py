@@ -106,6 +106,8 @@ class DefaultIndexHandler(object):
                 continue
             if name == 'path':
                 value = '/'.join(self.context.getPhysicalPath())
+            elif name == 'path_depth':
+                value = len(self.context.getPhysicalPath()) - 1
             else:
                 try:
                     value = getattr(wrapped, name)

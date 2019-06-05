@@ -18,6 +18,11 @@
                 "name": "plong"
             },
             {
+                "class": "solr.IntPointField",
+                "docValues": true,
+                "name": "pint"
+            },
+            {
                 "class": "solr.StrField",
                 "docValues": true,
                 "name": "string",
@@ -59,6 +64,12 @@
                 "name": "path",
                 "stored": false,
                 "type": "string"
+            },
+            {
+                "indexed": true,
+                "name": "path_depth",
+                "stored": false,
+                "type": "pint"
             },
             {
                 "indexed": true,

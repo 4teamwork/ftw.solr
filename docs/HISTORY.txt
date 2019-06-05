@@ -15,6 +15,9 @@ Changelog
 - Flush optimize command.
   [buchi]
 
+- Add support for indexing path depth.
+  [buchi]
+
 
 2.3.2 (2019-04-29)
 ------------------
