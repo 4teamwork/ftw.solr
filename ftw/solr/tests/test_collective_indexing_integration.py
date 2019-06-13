@@ -95,6 +95,7 @@ class TestCollectiveIndexingIntegration(unittest.TestCase):
             u'SearchableText': 'subfolder  My Subfolder ',
             u'allowedRolesAndUsers': ['Other'],
             u'path': u'/plone/folder/subfolder',
+            u'path_depth': 3,
         })
 
     def test_reindex_object_with_idxs_causes_atomic_update(self):

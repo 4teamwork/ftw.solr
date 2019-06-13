@@ -31,6 +31,7 @@ class TestSchema(unittest.TestCase):
                 u'_root_',
                 u'UID',
                 u'path',
+                u'path_depth',
             ])
         self.assertEqual(schema.copy_fields.keys(), [])
         self.assertEqual(schema.dynamic_fields.keys(), [])
@@ -40,6 +41,7 @@ class TestSchema(unittest.TestCase):
                 u'boolean',
                 u'string',
                 u'plong',
+                u'pint',
                 u'text',
                 u'pdate',
             ])

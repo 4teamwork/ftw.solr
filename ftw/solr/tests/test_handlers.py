@@ -52,6 +52,7 @@ class TestDefaultIndexHandler(unittest.TestCase):
                 u'UID': u'09baa75b67f44383880a6dab8b3200b6',
                 u'allowedRolesAndUsers': [u'Anonymous'],
                 u'path': u'/plone/doc',
+                u'path_depth': 2,
                 u'modified': u'2017-01-21T17:18:19.000Z',
                 u'SearchableText': 'doc  My Document ',
             },
@@ -86,6 +87,7 @@ class TestDefaultIndexHandler(unittest.TestCase):
             u'SearchableText': 'doc  My Document ',
             u'allowedRolesAndUsers': [u'Anonymous'],
             u'path': u'/plone/doc',
+            u'path_depth': 2,
         })
 
     def test_add_with_attributes_does_atomic_update(self):
