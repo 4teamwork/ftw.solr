@@ -4,7 +4,8 @@ Changelog
 2.4.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Handle facet_counts in solr response.
+  [njohner]
 
 
 2.4.0 (2019-06-13)
