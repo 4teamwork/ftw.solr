@@ -1,3 +1,4 @@
+from ftw.solr.helpers import group_by_two
 from ftw.solr.interfaces import ISolrConnectionConfig
 from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.schema import SolrSchema
@@ -201,6 +202,7 @@ class SolrResponse(object):
         self.qtime = 0
         self.params = None
         self.docs = []
+        self.facets = {}
         self.num_found = 0
         self.start = 0
         self.body = {}
@@ -228,6 +230,12 @@ class SolrResponse(object):
             self.num_found = data[u'response'].get(u'numFound', 0)
             self.start = data[u'response'].get(u'start', 0)
 
+        if u'facet_counts' in data:
+            facet_fields = data[u'facet_counts'].get(u'facet_fields', {})
+            for field, counts in facet_fields.items():
+                # facet counts are arranged in a tuple with the form
+                # (facet1, count1, facet2, count2, ...)
+                self.facets[field] = dict(group_by_two(counts))
         self.body = data
 
     def is_ok(self):

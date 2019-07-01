@@ -32,6 +32,20 @@ class TestResponse(unittest.TestCase):
         self.assertEqual(len(resp.docs), 3)
         self.assertEqual(resp.num_found, 3)
         self.assertEqual(resp.start, 0)
+        self.assertEqual(len(resp.facets), 0)
+        self.assertEqual(resp.facets, {})
+
+    def test_response_from_search_request_with_facets(self):
+        body = get_data('search_with_facets.json')
+        resp = SolrResponse(body=body, status=200)
+        self.assertTrue(resp.is_ok())
+        self.assertEqual(len(resp.docs), 3)
+        self.assertEqual(resp.num_found, 3)
+        self.assertEqual(resp.start, 0)
+        self.assertEqual(len(resp.facets), 2)
+        self.assertEqual(resp.facets,
+                         {u'portal_type': {u'Folder': 2, u'Document': 1},
+                          u'review_state': {u'private': 3}})
 
     def test_response_from_search_with_highlighting(self):
         body = get_data('highlighting.json')
