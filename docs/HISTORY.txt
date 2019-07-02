@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.4.1 (unreleased)
+2.5.0 (2019-07-02)
 ------------------
 
 - Make sure to always update 'path_depth' if 'path' is (re)indexed.
