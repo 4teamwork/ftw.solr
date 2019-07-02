@@ -111,6 +111,7 @@
     <field name="Title" type="text" indexed="true" stored="true"/>
     <field name="allowedRolesAndUsers" type="string" indexed="true" stored="false" multiValued="true"/>
     <field name="path_parent" type="descendent_path" indexed="true" stored="true" />
+    <field name="path_depth" type="pint" indexed="true" stored="false" />
     <field name="path" type="string" indexed="true" stored="false" />
     <field name="id" type="string" indexed="true" stored="false" />
     <field name="portal_type" type="string" indexed="true" stored="false" />

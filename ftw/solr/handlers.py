@@ -97,8 +97,16 @@ class DefaultIndexHandler(object):
             attributes = set(schema.fields.keys())
         else:
             attributes = set(schema.fields.keys()).intersection(attributes)
+
         if schema.unique_key not in attributes:
             attributes.add(schema.unique_key)
+
+        # If path gets (re)indexed, we also need to (re)index path_depth
+        # in Solr. Because path_depth is not a catalog index, we would
+        # otherwise fail to update it in cases where a specific list of
+        # `idxs` including path is passed to reindexObject().
+        if 'path' in attributes:
+            attributes.add('path_depth')
 
         data = {}
         for name in attributes:

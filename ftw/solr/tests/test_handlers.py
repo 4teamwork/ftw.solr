@@ -63,9 +63,9 @@ class TestDefaultIndexHandler(unittest.TestCase):
         self.assertEqual(
             {
                 u'UID': u'09baa75b67f44383880a6dab8b3200b6',
-                u'path': u'/plone/doc',
+                u'modified': u'2017-01-21T17:18:19.000Z',
             },
-            self.handler.get_data(['UID', 'path'])
+            self.handler.get_data(['UID', 'modified'])
         )
 
     def test_get_data_always_includes_unique_key(self):
@@ -75,6 +75,16 @@ class TestDefaultIndexHandler(unittest.TestCase):
                 u'UID': u'09baa75b67f44383880a6dab8b3200b6',
             },
             self.handler.get_data(['Title'])
+        )
+
+    def test_get_data_includes_path_depth_if_path_was_included(self):
+        self.assertEqual(
+            {
+                u'path': u'/plone/doc',
+                u'path_depth': 2,
+                u'UID': u'09baa75b67f44383880a6dab8b3200b6',
+            },
+            self.handler.get_data(['path'])
         )
 
     def test_add_without_attributes_adds_full_documemt(self):
@@ -92,11 +102,11 @@ class TestDefaultIndexHandler(unittest.TestCase):
 
     def test_add_with_attributes_does_atomic_update(self):
         self.manager.connection.add = MagicMock(name='add')
-        self.handler.add(['Title', 'path'])
+        self.handler.add(['Title', 'modified'])
         self.manager.connection.add.assert_called_once_with({
             u'UID': u'09baa75b67f44383880a6dab8b3200b6',
             u'Title': {'set': u'My Document'},
-            u'path': {'set': u'/plone/doc'},
+            u'modified': {'set': u'2017-01-21T17:18:19.000Z'},
         })
 
     def test_add_with_attributes_without_data_does_nothing(self):
