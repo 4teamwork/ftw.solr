@@ -4,7 +4,7 @@ Changelog
 2.5.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix error when trying to delete an object without a unique key. [jone]
 
 
 2.5.0 (2019-07-02)

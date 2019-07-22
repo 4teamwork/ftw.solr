@@ -80,6 +80,7 @@ class DefaultIndexHandler(object):
             logger.warning(
                 'Object is missing unique key, skipping unindexing of %r',
                 self.context)
+            return
 
         conn.delete(data[unique_key])
 
