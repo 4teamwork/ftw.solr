@@ -16,6 +16,7 @@ tests_require = [
     'plone.app.dexterity',
     'plone.testing',
     'plone.api',
+    'plone.app.contenttypes',
     'pytz',
     'mock',
     'ftw.testing',

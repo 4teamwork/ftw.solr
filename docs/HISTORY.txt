@@ -4,6 +4,10 @@ Changelog
 2.5.1 (unreleased)
 ------------------
 
+- Use Solr Cell only for text extraction. The SearchableText is now also indexed
+  using the update handler which allows atomic updates. Also fixes #137.
+  [buchi]
+
 - Fix error when trying to delete an object without a unique key. [jone]
 
 

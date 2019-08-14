@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from DateTime import DateTime
 from ftw.solr.connection import SolrResponse
+from ftw.solr.handlers import ATBlobFileIndexHandler
 from ftw.solr.handlers import DefaultIndexHandler
+from ftw.solr.handlers import DexterityItemIndexHandler
 from ftw.solr.schema import SolrSchema
+from ftw.solr.testing import FTW_SOLR_DEXTERITY_INTEGRATION_TESTING
 from ftw.solr.testing import FTW_SOLR_INTEGRATION_TESTING
 from ftw.solr.tests.utils import get_data
 from mock import MagicMock
@@ -12,6 +15,7 @@ from plone.app.testing import login
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
+from plone.namedfile.file import NamedBlobFile
 from plone.uuid.interfaces import IMutableUUID
 from Products.CMFPlone.utils import base_hasattr
 import unittest
@@ -119,3 +123,204 @@ class TestDefaultIndexHandler(unittest.TestCase):
         self.handler.delete()
         self.manager.connection.delete.assert_called_once_with(
             u'09baa75b67f44383880a6dab8b3200b6')
+
+
+class TestATBlobFileIndexHandler(unittest.TestCase):
+
+    layer = FTW_SOLR_INTEGRATION_TESTING
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        login(self.portal, TEST_USER_NAME)
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
+        self.doc = api.content.create(
+            type='File', title='My File', id='doc',
+            file='File data ...', container=self.portal)
+        if base_hasattr(self.doc, '_setUID'):
+            self.doc._setUID('09baa75b67f44383880a6dab8b3200b6')
+            self.doc.setModificationDate(DateTime('2017-01-21T17:18:19+00:00'))
+        else:
+            IMutableUUID(self.doc).set('09baa75b67f44383880a6dab8b3200b6')
+            self.doc.modification_date = DateTime('2017-01-21T17:18:19+00:00')
+
+        conn = MagicMock(name='SolrConnection')
+        conn.get = MagicMock(name='get', return_value=SolrResponse(
+            body=get_data('schema.json'), status=200))
+        self.manager = MagicMock(name='SolrConnectionManager')
+        type(self.manager).connection = PropertyMock(return_value=conn)
+        type(self.manager).schema = PropertyMock(return_value=SolrSchema(
+            self.manager))
+        self.handler = ATBlobFileIndexHandler(self.doc, self.manager)
+
+    def test_add_without_attributes_calls_add_and_extract(self):
+        self.manager.connection.add = MagicMock(name='add')
+        self.manager.connection.extract = MagicMock(name='extract')
+        self.handler.add(None)
+        self.manager.connection.add.assert_called_once_with({
+            u'UID': u'09baa75b67f44383880a6dab8b3200b6',
+            u'Title': {u'set': u'My File'},
+            u'modified': {u'set': u'2017-01-21T17:18:19.000Z'},
+            u'allowedRolesAndUsers': {u'set': [u'Anonymous']},
+            u'path': {u'set': u'/plone/doc'},
+            u'path_depth': {u'set': 2},
+        })
+        self.manager.connection.extract.assert_called_once_with(
+            self.doc.getFile().blob,
+            'SearchableText',
+            {u'UID': u'09baa75b67f44383880a6dab8b3200b6'},
+        )
+
+    def test_add_with_attributes_without_searchabletext_calls_add(self):
+        self.manager.connection.add = MagicMock(name='add')
+        self.manager.connection.extract = MagicMock(name='extract')
+        self.handler.add(['Title', 'modified'])
+        self.manager.connection.add.assert_called_once_with({
+            u'UID': u'09baa75b67f44383880a6dab8b3200b6',
+            u'Title': {'set': u'My File'},
+            u'modified': {'set': u'2017-01-21T17:18:19.000Z'},
+        })
+        self.manager.connection.extract.assert_not_called()
+
+    def test_add_with_attributes_with_searchabletext_calls_add_and_extract(self):
+        self.manager.connection.add = MagicMock(name='add')
+        self.manager.connection.extract = MagicMock(name='extract')
+        self.handler.add(['SearchableText', 'modified'])
+        self.manager.connection.add.assert_called_once_with({
+            u'UID': u'09baa75b67f44383880a6dab8b3200b6',
+            u'modified': {'set': u'2017-01-21T17:18:19.000Z'},
+        })
+        self.manager.connection.extract.assert_called_once_with(
+            self.doc.getFile().blob,
+            'SearchableText',
+            {u'UID': u'09baa75b67f44383880a6dab8b3200b6'},
+        )
+
+    def test_add_with_searchabletext_only_calls_extract(self):
+        self.manager.connection.add = MagicMock(name='add')
+        self.manager.connection.extract = MagicMock(name='extract')
+        self.handler.add(['SearchableText'])
+        self.manager.connection.add.assert_not_called()
+        self.manager.connection.extract.assert_called_once_with(
+            self.doc.getFile().blob,
+            'SearchableText',
+            {u'UID': u'09baa75b67f44383880a6dab8b3200b6'},
+        )
+
+
+class TestDexterityItemIndexHandler(unittest.TestCase):
+
+    layer = FTW_SOLR_DEXTERITY_INTEGRATION_TESTING
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        login(self.portal, TEST_USER_NAME)
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
+        namedfile = NamedBlobFile(
+            data='File data ...',
+            filename=u'document.docx',
+            contentType='application/vnd.openxmlformats-officedocument. wordprocessingml.document')
+        self.doc = api.content.create(
+            type='File', title='My File', id='doc',
+            file=namedfile, container=self.portal)
+        if base_hasattr(self.doc, '_setUID'):
+            self.doc._setUID('09baa75b67f44383880a6dab8b3200b6')
+            self.doc.setModificationDate(DateTime('2017-01-21T17:18:19+00:00'))
+        else:
+            IMutableUUID(self.doc).set('09baa75b67f44383880a6dab8b3200b6')
+            self.doc.modification_date = DateTime('2017-01-21T17:18:19+00:00')
+
+        conn = MagicMock(name='SolrConnection')
+        conn.get = MagicMock(name='get', return_value=SolrResponse(
+            body=get_data('schema.json'), status=200))
+        self.manager = MagicMock(name='SolrConnectionManager')
+        type(self.manager).connection = PropertyMock(return_value=conn)
+        type(self.manager).schema = PropertyMock(return_value=SolrSchema(
+            self.manager))
+        self.handler = DexterityItemIndexHandler(self.doc, self.manager)
+
+        self.manager.connection.add = MagicMock(name='add')
+        self.manager.connection.extract = MagicMock(name='extract')
+
+    def test_add_without_attributes_calls_add_and_extract(self):
+        self.handler.add(None)
+        self.manager.connection.add.assert_called_once_with({
+            u'UID': u'09baa75b67f44383880a6dab8b3200b6',
+            u'Title': {u'set': u'My File'},
+            u'modified': {u'set': u'2017-01-21T17:18:19.000Z'},
+            u'allowedRolesAndUsers': {u'set': [u'Anonymous']},
+            u'path': {u'set': u'/plone/doc'},
+            u'path_depth': {u'set': 2},
+        })
+        self.manager.connection.extract.assert_called_once_with(
+            self.doc.file._blob,
+            'SearchableText',
+            {u'UID': u'09baa75b67f44383880a6dab8b3200b6'},
+        )
+
+    def test_add_with_attributes_without_searchabletext_calls_add(self):
+        self.handler.add(['Title', 'modified'])
+        self.manager.connection.add.assert_called_once_with({
+            u'UID': u'09baa75b67f44383880a6dab8b3200b6',
+            u'Title': {'set': u'My File'},
+            u'modified': {'set': u'2017-01-21T17:18:19.000Z'},
+        })
+        self.manager.connection.extract.assert_not_called()
+
+    def test_add_with_attributes_with_searchabletext_calls_add_and_extract(self):
+        self.handler.add(['SearchableText', 'modified'])
+        self.manager.connection.add.assert_called_once_with({
+            u'UID': u'09baa75b67f44383880a6dab8b3200b6',
+            u'modified': {'set': u'2017-01-21T17:18:19.000Z'},
+        })
+        self.manager.connection.extract.assert_called_once_with(
+            self.doc.file._blob,
+            'SearchableText',
+            {u'UID': u'09baa75b67f44383880a6dab8b3200b6'},
+        )
+
+    def test_add_with_searchabletext_only_calls_extract(self):
+        self.handler.add(['SearchableText'])
+        self.manager.connection.add.assert_not_called()
+        self.manager.connection.extract.assert_called_once_with(
+            self.doc.file._blob,
+            'SearchableText',
+            {u'UID': u'09baa75b67f44383880a6dab8b3200b6'},
+        )
+
+    def test_add_without_attributes_for_item_without_blob_calls_add(self):
+        item = api.content.create(
+            type='Document', title='My Document', id='doc2',
+            container=self.portal)
+        IMutableUUID(item).set('56d2c8b62c064f38890c60b66d01c894')
+        item.modification_date = DateTime('2017-01-21T17:18:19+00:00')
+
+        handler = DexterityItemIndexHandler(item, self.manager)
+        handler.add(None)
+        self.manager.connection.add.assert_called_once_with({
+            u'UID': u'56d2c8b62c064f38890c60b66d01c894',
+            u'Title': {u'set': u'My Document'},
+            u'modified': {u'set': u'2017-01-21T17:18:19.000Z'},
+            u'SearchableText': {'set': ' doc2 My Document   '},
+            u'allowedRolesAndUsers': {u'set': [u'Anonymous']},
+            u'path': {u'set': u'/plone/doc2'},
+            u'path_depth': {u'set': 2},
+        })
+        self.manager.connection.extract.assert_not_called()
+
+    def test_add_with_attributes_for_item_without_blob_calls_add(self):
+        item = api.content.create(
+            type='Document', title='My Document', id='doc2',
+            container=self.portal)
+        IMutableUUID(item).set('56d2c8b62c064f38890c60b66d01c894')
+        item.modification_date = DateTime('2017-01-21T17:18:19+00:00')
+
+        handler = DexterityItemIndexHandler(item, self.manager)
+        handler.add(['SearchableText', 'modified'])
+        self.manager.connection.add.assert_called_once_with({
+            u'UID': u'56d2c8b62c064f38890c60b66d01c894',
+            u'modified': {u'set': u'2017-01-21T17:18:19.000Z'},
+            u'SearchableText': {'set': ' doc2 My Document   '},
+        })
+        self.manager.connection.extract.assert_not_called()

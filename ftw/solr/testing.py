@@ -9,6 +9,7 @@ from plone.testing import z2
 
 import collective.indexing
 import ftw.solr
+import plone.app.contenttypes
 
 
 class FtwSolrLayer(PloneSandboxLayer):
@@ -27,6 +28,20 @@ class FtwSolrLayer(PloneSandboxLayer):
         applyProfile(portal, 'ftw.solr:default')
 
 
+class FtwSolrDexterityLayer(PloneSandboxLayer):
+
+    defaultBases = (PLONE_FIXTURE,)
+
+    def setUpZope(self, app, configurationContext):
+        z2.installProduct(app, 'Products.DateRecurringIndex')
+        self.loadZCML(package=plone.app.contenttypes)
+        self.loadZCML(package=ftw.solr)
+
+    def setUpPloneSite(self, portal):
+        applyProfile(portal, 'plone.app.contenttypes:default')
+        applyProfile(portal, 'ftw.solr:default')
+
+
 class FtwSolrCollectiveIndexingLayer(FtwSolrLayer):
     """Testing layer that loads collective.indexing's catalog patches in
     order to test behavior / functionality that depends on the integration
@@ -42,12 +57,18 @@ class FtwSolrCollectiveIndexingLayer(FtwSolrLayer):
 
 
 FTW_SOLR_FIXTURE = FtwSolrLayer()
+FTW_SOLR_DEXTERITY_FIXTURE = FtwSolrDexterityLayer()
 FTW_SOLR_COLLECTIVE_INDEXING_FIXTURE = FtwSolrCollectiveIndexingLayer()
 
 
 FTW_SOLR_INTEGRATION_TESTING = IntegrationTesting(
     bases=(FTW_SOLR_FIXTURE,),
     name='FtwSolrLayer:IntegrationTesting'
+)
+
+FTW_SOLR_DEXTERITY_INTEGRATION_TESTING = IntegrationTesting(
+    bases=(FTW_SOLR_DEXTERITY_FIXTURE,),
+    name='FtwSolrDexterityLayer:IntegrationTesting'
 )
 
 FTW_SOLR_COLLECTIVE_INDEXING_INTEGRATION_TESTING = IntegrationTesting(
