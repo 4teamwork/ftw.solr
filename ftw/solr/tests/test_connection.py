@@ -60,8 +60,8 @@ class TestConnection(unittest.TestCase):
 
     def test_extract_operation_queues_extract_command(self):
         conn = SolrConnection()
-        conn.extract('Blob', {'id': '1'})
-        self.assertEqual(conn.extract_commands, [('Blob', {'id': '1'})])
+        conn.extract('Blob', 'SearchableText', {'id': '1'})
+        self.assertEqual(conn.extract_commands, [('Blob', 'SearchableText', {'id': '1'})])
 
     def test_delete_operation_queues_update_command(self):
         conn = SolrConnection()
@@ -103,52 +103,59 @@ class TestConnection(unittest.TestCase):
     def test_flush_operation_posts_extract_commands_and_clears_queue(self):
         conn = SolrConnection(base='/solr/mycore')
         conn.post = MagicMock(name='post')
+        conn.post.return_value.body.get.return_value = 'The searchable text'
         tr = transaction.begin()
-        conn.extract(MockBlob(), {'id': '1'})
+        conn.extract(MockBlob(), 'SearchableText', {'id': '1'})
         conn.flush()
         tr.commit()
         args, kwargs = conn.post.call_args_list[0]
+        self.assertEqual(
+            args,
+            ('/update/extract?extractOnly=true&stream.file=%2Ffolder%2Ffile',))
+        self.assertEqual(
+            kwargs,
+            {'headers': {'Content-Type': 'application/x-www-form-urlencoded'},
+             'log_error': False},
+        )
+        args, kwargs = conn.post.call_args_list[1]
         self.assertEqual(args, ('/update',))
         self.assertEqual(
             kwargs,
-            {'data': '{"add": {"doc": {"id": "1"}}}', 'log_error': False})
-        conn.post.assert_called_with(
-            '/update/extract?literal.id=1&commitWithin=10000'
-            '&stream.file=%2Ffolder%2Ffile',
-            headers={'Content-Type': 'application/x-www-form-urlencoded'},
-            log_error=False)
+            {'data': '{"add": {"doc": {"id": "1", "SearchableText": {"set": "T'
+                     'he searchable text"}}}}',
+             'log_error': False})
         self.assertEqual(conn.extract_commands, [])
 
     def test_flush_operation_without_after_commit_hook(self):
         conn = SolrConnection(base='/solr/mycore')
         conn.post = MagicMock(name='post')
-        conn.extract(MockBlob(), {'id': '1'})
+        conn.post.return_value.body.get.return_value = 'The searchable text'
+        conn.extract(MockBlob(), 'SearchableText', {'id': '1'})
         conn.flush(extract_after_commit=False)
+
         args, kwargs = conn.post.call_args_list[0]
+        self.assertEqual(
+            args,
+            ('/update/extract?extractOnly=true&stream.file=%2Ffolder%2Ffile',))
+        self.assertEqual(
+            kwargs,
+            {'headers': {'Content-Type': 'application/x-www-form-urlencoded'},
+             'log_error': False},
+        )
+        args, kwargs = conn.post.call_args_list[1]
         self.assertEqual(args, ('/update',))
         self.assertEqual(
             kwargs,
-            {'data': '{"add": {"doc": {"id": "1"}}}', 'log_error': False})
-        conn.post.assert_called_with(
-            '/update/extract?literal.id=1&commitWithin=10000'
-            '&stream.file=%2Ffolder%2Ffile',
-            headers={'Content-Type': 'application/x-www-form-urlencoded'},
-            log_error=False)
-        self.assertEqual(conn.extract_commands, [])
+            {'data': '{"add": {"doc": {"id": "1", "SearchableText": {"set": "T'
+                     'he searchable text"}}}}',
+             'log_error': False})
 
-    def test_extract_with_boolean_query_params(self):
-        conn = SolrConnection(base='/solr/mycore')
-        conn.post = MagicMock(name='post')
-        conn.extract(MockBlob(), {'id': '1', 'b1': True, 'b2': False})
-        conn.flush(extract_after_commit=False)
-        args, kwargs = conn.post.call_args
-        self.assertIn('literal.b1=true', args[0])
-        self.assertIn('literal.b2=false', args[0])
+        self.assertEqual(conn.extract_commands, [])
 
     def test_abort_operation_clears_queue(self):
         conn = SolrConnection(base='/solr/mycore')
         conn.add({'id': '1'})
-        conn.extract(MockBlob(), {'id': '1'})
+        conn.extract(MockBlob(), 'SearchableText', {'id': '1'})
         conn.abort()
         self.assertEqual(conn.update_commands, [])
         self.assertEqual(conn.extract_commands, [])

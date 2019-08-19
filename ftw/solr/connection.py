@@ -10,6 +10,7 @@ from urllib import urlencode
 from zope.component import queryUtility
 from zope.interface import implementer
 import json
+import os.path
 import socket
 import transaction
 
@@ -78,10 +79,9 @@ class SolrConnection(object):
     def add(self, data):
         self.update_commands.append('"add": ' + json.dumps({'doc': data}))
 
-    def extract(self, blob, data):
+    def extract(self, blob, field, data):
         """Add blob using Solr's Extracting Request Handler."""
-        self.update_commands.append('"add": ' + json.dumps({'doc': data}))
-        self.extract_commands.append((blob, data))
+        self.extract_commands.append((blob, field, data))
 
     def delete(self, id_):
         self.update_commands.append(
@@ -116,20 +116,11 @@ class SolrConnection(object):
             def hook(succeeded, extract_commands):
                 if not succeeded:
                     return
-                for blob, data in extract_commands:
+                for blob, field, data in extract_commands:
                     file_ = blob.committed()
                     params = {}
-                    for k, v in data.items():
-                        k = k.encode('utf8')
-                        if isinstance(v, unicode):
-                            v = v.encode('utf8')
-                        elif isinstance(v, list):
-                            v = [vv.encode('utf8') for vv in v]
-                        elif isinstance(v, bool):
-                            v = 'true' if v else 'false'
-                        params['literal.%s' % k] = v
                     params['stream.file'] = file_
-                    params['commitWithin'] = '10000'
+                    params['extractOnly'] = 'true'
                     resp = self.post(
                         '/update/extract?%s' % urlencode(params, doseq=True),
                         headers={'Content-Type': 'application/x-www-form-urlencoded'},  # noqa
@@ -139,6 +130,20 @@ class SolrConnection(object):
                             'Extract command for UID=%s with blob %s failed. '
                             '%s',
                             data.get(u'UID'), file_, resp.error_msg())
+                        continue
+
+                    update_command = {"add": {"doc": data}}
+                    update_command["add"]["doc"][field] = {
+                        "set": resp.body.get(os.path.basename(file_)),
+                    }
+                    resp = self.post(
+                        '/update',
+                        data=json.dumps(update_command),
+                        log_error=False)
+                    if not resp.is_ok():
+                        logger.error(
+                            'Update command failed. %s', resp.error_msg())
+
             if extract_after_commit:
                 transaction.get().addAfterCommitHook(
                     hook, args=[self.extract_commands])
