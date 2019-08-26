@@ -85,7 +85,7 @@ class DefaultIndexHandler(object):
         # in Solr. Because path_depth is not a catalog index, we would
         # otherwise fail to update it in cases where a specific list of
         # `idxs` including path is passed to reindexObject().
-        if 'path' in attributes:
+        if 'path' in attributes and 'path_depth' in schema.fields:
             attributes.add('path_depth')
 
         data = {}

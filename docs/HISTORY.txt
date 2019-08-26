@@ -4,7 +4,7 @@ Changelog
 2.6.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix 'path_depth' indexing handling, when 'path_depth' is not part of the schema. [phgross]
 
 
 2.6.0 (2019-08-19)

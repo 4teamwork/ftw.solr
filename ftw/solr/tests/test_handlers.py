@@ -81,11 +81,21 @@ class TestDefaultIndexHandler(unittest.TestCase):
             self.handler.get_data(['Title'])
         )
 
-    def test_get_data_includes_path_depth_if_path_was_included(self):
+    def test_get_data_includes_path_depth_if_exists_and_path_was_included(self):
         self.assertEqual(
             {
                 u'path': u'/plone/doc',
                 u'path_depth': 2,
+                u'UID': u'09baa75b67f44383880a6dab8b3200b6',
+            },
+            self.handler.get_data(['path'])
+        )
+
+        # solr schemas without the path_depth field
+        self.manager.schema.fields.pop('path_depth')
+        self.assertEqual(
+            {
+                u'path': u'/plone/doc',
                 u'UID': u'09baa75b67f44383880a6dab8b3200b6',
             },
             self.handler.get_data(['path'])
