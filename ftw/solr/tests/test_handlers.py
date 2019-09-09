@@ -125,7 +125,7 @@ class TestDefaultIndexHandler(unittest.TestCase):
 
     def test_add_with_attributes_without_data_does_nothing(self):
         self.manager.connection.add = MagicMock(name='add')
-        self.handler.add(['Description'])
+        self.handler.add(['field_not_in_schema'])
         self.assertFalse(self.manager.connection.add.called)
 
     def test_delete(self):
@@ -216,6 +216,11 @@ class TestATBlobFileIndexHandler(unittest.TestCase):
             'SearchableText',
             {u'UID': u'09baa75b67f44383880a6dab8b3200b6'},
         )
+
+    def test_add_with_attributes_without_data_does_nothing(self):
+        self.manager.connection.add = MagicMock(name='add')
+        self.handler.add(['field_not_in_schema'])
+        self.assertFalse(self.manager.connection.add.called)
 
 
 class TestDexterityItemIndexHandler(unittest.TestCase):
@@ -334,3 +339,8 @@ class TestDexterityItemIndexHandler(unittest.TestCase):
             u'SearchableText': {'set': ' doc2 My Document   '},
         })
         self.manager.connection.extract.assert_not_called()
+
+    def test_add_with_attributes_without_data_does_nothing(self):
+        self.manager.connection.add = MagicMock(name='add')
+        self.handler.add(['field_not_in_schema'])
+        self.assertFalse(self.manager.connection.add.called)
