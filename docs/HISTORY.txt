@@ -4,7 +4,7 @@ Changelog
 2.6.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Avoid sending atomic update commands with null-documents. [lgraf]
 
 
 2.6.1 (2019-08-26)

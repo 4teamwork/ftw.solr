@@ -156,8 +156,9 @@ class ATBlobFileIndexHandler(DefaultIndexHandler):
         data = self.get_data(attributes)
 
         if attributes:
-            self.manager.connection.add(
-                self.add_atomic_update_modifier(data, unique_key))
+            data = self.add_atomic_update_modifier(data, unique_key)
+            if data:
+                self.manager.connection.add(data)
 
         if extract:
             field = self.context.getPrimaryField()
@@ -198,8 +199,9 @@ class DexterityItemIndexHandler(DefaultIndexHandler):
         data = self.get_data(attributes)
 
         if attributes:
-            self.manager.connection.add(
-                self.add_atomic_update_modifier(data, unique_key))
+            data = self.add_atomic_update_modifier(data, unique_key)
+            if data:
+                self.manager.connection.add(data)
 
         if extract:
             self.manager.connection.extract(
