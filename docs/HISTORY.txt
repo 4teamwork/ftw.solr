@@ -4,6 +4,9 @@ Changelog
 2.6.3 (unreleased)
 ------------------
 
+- Add console script for maintenance tasks.
+  [buchi]
+
 - Add registry setting for enabling/disabling indexing.
   [buchi]
 

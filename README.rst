@@ -89,6 +89,37 @@ You can get a ``plone.app.contentlisting`` style result by adapting ``IContentLi
     listing = IContentListing(resp)
 
 
+Solr Index Maintenance
+======================
+
+For indexing Plone content and other maintenance work you can use the ``solr`` Zope command.
+Run ``bin/instance solr -h`` for available options.
+
+Clear the Solr index:
+
+.. code::
+
+    bin/instance solr clear
+
+Rebuild the complete Solr index:
+
+.. code::
+
+    bin/instance solr reindex
+
+Reindex specific indexes:
+
+.. code::
+
+    bin/instance solr reindex -i modified created
+
+Synchronize the Solr index with the portal catalog:
+
+.. code::
+
+    bin/instance solr sync
+
+
 Links
 =====
 
