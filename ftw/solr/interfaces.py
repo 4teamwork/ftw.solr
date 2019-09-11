@@ -2,6 +2,7 @@
 from collective.indexing.interfaces import IIndexQueueProcessor
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
+from zope.schema import Bool
 from zope.schema import Text
 
 
@@ -38,6 +39,12 @@ class ISolrDocument(Interface):
 
 
 class ISolrSettings(Interface):
+
+    enabled = Bool(
+        title=u'Enable Indexing',
+        description=u'Check this to enable indexing in Solr.',
+        default=True,
+    )
 
     local_query_parameters = Text(
         title=u'Local Query Parameters',

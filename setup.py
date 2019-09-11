@@ -53,6 +53,7 @@ setup(
         'plone.app.contentlisting',
         'plone.app.layout',
         'plone.namedfile[blobs]',
+        'ftw.upgrade',
     ],
     extras_require=dict(test=tests_require, tests=tests_require),
     entry_points="""
