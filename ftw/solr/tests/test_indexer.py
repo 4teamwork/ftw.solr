@@ -2,11 +2,14 @@
 from ftw.solr.indexer import SolrIndexQueueProcessor
 from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrIndexHandler
+from ftw.solr.interfaces import ISolrSettings
+from ftw.solr.testing import FTW_SOLR_INTEGRATION_TESTING
 from mock import MagicMock
 from mock import PropertyMock
-from plone.testing import zca
+from plone.registry.interfaces import IRegistry
 from zope.component import provideAdapter
 from zope.component import provideUtility
+from zope.component import queryUtility
 from zope.interface import Interface
 import unittest
 
@@ -22,7 +25,7 @@ class MockSolrIndexHandler(object):
 
 class TestSolrIndexQueueProcessor(unittest.TestCase):
 
-    layer = zca.UNIT_TESTING
+    layer = FTW_SOLR_INTEGRATION_TESTING
 
     def setUp(self):
         self.indexer = SolrIndexQueueProcessor()
@@ -36,6 +39,11 @@ class TestSolrIndexQueueProcessor(unittest.TestCase):
         conn.commit = MagicMock(name='commit')
         type(self.indexer._manager).connection = PropertyMock(
             return_value=conn)
+
+    def disable_indexing(self):
+        registry = queryUtility(IRegistry)
+        settings = registry.forInterface(ISolrSettings)
+        settings.enabled = False
 
     def test_index_object_without_providing_attributes_calls_add(self):
         self.indexer.index(object())
@@ -74,3 +82,29 @@ class TestSolrIndexQueueProcessor(unittest.TestCase):
         util = object()
         provideUtility(util, ISolrConnectionManager)
         self.assertEqual(util, self.indexer.manager)
+
+    def test_index_does_not_call_add_if_disabled(self):
+        self.disable_indexing()
+        self.indexer.index(object())
+        self.assertFalse(
+            MockSolrIndexHandler.add.called, 'Should not call add')
+
+    def test_unindex_does_not_call_delete_if_disabled(self):
+        self.disable_indexing()
+        self.indexer.unindex(object())
+        self.assertFalse(
+            MockSolrIndexHandler.delete.called, 'Should not call delete')
+
+    def test_commit_does_not_call_commit_if_disabled(self):
+        self.disable_indexing()
+        self.indexer.commit()
+        self.assertFalse(
+            self.indexer.manager.connection.commit.called,
+            'Should not call commit')
+
+    def test_abort_does_not_call_abort_if_disabled(self):
+        self.disable_indexing()
+        self.indexer.abort()
+        self.assertFalse(
+            self.indexer.manager.connection.abort.called,
+            'Should not call abort')

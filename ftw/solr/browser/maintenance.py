@@ -2,7 +2,9 @@
 from ftw.solr.converters import to_iso8601
 from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrIndexHandler
+from ftw.solr.interfaces import ISolrSettings
 from logging import getLogger
+from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces import ICatalogAware
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import base_hasattr
@@ -56,14 +58,23 @@ class SolrMaintenanceView(BrowserView):
         super(SolrMaintenanceView, self).__init__(context, request)
         self.request.RESPONSE.setHeader('Content-Type', 'text/plain')
 
+    def is_enabled(self):
+        registry = queryUtility(IRegistry)
+        settings = registry.forInterface(ISolrSettings)
+        return settings.enabled
+
     def optimize(self):
         """Optimize the Solr index."""
+        if not self.is_enabled():
+            return 'Solr indexing is disabled.'
         conn = self.manager.connection
         conn.optimize()
         return 'Solr index optimized.'
 
     def clear(self):
         """Clear all data from Solr index."""
+        if not self.is_enabled():
+            return 'Solr indexing is disabled.'
         conn = self.manager.connection
         conn.delete_by_query('*:*')
         conn.commit(soft_commit=False)
@@ -71,6 +82,8 @@ class SolrMaintenanceView(BrowserView):
 
     def reindex(self, commit_interval=100, idxs=None, doom=True):
         """Reindex content in Solr."""
+        if not self.is_enabled():
+            return 'Solr indexing is disabled.'
 
         processed = 0
         real = timer()
@@ -111,6 +124,9 @@ class SolrMaintenanceView(BrowserView):
     def reindex_cataloged(self, commit_interval=100, idxs=None, start=0,
                           end=-1, query=None, doom=True):
         """Reindex all cataloged content in Solr."""
+        if not self.is_enabled():
+            return 'Solr indexing is disabled.'
+
         query = query or {}
         for key, value in self.request.form.items():
             if key in ['UID', 'path', 'created', 'modified', 'portal_type',
@@ -171,6 +187,9 @@ class SolrMaintenanceView(BrowserView):
 
     def diff(self):
         """Diff with portal catalog"""
+        if not self.is_enabled():
+            return 'Solr indexing is disabled.'
+
         catalog = getToolByName(self.context, 'portal_catalog')
         items = catalog.unrestrictedSearchResults()
         catalog_uids = set([item.UID for item in items])
@@ -207,6 +226,9 @@ class SolrMaintenanceView(BrowserView):
 
     def sync(self, commit_interval=100, idxs=None, doom=True):
         """Sync Solr with portal catalog"""
+        if not self.is_enabled():
+            return 'Solr indexing is disabled.'
+
         catalog = getToolByName(self.context, 'portal_catalog')
         not_in_catalog, not_in_solr, not_in_sync = self.diff()
 

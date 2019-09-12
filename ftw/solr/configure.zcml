@@ -4,6 +4,7 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:plone="http://namespaces.plone.org/plone"
     xmlns:five="http://namespaces.zope.org/five"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     i18n_domain="ftw.solr">
 
   <five:registerPackage package="." initialize=".initialize" />
@@ -67,6 +68,13 @@
   <utility
       factory=".setuphandlers.HiddenProfiles"
       name="ftw.solr-hiddenprofiles"
+      />
+
+    <include package="ftw.upgrade" file="meta.zcml" />
+
+  <upgrade-step:directory
+      profile="ftw.solr:default"
+      directory="./upgrades"
       />
 
 </configure>

@@ -1,7 +1,9 @@
 from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrIndexHandler
 from ftw.solr.interfaces import ISolrIndexQueueProcessor
+from ftw.solr.interfaces import ISolrSettings
 from logging import getLogger
+from plone.registry.interfaces import IRegistry
 from zope.component import getMultiAdapter
 from zope.component import queryUtility
 from zope.interface import implementer
@@ -16,10 +18,16 @@ class SolrIndexQueueProcessor(object):
 
     _manager = None
 
+    def is_enabled(self):
+        registry = queryUtility(IRegistry)
+        settings = registry.forInterface(ISolrSettings)
+        return settings.enabled
+
     def index(self, obj, attributes=None):
         """Index the given object."""
-        handler = getMultiAdapter((obj, self.manager), ISolrIndexHandler)
-        handler.add(attributes)
+        if self.is_enabled():
+            handler = getMultiAdapter((obj, self.manager), ISolrIndexHandler)
+            handler.add(attributes)
 
     def reindex(self, obj, attributes=None):
         """Reindex the given object."""
@@ -27,8 +35,9 @@ class SolrIndexQueueProcessor(object):
 
     def unindex(self, obj):
         """Unindex the given object."""
-        handler = getMultiAdapter((obj, self.manager), ISolrIndexHandler)
-        handler.delete()
+        if self.is_enabled():
+            handler = getMultiAdapter((obj, self.manager), ISolrIndexHandler)
+            handler.delete()
 
     def begin(self):
         """Called before processing of the queue is started."""
@@ -39,14 +48,16 @@ class SolrIndexQueueProcessor(object):
         conn = self.manager.connection
         if conn is None:
             return
-        conn.commit()
+        if self.is_enabled():
+            conn.commit()
 
     def abort(self):
         """Called if processing of the queue needs to be aborted."""
         conn = self.manager.connection
         if conn is None:
             return
-        conn.abort()
+        if self.is_enabled():
+            conn.abort()
 
     @property
     def manager(self):
