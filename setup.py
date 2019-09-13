@@ -59,5 +59,7 @@ setup(
     entry_points="""
     [z3c.autoinclude.plugin]
     target = plone
+    [zopectl.command]
+    solr = ftw.solr.commands:solr
     """,
 )
