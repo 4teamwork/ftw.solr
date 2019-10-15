@@ -1,4 +1,3 @@
-from collective.indexing.queue import getQueue
 from plone.indexer.interfaces import IIndexer
 from Products.Archetypes.config import TOOL_NAME
 from Products.Archetypes.utils import isFactoryContained
