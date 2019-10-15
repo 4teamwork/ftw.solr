@@ -72,7 +72,7 @@ a Word Cloud
 showing the most common terms across documents can be displayed.
 
 The Word Cloud is implemented in a browser view that can either be displayed
-stand-alone by traversing to ``/@@wordcloud`` or rendered in a portlet.
+stand-alone by traversing to ``/@@wordcloud``.
 
 Ajax-ified search form
 ----------------------
