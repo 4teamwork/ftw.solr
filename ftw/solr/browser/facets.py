@@ -8,7 +8,7 @@ from zope.i18nmessageid import Message
 from collective.solr.browser import facets
 from collective.solr.browser.facets import param, facetParameters
 from collective.solr.interfaces import IFacetTitleVocabularyFactory
-from collective.solr.interfaces import ISolrConnectionConfig
+from ftw.solr import IS_PLONE_5
 
 
 FACET_QUERY_POSITIONS = {
@@ -92,7 +92,13 @@ class SearchFacetsView(facets.SearchFacetsView):
                 key=lambda x: FACET_QUERY_POSITIONS.get(x['name'], 100))))
 
         # Sort facets in the order stored in the configuration
-        config = queryUtility(ISolrConnectionConfig)
+        if IS_PLONE_5:
+            from collective.solr.utils import getConfig
+            config = getConfig()
+        else:
+            from collective.solr.interfaces import ISolrConnectionConfig
+            config = queryUtility(ISolrConnectionConfig)
+
         if config is not None:
             def pos(item):
                 try:

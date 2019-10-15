@@ -1,29 +1,39 @@
 from collective.solr.interfaces import ISolrConnectionConfig
-from collective.solr.manager import SolrConnectionConfig
 from collective.solr.parser import SolrSchema, SolrField
 from collective.solr.tests.utils import getData
+from ftw.solr import IS_PLONE_5
 from ftw.solr.patches.mangler import cleanupQueryParameters
-from ftw.solr.patches.mangler import subtractQueryParameters
 from ftw.solr.patches.mangler import leading_wildcards
-from ftw.solr.patches.mangler import mangleQuery
 from ftw.solr.patches.mangler import mangle_searchable_text_query
+from ftw.solr.patches.mangler import mangleQuery
 from ftw.solr.patches.mangler import searchterms_from_value
+from ftw.solr.patches.mangler import subtractQueryParameters
 from ftw.solr.patches.mangler import trailing_wildcards
+from ftw.solr.testing import SOLR_INTEGRATION_TESTING
 from unittest import TestCase
 from zope.component import provideUtility, getUtility
 
 
 class TestQueryMangler(TestCase):
 
+    layer = SOLR_INTEGRATION_TESTING
+
     def setUp(self):
-        provideUtility(SolrConnectionConfig(), ISolrConnectionConfig)
+        if IS_PLONE_5:
+            from collective.solr.utils import getConfig
+            config = getConfig()
+        else:
+            from collective.solr.manager import SolrConnectionConfig
+            config = SolrConnectionConfig()
+
+        provideUtility(config, ISolrConnectionConfig)
         xml = getData('plone_schema.xml')
         xml = xml[xml.find('<schema'):]
         self.schema = SolrSchema(xml.strip())
 
     def test_search_pattern_value_is_lowercase(self):
         config = getUtility(ISolrConnectionConfig)
-        config.search_pattern = 'Title:{value}'
+        config.search_pattern = u'Title:{value}'
 
         query = dict(SearchableText='Pass')
         mangleQuery(query, config, self.schema)
@@ -48,7 +58,7 @@ class TestQueryMangler(TestCase):
 
     def test_simple_terms_result_in_value_without_wildcards(self):
         config = getUtility(ISolrConnectionConfig)
-        config.search_pattern = '{value}'
+        config.search_pattern = u'{value}'
 
         query = dict(SearchableText='foo')
         mangleQuery(query, config, self.schema)
@@ -59,7 +69,7 @@ class TestQueryMangler(TestCase):
 
     def test_simple_search_results_in_value_without_wildcards(self):
         config = getUtility(ISolrConnectionConfig)
-        config.search_pattern = '{value}'
+        config.search_pattern = u'{value}'
 
         query = dict(SearchableText='foo bar')
         mangleQuery(query, config, self.schema)
@@ -70,7 +80,7 @@ class TestQueryMangler(TestCase):
 
     def test_complex_search_goes_through_unmodified(self):
         config = getUtility(ISolrConnectionConfig)
-        config.search_pattern = '{irrelevant}'
+        config.search_pattern = u'{irrelevant}'
 
         query = dict(SearchableText='foo AND bar')
         mangleQuery(query, config, self.schema)
@@ -81,7 +91,7 @@ class TestQueryMangler(TestCase):
 
     def test_simple_terms_are_handled_the_same_as_simple_searches(self):
         config = getUtility(ISolrConnectionConfig)
-        config.search_pattern = '{value} OR {value_lwc} OR {value_twc}'
+        config.search_pattern = u'{value} OR {value_lwc} OR {value_twc}'
 
         # Simple term
         query = dict(SearchableText='foo')

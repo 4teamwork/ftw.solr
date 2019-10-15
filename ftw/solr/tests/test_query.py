@@ -1,17 +1,17 @@
-from collective.solr.interfaces import ISolrConnectionConfig
-from collective.solr.manager import SolrConnectionConfig
 from collective.solr.manager import SolrConnectionManager
 from collective.solr.search import Search
 from collective.solr.tests.utils import getData, fakehttp
 from ftw.solr.patches.search import buildQueryAndParameters
+from ftw.solr.testing import SOLR_INTEGRATION_TESTING
 from unittest import TestCase
-from zope.component import provideUtility
 
 
 class TestBuildQuery(TestCase):
 
+    layer = SOLR_INTEGRATION_TESTING
+
     def setUp(self):
-        provideUtility(SolrConnectionConfig(), ISolrConnectionConfig)
+
         self.mngr = SolrConnectionManager()
         self.mngr.setHost(active=True)
         conn = self.mngr.getConnection()
