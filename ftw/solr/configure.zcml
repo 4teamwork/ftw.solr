@@ -29,15 +29,35 @@
 
     <adapter factory=".flare.PloneFlare" />
 
+
     <genericsetup:registerProfile
+        name="base"
+        title="ftw.solr"
+        directory="profiles/base"
+        description="ftw.solr base profile"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <genericsetup:registerProfile
+        zcml:condition="have plone-5"
         name="default"
         title="ftw.solr"
-        directory="profiles/default"
+        directory="profiles/plone5"
         description="Installs the ftw.solr package"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
     <genericsetup:registerProfile
+        zcml:condition="not-have plone-5"
+        name="default"
+        title="ftw.solr"
+        directory="profiles/plone4"
+        description="Installs the ftw.solr package"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <genericsetup:registerProfile
+        zcml:condition="not-have plone-5"
         name="autocomplete"
         title="ftw.solr-autocomplete"
         directory="profiles/autocomplete"
