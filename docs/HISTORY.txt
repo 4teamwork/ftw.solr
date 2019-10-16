@@ -5,6 +5,7 @@ Changelog
 -------------------
 
 - Remove searchterm highlighter word filter [Nachtalb]
+- Fix rst syntax of readme [Nachtalb]
 
 
 1.12.0 (2019-04-23)

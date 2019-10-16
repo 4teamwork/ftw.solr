@@ -92,6 +92,7 @@ Otherwise the content will be indexed twice. With ftw.tika and in solr (also wit
 
 To use ftw.tika's transform please unregister the adders from collective.solr by placing the following code into your project:
 
+.. code:: xml
 
     <include package="z3c.unconfigure" file="meta.zcml" />
     <unconfigure>
@@ -106,13 +107,14 @@ To use ftw.tika's transform please unregister the adders from collective.solr by
     </unconfigure>
 
 
-
 Solr connection configuration in ZCML
 -------------------------------------
 
 The connections settings for Solr can be configured in ZCML and thus in
 buildout. This makes it easier when copying databases between multiple Zope
-instances with different Solr servers. Example::
+instances with different Solr servers. Example:
+
+.. code:: ini
 
     zcml-additional =
         <configure xmlns:solr="http://namespaces.plone.org/solr">
@@ -131,7 +133,9 @@ Solr server. Search handlers are configured in ``solrconfig.xml`` of your
 collection.
 
 The ``livesearch`` request handler is used for live search and should limit the
-returned fields to a minimum for maximum speed. Example::
+returned fields to a minimum for maximum speed. Example:
+
+.. code:: xml
 
     <requestHandler name="livesearch" class="solr.SearchHandler">
         <lst name="defaults">
@@ -144,7 +148,9 @@ returned fields to a minimum for maximum speed. Example::
     </requestHandler>
 
 The ``hlsearch`` request handler should contain the configuration for highlighting.
-Example::
+Example:
+
+.. code:: xml
 
     <requestHandler name="hlsearch" class="solr.SearchHandler">
         <lst name="defaults">
@@ -170,7 +176,9 @@ Highlighting requires an index named ``snippetText``
 with its own field type which does not do too much text analysis.
 Fields and indexes are configured in ``schema.xml`` of your collection.
 
-Example::
+Example:
+
+.. code:: xml
 
     <fieldType name="text_snippets" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
@@ -196,7 +204,9 @@ with it's own field type.
 It's basically a copy of ``SearchableText`` but with less analysis and
 filtering (no lowercasing, no character normalization, etc...).
 
-Field type example::
+Field type example:
+
+.. code:: xml
 
     <fieldType name="cloud_terms" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
@@ -221,7 +231,9 @@ Field type example::
       </analyzer>
     </fieldType>
 
-Index example::
+Index example:
+
+.. code:: xml
 
     <field name="wordCloudTerms" type="cloud_terms" indexed="true"
            stored="true" required="false" multiValued="false"
@@ -242,7 +254,9 @@ Suggestions
 By default suggestions are disabled on the advanced search input field.
 if you want autocomplete while typing you need to install the autocomplete profile of ftw.solr and...
 
-**Prerequisit (solr config)**::
+**Prerequisit (solr config)**:
+
+.. code:: xml
 
     <!-- Suggester for autocomplete -->
     <searchComponent class="solr.SpellCheckComponent" name="suggest">
@@ -280,7 +294,7 @@ Add as dependency
 Install ``ftw.solr`` by adding it to the list of eggs in your
 buildout or by adding it as a dependency of your policy package.
 
-.. code:: rst
+.. code:: ini
 
     [instance]
     eggs +=
