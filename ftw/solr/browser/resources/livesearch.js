@@ -26,126 +26,127 @@
     }
   };
 
-  var options = {
-    source: "ftw_solr_livesearch_reply",
-    minLength: 3,
-    select: selectItem,
-    focus: focusItem,
-    appendTo: ".LSBox",
-    messages: {
-      noResults: $("#search-no-results-message").text(),
-      results: function( amount ) {
-        amount = amount - $(".ui-menu-item .no-result").length;
-        if (amount !== 0) {
-          $("#search-no-results-message").attr("aria-hidden", true);
-          if(amount > 1) {
-            $("#search-amount-results-found-message").attr("aria-hidden", false);
-            return amount + $("#search-amount-results-found-message").text();
-          } else {
-            $("#search-one-result-found-message").attr("aria-hidden", false);
-            return amount + $("#search-one-result-found-message").text();
-          }
-
-        } else {
-          $("#search-amount-results-found-message").attr("aria-hidden", true);
-          $("#search-one-result-found-message").attr("aria-hidden", true);
-          $("#search-no-results-message").attr("aria-hidden", false);
-          return $("#search-no-results-message").text();
-        }
-      }
-    }
-  };
-
-  var source = options.source;
-
-  var renderMenu = function(ul, items) {
-    var self = this;
-
-    // Only show "Search in current folder" if we are not on plone root.
-    if ($("body.portaltype-plone-site").length !== 1) {
-      items.unshift({
-        firstOfGroup: false,
-        currentFolder: true,
-        title: "Current folder",
-        url: ""
-      });
-    }
-
-    $.each( items, function( index, item ) {
-      self._renderItemData( ul, item );
-    });
-
-
-    //Change id/for of copied DOM to prevent duplicated ids
-    $("#searchbox_currentfolder_only", ul).attr("id", "live_searchbox_currentfolder_only");
-    $("[for='searchbox_currentfolder_only']", ul).attr("for", "live_searchbox_currentfolder_only");
-
-    $(".folder_path", ul).on("change", function() {
-
-      if(this.checked) {
-        self.option("source", source + "?path=" + this.value);
-      } else {
-        self.option("source", source);
-      }
-      $("#currentfolder_item .folder_path").prop("checked", this.checked);
-      self.search();
-    });
-
-  };
-
-  var renderItem = function(ul, item) {
-
-    var autocompleteItem = { label: item.title, value: item.title, url: item.url };
-
-    if(item.currentFolder) {
-      autocompleteItem.currentFolder = true;
-      return ul.append($("#currentfolder_item").children().clone().data("ui-autocomplete-item", autocompleteItem));
-    }
-
-    var li = $("<li>").data("ui-autocomplete-item", autocompleteItem);
-
-    var anchor = $("<a>").attr("href", item.url).addClass(item.cssclass);
-
-    var title = $("<span>").text(item.title)
-                           .addClass("title");
-
-    var description;
-    if (item.cssclass == 'no-result'){
-      // Insert description directly, this means html content is interpreted as html.
-      if (item.description){
-        description = $("<span>" + item.description + "</span>");
-      } else {
-        description = $('<span />');
-      }
-
-    } else {
-      // Always insert description as text, since it's indexed data and may contain anything.
-      description = $("<span>").text($("<div />").html(item.description).text());
-    }
-    description.addClass("description");
-
-    var itemText = $("<div>").append(title).append(description);
-
-    if(item.firstOfGroup) {
-      li.addClass("firstOfGroup");
-      var group = $("<span>").text(item.type)
-                             .addClass("group");
-      li.append(group);
-    }
-
-    anchor.append(item.icon).append(itemText);
-
-    li.append(anchor);
-
-    return ul.append(li);
-  };
-
   var init = function() {
     var searchbox = $(".searchField");
     if (!$(".searchField").length) { return; }
 
     // Always empty on init
     searchbox.val('');
+
+    var baseUrl = $("base").length === 1 ? $("base").attr("href") : $("body").data("base-url");
+    var options = {
+      source: baseUrl + "/ftw_solr_livesearch_reply",
+      minLength: 3,
+      select: selectItem,
+      focus: focusItem,
+      appendTo: ".LSBox",
+      messages: {
+        noResults: $("#search-no-results-message").text(),
+        results: function( amount ) {
+          amount = amount - $(".ui-menu-item .no-result").length;
+          if (amount !== 0) {
+            $("#search-no-results-message").attr("aria-hidden", true);
+            if(amount > 1) {
+              $("#search-amount-results-found-message").attr("aria-hidden", false);
+              return amount + $("#search-amount-results-found-message").text();
+            } else {
+              $("#search-one-result-found-message").attr("aria-hidden", false);
+              return amount + $("#search-one-result-found-message").text();
+            }
+
+          } else {
+            $("#search-amount-results-found-message").attr("aria-hidden", true);
+            $("#search-one-result-found-message").attr("aria-hidden", true);
+            $("#search-no-results-message").attr("aria-hidden", false);
+            return $("#search-no-results-message").text();
+          }
+        }
+      }
+    };
+
+    var renderMenu = function(ul, items) {
+      var self = this;
+
+      // Only show "Search in current folder" if we are not on plone root.
+      if ($("body.portaltype-plone-site").length !== 1) {
+        items.unshift({
+          firstOfGroup: false,
+          currentFolder: true,
+          title: "Current folder",
+          url: ""
+        });
+      }
+
+      $.each( items, function( index, item ) {
+        self._renderItemData( ul, item );
+      });
+
+
+      //Change id/for of copied DOM to prevent duplicated ids
+      $("#searchbox_currentfolder_only", ul).attr("id", "live_searchbox_currentfolder_only");
+      $("[for='searchbox_currentfolder_only']", ul).attr("for", "live_searchbox_currentfolder_only");
+
+      $(".folder_path", ul).on("change", function() {
+
+        if(this.checked) {
+          self.option("source", options.source + "?path=" + this.value);
+        } else {
+          self.option("source", options.source);
+        }
+        $("#currentfolder_item .folder_path").prop("checked", this.checked);
+        self.search();
+      });
+
+    };
+
+    var renderItem = function(ul, item) {
+
+      var autocompleteItem = { label: item.title, value: item.title, url: item.url };
+
+      if(item.currentFolder) {
+        autocompleteItem.currentFolder = true;
+        return ul.append($("#currentfolder_item").children().clone().data("ui-autocomplete-item", autocompleteItem));
+      }
+
+      var li = $("<li>").data("ui-autocomplete-item", autocompleteItem);
+
+      var anchor = $("<a>").attr("href", item.url).addClass(item.cssclass);
+
+      var title = $("<span>").text(item.title)
+                             .addClass("title");
+
+      var description;
+      if (item.cssclass == 'no-result'){
+        // Insert description directly, this means html content is interpreted as html.
+        if (item.description){
+          description = $("<span>" + item.description + "</span>");
+        } else {
+          description = $('<span />');
+        }
+
+      } else {
+        // Always insert description as text, since it's indexed data and may contain anything.
+        description = $("<span>").text($("<div />").html(item.description).text());
+      }
+      description.addClass("description");
+
+      var itemText = $("<div>").append(title).append(description);
+
+      if(item.firstOfGroup) {
+        li.addClass("firstOfGroup");
+        var group = $("<span>").text(item.type)
+                               .addClass("group");
+        li.append(group);
+      }
+
+      anchor.append(item.icon).append(itemText);
+
+      li.append(anchor);
+
+      return ul.append(li);
+    };
+
+
     var widget = $.ui.autocomplete(options, searchbox);
     widget._renderItem = renderItem;
     widget._renderMenu = renderMenu;
