@@ -9,7 +9,6 @@ tests_require = [
     'plone.app.dexterity',
     'plone.app.testing',
     'plone.app.contenttypes',
-    'collective.dexteritytextindexer',
     'unittest2',
     ]
 
@@ -42,6 +41,7 @@ setup(name='ftw.solr',
         'ftw.upgrade',
         'plone.api',
         'plone.app.contentlisting',
+        'collective.dexteritytextindexer',
         'requests',
         'setuptools',
         'z3c.unconfigure',
