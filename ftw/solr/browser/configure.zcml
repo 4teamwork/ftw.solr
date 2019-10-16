@@ -72,14 +72,15 @@
     <plone:static directory="resources" name="ftw.solr" type="plone"/>
 
 
+    <!-- necessary for plone4 to override the global search.js -->
     <browser:resource
         name="search.js"
-        file="search.js"
+        file="resources/search.js"
         layer="ftw.solr.interfaces.IFtwSolrLayer" />
 
     <browser:resource
         name="jquery.history.js"
-        file="jquery.history.js" />
+        file="resources/jquery.history.js" />
 
     <browser:resource
         name="ftw.solr.suggest.js"

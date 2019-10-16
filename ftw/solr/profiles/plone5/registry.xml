@@ -12,11 +12,25 @@
         <value key="deps">jquery</value>
     </records>
 
+    <records prefix="plone.resources/ftwsolr_jquery_history"
+             interface="Products.CMFPlone.interfaces.IResourceRegistry">
+        <value key="js">++resource++ftw.solr/jquery.history.js</value>
+        <value key="deps">jquery</value>
+    </records>
+
+    <records prefix="plone.resources/ftwsolr_search"
+             interface="Products.CMFPlone.interfaces.IResourceRegistry">
+        <value key="js">++resource++ftw.solr/search.js</value>
+        <value key="deps">jquery</value>
+    </records>
+
     <records prefix="plone.bundles/ftw-solr-resources"
              interface="Products.CMFPlone.interfaces.IBundleRegistry">
         <value key="resources">
             <element>ftwsolr_liveserch</element>
             <element>ftwsolr_facets</element>
+            <element>ftwsolr_jquery_history</element>
+            <element>ftwsolr_search</element>
         </value>
         <value key="enabled">True</value>
         <value key="depends">plone-legacy</value>
