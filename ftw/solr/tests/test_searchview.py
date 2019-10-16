@@ -247,7 +247,7 @@ class TestSearchView(TestCase):
             content_listing.result_url(),
             'http://nohost/plone/object?this=that&searchterm=test#ananans')
 
-    def test_breadcrumbs(self):
+    def test_breadcrumbs_escaped(self):
         """We get mixed html and plaintext form solr and need to escape the
         text. The only html we get is <em> and </em>, so we should only keep
         that unescaped.
