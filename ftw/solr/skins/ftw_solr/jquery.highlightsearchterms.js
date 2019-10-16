@@ -106,7 +106,7 @@
             var self = this;
             return $.unique($.map(terms, function(term) {
                 term = $.trim(self.caseInsensitive ? term.toLowerCase() : term);
-                return (!term || self.filterTerms.test(term)) ? null : term;
+                return !term ? null : term;
             }));
         },
 
@@ -197,8 +197,6 @@
 
         // Are terms matched case insensitive?
         caseInsensitive: true,
-        // what terms are never to be highlighted (regexp)?
-        filterTerms: /(not|and|or)/i,
         // What class is used to mark highlighted search terms?
         highlightClass: 'highlightedSearchTerm'
     };

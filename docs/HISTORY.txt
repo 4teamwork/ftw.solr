@@ -4,7 +4,7 @@ Changelog
 1.12.1 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Remove searchterm highlighter word filter [Nachtalb]
 
 
 1.12.0 (2019-04-23)
