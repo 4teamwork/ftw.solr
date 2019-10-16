@@ -105,9 +105,7 @@
         <metal:results tal:condition="batch"
                        tal:define="isAnon context/@@plone_portal_state/anonymous;
                                    toLocalizedTime nocall: context/@@plone/toLocalizedTime;
-                                   site_properties context/portal_properties/site_properties;
-                                   allowAnonymousViewAbout site_properties/allowAnonymousViewAbout;
-                                   show_about python:not isAnon or allowAnonymousViewAbout;">
+                                   show_about python:not isAnon or view.anonymous_view_about();">
           <dl class="searchResults">
             <tal:results repeat="item batch">
               <dt tal:attributes="class item/ContentTypeClass">
