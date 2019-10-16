@@ -43,9 +43,11 @@ class SolrLayer(PloneSandboxLayer):
                 context=configurationContext)
 
             z2.installProduct(app, 'collective.indexing')
+            z2.installProduct(app, 'Products.DateRecurringIndex')
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'plone.app.dexterity:default')
+
 
         applyProfile(portal, 'plone.app.contenttypes:default')
 
