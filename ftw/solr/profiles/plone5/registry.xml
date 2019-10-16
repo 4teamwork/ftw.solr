@@ -18,6 +18,13 @@
         <value key="deps">jquery</value>
     </records>
 
+    <records prefix="plone.resources/ftwsolr_jquery_legazy_highlight"
+             interface="Products.CMFPlone.interfaces.IResourceRegistry">
+        <value key="js">++resource++ftw.solr/jquery.highlightsearchterms.js</value>
+        <value key="deps">jquery</value>
+    </records>
+
+
     <records prefix="plone.resources/ftwsolr_search"
              interface="Products.CMFPlone.interfaces.IResourceRegistry">
         <value key="js">++resource++ftw.solr/search.js</value>
@@ -29,6 +36,7 @@
         <value key="resources">
             <element>ftwsolr_liveserch</element>
             <element>ftwsolr_facets</element>
+            <element>ftwsolr_jquery_legazy_highlight</element>
             <element>ftwsolr_jquery_history</element>
             <element>ftwsolr_search</element>
         </value>
