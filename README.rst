@@ -4,6 +4,16 @@ Introduction
 ``ftw.solr`` provides various customizations and enhancements on top of
 ``collective.solr`` which integrates the Solr search engine with Plone.
 
+
+Plone 5.1.x
+------------
+
+This package is Plone 5.1.x compatible.
+In order to achieve this we dropped AT support completely in 1.13.0
+This package registers some legacy jquery plugins from plone 4.
+
+
+
 .. contents:: Table of Contents
 
 Features
