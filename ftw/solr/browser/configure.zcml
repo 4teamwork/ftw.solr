@@ -36,6 +36,14 @@
         layer="ftw.solr.interfaces.IFtwSolrLayer" />
 
     <browser:page
+        for="plone.app.layout.navigation.interfaces.INavigationRoot"
+        name="search"
+        class=".search.SearchView"
+        permission="zope2.View"
+        layer="ftw.solr.interfaces.IFtwSolrLayer" />
+
+
+    <browser:page
         for="*"
         name="ftw_solr_livesearch_reply"
         class=".livesearch.FtwSolrLiveSearchReplyView"
