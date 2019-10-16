@@ -47,8 +47,7 @@ class SolrLayer(PloneSandboxLayer):
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'plone.app.dexterity:default')
 
-        if IS_PLONE_5:
-            applyProfile(portal, 'plone.app.contenttypes:default')
+        applyProfile(portal, 'plone.app.contenttypes:default')
 
         applyProfile(portal, 'ftw.solr:default')
 

@@ -8,6 +8,7 @@ tests_require = [
     'ftw.testbrowser',
     'plone.app.dexterity',
     'plone.app.testing',
+    'plone.app.contenttypes',
     'collective.dexteritytextindexer',
     'unittest2',
     ]
