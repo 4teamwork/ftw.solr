@@ -1,5 +1,6 @@
 from Acquisition import aq_inner
 from ftw.solr import _
+from ftw.solr import IS_PLONE_5
 from ftw.solr.browser.search import prepare_SearchableText
 from ftw.solr.interfaces import ILiveSearchSettings
 from itertools import groupby
@@ -34,8 +35,13 @@ class FtwSolrLiveSearchReplyView(BrowserView):
         plone_utils = getToolByName(context, 'plone_utils')
         self.pretty_title_or_id = plone_utils.pretty_title_or_id
         self.normalizeString = plone_utils.normalizeString
-        plone_view = getMultiAdapter((context, self.request), name='plone')
-        self.get_icon = plone_view.getIcon
+
+        if IS_PLONE_5:
+            layout_view = getMultiAdapter((context, self.request), name='plone_layout')
+            self.get_icon = layout_view.getIcon
+        else:
+            plone_view = getMultiAdapter((context, self.request), name='plone')
+            self.get_icon = plone_view.getIcon
 
         pprops = getToolByName(context, 'portal_properties')
         sprops = getattr(pprops, 'site_properties', None)

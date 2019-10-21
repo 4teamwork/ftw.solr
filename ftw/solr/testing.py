@@ -1,11 +1,12 @@
 from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import functional_session_factory
 from ftw.builder.testing import set_builder_session_factory
+from ftw.solr import IS_PLONE_5
+from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
-from plone.app.testing import applyProfile
 from plone.dexterity.fti import DexterityFTI
 from plone.testing import z2
 from zope.configuration import xmlconfig
@@ -20,18 +21,36 @@ class SolrLayer(PloneSandboxLayer):
         import z3c.autoinclude
         xmlconfig.file('meta.zcml', z3c.autoinclude,
                        context=configurationContext)
-        xmlconfig.string(
-            '<configure xmlns="http://namespaces.zope.org/zope">'
-            '  <includePlugins package="plone" />'
-            '  <includePluginsOverrides package="plone" />'
-            '  <include package="collective.indexing" />'
-            '</configure>',
-            context=configurationContext)
 
-        z2.installProduct(app, 'collective.indexing')
+        if IS_PLONE_5:
+
+            xmlconfig.string(
+                '<configure xmlns="http://namespaces.zope.org/zope">'
+                '  <includePlugins package="plone" />'
+                '  <includePluginsOverrides package="plone" />'
+                '  <include package="collective.dexteritytextindexer" />'
+                '</configure>',
+                context=configurationContext)
+
+        else:
+            xmlconfig.string(
+                '<configure xmlns="http://namespaces.zope.org/zope">'
+                '  <includePlugins package="plone" />'
+                '  <includePluginsOverrides package="plone" />'
+                '  <include package="collective.indexing" />'
+                '  <include package="collective.dexteritytextindexer" />'
+                '</configure>',
+                context=configurationContext)
+
+            z2.installProduct(app, 'collective.indexing')
+            z2.installProduct(app, 'Products.DateRecurringIndex')
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'plone.app.dexterity:default')
+
+
+        applyProfile(portal, 'plone.app.contenttypes:default')
+
         applyProfile(portal, 'ftw.solr:default')
 
         fti = DexterityFTI('DexterityFolder',

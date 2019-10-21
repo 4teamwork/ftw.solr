@@ -1,4 +1,3 @@
-from collective.indexing.queue import getQueue
 from plone.indexer.interfaces import IIndexer
 from Products.Archetypes.config import TOOL_NAME
 from Products.Archetypes.utils import isFactoryContained
@@ -88,23 +87,6 @@ def recursive_index_security(catalog, obj):
         # stops.
         for subobj in obj.objectValues():
             recursive_index_security(catalog, subobj)
-
-
-def ftw_solr_CatalogMultiplex_reindexObjectSecurity(self, skip_self=False):
-    """update security information in all registered catalogs.
-    """
-    if isFactoryContained(self):
-        return
-    at = getToolByName(self, TOOL_NAME, None)
-    if at is None:
-        return
-
-    catalogs = [c for c in at.getCatalogsByType(self.meta_type)
-                if ICatalogTool.providedBy(c)]
-
-    for catalog in catalogs:
-        recursive_index_security(catalog, self)
-
 
 def ftw_solr_CatalogAware_reindexObjectSecurity(self, skip_self=False):
     """ Reindex security-related indexes on the object.

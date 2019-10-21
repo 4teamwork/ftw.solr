@@ -1,11 +1,19 @@
-from zope.interface import Interface
-from zope import schema
 from ftw.solr import _
+from ftw.solr import IS_PLONE_5
+from zope import schema
+from zope.interface import Interface
 
 
-class IFtwSolrLayer(Interface):
+layerinterface = Interface
+if IS_PLONE_5:
+    from collective.solr.browser.interfaces import IThemeSpecific
+    layerinterface = IThemeSpecific
+
+
+class IFtwSolrLayer(layerinterface):
     """Browser layer for ftw.solr
     """
+
 
 class ILiveSearchSettings(Interface):
 

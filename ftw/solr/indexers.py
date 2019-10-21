@@ -2,7 +2,6 @@ from plone import api
 from plone.indexer import indexer
 from plone.indexer.interfaces import IIndexer
 from plone.indexer.wrapper import IndexableObjectWrapper
-from Products.Archetypes.interfaces.base import IBaseObject
 from Products.CMFCore.interfaces import IContentish
 from Products.CMFCore.utils import getToolByName
 from Products.PluginIndexes.common import safe_callable
@@ -60,27 +59,10 @@ class SnippetTextIndexer(object):
         self.catalog = catalog
 
     def __call__(self):
-        wrapped = IndexableObjectWrapper(self.context, self.catalog)
-        text = getattr(wrapped, 'SearchableText')
-        if safe_callable(text):
-            text = text()
+        from collective.dexteritytextindexer import indexer
+        text = indexer.dynamic_searchable_text_indexer(self.context)()
 
-        # Archetypes object: remove id and title
-        if IBaseObject.providedBy(self.context):
-            for fieldname in ['id', 'title']:
-                field = self.context.Schema().getField(fieldname)
-                if field is None:
-                    continue
+        # Remove title
+        text = text.replace(self.context.Title(), '', 1)
 
-                method = field.getIndexAccessor(self.context)
-                value = method()
-                text = text.replace(value, '', 1)
-        # other content (e.g. dexterity): remove title
-        elif IContentish.providedBy(self.context):
-            text = text.replace(self.context.Title(), '', 1)
-
-        # Strip html tags
-        text = re.sub('<[^<]+?>', '', text)
-        text = text.replace('<', '&lt;')
-        text = text.replace('>', '&gt;')
         return text

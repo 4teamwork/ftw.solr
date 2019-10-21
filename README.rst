@@ -4,6 +4,16 @@ Introduction
 ``ftw.solr`` provides various customizations and enhancements on top of
 ``collective.solr`` which integrates the Solr search engine with Plone.
 
+
+Plone 5.1.x
+------------
+
+This package is Plone 5.1.x compatible.
+In order to achieve this we dropped AT support completely in 1.13.0
+This package registers some legacy jquery plugins from plone 4.
+
+
+
 .. contents:: Table of Contents
 
 Features
@@ -72,7 +82,7 @@ a Word Cloud
 showing the most common terms across documents can be displayed.
 
 The Word Cloud is implemented in a browser view that can either be displayed
-stand-alone by traversing to ``/@@wordcloud`` or rendered in a portlet.
+stand-alone by traversing to ``/@@wordcloud``.
 
 Ajax-ified search form
 ----------------------

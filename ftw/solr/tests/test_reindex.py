@@ -1,14 +1,20 @@
-from collective.indexing.queue import getQueue
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.solr import IS_PLONE_5
 from ftw.solr.testing import SOLR_FUNCTIONAL_TESTING
 from ftw.solr.tests.pages import Catalog
-from plone.app.testing import TEST_USER_ID
-from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import login
 from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_NAME
 from unittest2 import TestCase
 import transaction
+
+
+if IS_PLONE_5:
+    from Products.CMFCore.indexing import getQueue
+else:
+    from collective.indexing.queue import getQueue
 
 
 class TestReindexingSecurity(TestCase):
@@ -24,7 +30,7 @@ class TestReindexingSecurity(TestCase):
         return getQueue().length()
 
     def folder_builder(self):
-        return Builder('folder')
+        return Builder('dexterity folder')
 
     def test_indexes_are_updated_recursively(self):
         folder = create(self.folder_builder())
@@ -81,9 +87,3 @@ class TestReindexingSecurity(TestCase):
 
             {'folder': Catalog().get_allowed_roles_and_users(folder),
              'subfolder': Catalog().get_allowed_roles_and_users(subfolder)})
-
-
-class TestDexterityReindexingSecurity(TestReindexingSecurity):
-
-    def folder_builder(self):
-        return Builder('dexterity folder')

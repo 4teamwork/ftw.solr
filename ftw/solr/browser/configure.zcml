@@ -1,6 +1,7 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
     i18n_domain="ftw.solr">
 
     <browser:page
@@ -36,6 +37,14 @@
         layer="ftw.solr.interfaces.IFtwSolrLayer" />
 
     <browser:page
+        for="plone.app.layout.navigation.interfaces.INavigationRoot"
+        name="search"
+        class=".search.SearchView"
+        permission="zope2.View"
+        layer="ftw.solr.interfaces.IFtwSolrLayer" />
+
+
+    <browser:page
         for="*"
         name="ftw_solr_livesearch_reply"
         class=".livesearch.FtwSolrLiveSearchReplyView"
@@ -59,15 +68,19 @@
     <browser:resourceDirectory
         name="ftw.solr"
         directory="resources" />
+    
+    <plone:static directory="resources" name="ftw.solr" type="plone"/>
 
+
+    <!-- necessary for plone4 to override the global search.js -->
     <browser:resource
         name="search.js"
-        file="search.js"
+        file="resources/search.js"
         layer="ftw.solr.interfaces.IFtwSolrLayer" />
 
     <browser:resource
         name="jquery.history.js"
-        file="jquery.history.js" />
+        file="resources/jquery.history.js" />
 
     <browser:resource
         name="ftw.solr.suggest.js"

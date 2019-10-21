@@ -2,7 +2,6 @@
 <metadata>
     <dependencies>
         <dependency>profile-collective.solr:default</dependency>
-        <dependency>profile-plone.app.search:default</dependency>
         <dependency>profile-collective.js.jqueryui:default</dependency>
     </dependencies>
 </metadata>

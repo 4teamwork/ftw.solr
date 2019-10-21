@@ -1,10 +1,12 @@
 Changelog
 =========
 
-1.12.2 (unreleased)
+1.13.0 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Add Plone 5.1.x support [mathias.leimgruber]
+- Drop AT support [mathias.leimgruber]
+- Drop Wordcloud portlet (nowhere in use) [mathias.leimgruber]
 
 
 1.12.1 (2019-10-17)

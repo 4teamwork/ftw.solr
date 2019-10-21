@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from collective.solr.exceptions import SolrConnectionException
+from ftw.solr import IS_PLONE_5
 from ftw.solr.interfaces import ISearchSettings
 from logging import getLogger
 from plone.app.contentlisting.interfaces import IContentListing
-from plone.app.search import browser
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.PloneBatch import Batch
@@ -17,6 +17,15 @@ from zope.deferredimport import deprecated
 import re
 import urllib
 import urlparse
+
+
+if IS_PLONE_5:
+    from Products.CMFPlone.browser.search import Search
+    SEARCH_VIEW = Search
+else:
+    from plone.app.search.browser import Search
+    SEARCH_VIEW = Search
+
 
 logger = getLogger('ftw.solr')
 
@@ -44,7 +53,7 @@ def prepare_SearchableText(searchstring):
                   re.UNICODE).strip().encode('utf-8')
 
 
-class SearchView(browser.Search):
+class SearchView(SEARCH_VIEW):
 
     template = ViewPageTemplateFile('search.pt')
     results_template = ViewPageTemplateFile('results.pt')
@@ -230,3 +239,11 @@ class SearchView(browser.Search):
                                                urllib.urlencode(query_dict, doseq=True)),
                 'title': item.Title(),
                 'url': item.absolute_url()}
+
+    def anonymous_view_about(self):
+        if IS_PLONE_5:
+            registry = getUtility(IRegistry)
+            return registry['plone.allow_anon_views_about']
+        else:
+            props = getToolByName(self.context, 'portal_properties').site_properties
+            return props.allowAnonymousViewAbout

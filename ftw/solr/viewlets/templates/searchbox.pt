@@ -1,7 +1,7 @@
 <div id="portal-searchbox"
      i18n:domain="ftw.solr"
      tal:define="navigation_root_url view/navigation_root_url;
-                 search_input_id view/search_input_id;">
+                 search_input_id string:searchGadget;">
 
     <form id="searchGadget_form"
           action="@@search"
