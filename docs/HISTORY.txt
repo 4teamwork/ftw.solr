@@ -4,7 +4,7 @@ Changelog
 1.13.1 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fix classifier - since it has to be in https://pypi.org/classifiers/. [mathias.leimgruber]
 
 
 1.13.0 (2019-10-21)
