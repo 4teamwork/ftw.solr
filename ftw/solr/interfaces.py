@@ -1,9 +1,16 @@
 # -*- coding: utf-8 -*-
-from collective.indexing.interfaces import IIndexQueueProcessor
+from Products.CMFPlone.utils import getFSVersionTuple
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.schema import Bool
 from zope.schema import Text
+
+
+PLONE51 = getFSVersionTuple() >= (5, 1)
+if PLONE51:
+    from Products.CMFCore.interfaces import IIndexQueueProcessor
+else:
+    from collective.indexing.interfaces import IIndexQueueProcessor
 
 
 class IFtwSolrLayer(IDefaultBrowserLayer):

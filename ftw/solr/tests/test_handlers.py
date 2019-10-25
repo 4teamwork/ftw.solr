@@ -5,7 +5,7 @@ from ftw.solr.handlers import ATBlobFileIndexHandler
 from ftw.solr.handlers import DefaultIndexHandler
 from ftw.solr.handlers import DexterityItemIndexHandler
 from ftw.solr.schema import SolrSchema
-from ftw.solr.testing import FTW_SOLR_DEXTERITY_INTEGRATION_TESTING
+from ftw.solr.testing import FTW_SOLR_AT_INTEGRATION_TESTING
 from ftw.solr.testing import FTW_SOLR_INTEGRATION_TESTING
 from ftw.solr.tests.utils import get_data
 from mock import MagicMock
@@ -18,6 +18,7 @@ from plone.app.testing import TEST_USER_NAME
 from plone.namedfile.file import NamedBlobFile
 from plone.uuid.interfaces import IMutableUUID
 from Products.CMFPlone.utils import base_hasattr
+from Products.CMFPlone.utils import getFSVersionTuple
 import unittest
 
 
@@ -135,9 +136,11 @@ class TestDefaultIndexHandler(unittest.TestCase):
             u'09baa75b67f44383880a6dab8b3200b6')
 
 
+@unittest.skipIf(getFSVersionTuple() >= (5, 0),
+                 'Files are not AT-based on Plone 5 and later')
 class TestATBlobFileIndexHandler(unittest.TestCase):
 
-    layer = FTW_SOLR_INTEGRATION_TESTING
+    layer = FTW_SOLR_AT_INTEGRATION_TESTING
 
     def setUp(self):
         self.portal = self.layer['portal']
@@ -225,7 +228,7 @@ class TestATBlobFileIndexHandler(unittest.TestCase):
 
 class TestDexterityItemIndexHandler(unittest.TestCase):
 
-    layer = FTW_SOLR_DEXTERITY_INTEGRATION_TESTING
+    layer = FTW_SOLR_INTEGRATION_TESTING
 
     def setUp(self):
         self.portal = self.layer['portal']

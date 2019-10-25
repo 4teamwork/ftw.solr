@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from collective.indexing.queue import getQueue
 from datetime import datetime
 from ftw.solr.connection import SolrResponse
 from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrIndexQueueProcessor
+from ftw.solr.interfaces import PLONE51
 from ftw.solr.schema import SolrSchema
-from ftw.solr.testing import FTW_SOLR_COLLECTIVE_INDEXING_INTEGRATION_TESTING
+from ftw.solr.testing import FTW_SOLR_INTEGRATION_TESTING
 from ftw.solr.tests.utils import get_data
 from ftw.testing import freeze
 from mock import call
@@ -22,9 +22,15 @@ from zope.interface import alsoProvides
 import unittest
 
 
+if PLONE51:
+    from Products.CMFCore.indexing import getQueue
+else:
+    from collective.indexing.queue import getQueue
+
+
 class TestCollectiveIndexingIntegration(unittest.TestCase):
 
-    layer = FTW_SOLR_COLLECTIVE_INDEXING_INTEGRATION_TESTING
+    layer = FTW_SOLR_INTEGRATION_TESTING
 
     def setUp(self):
         super(TestCollectiveIndexingIntegration, self).setUp()
