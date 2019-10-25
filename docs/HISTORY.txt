@@ -4,7 +4,8 @@ Changelog
 2.7.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add support for Plone 5.0 and 5.1.
+  [buchi]
 
 
 2.7.0 (2019-09-16)
