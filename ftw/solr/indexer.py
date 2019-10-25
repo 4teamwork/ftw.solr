@@ -29,7 +29,7 @@ class SolrIndexQueueProcessor(object):
             handler = getMultiAdapter((obj, self.manager), ISolrIndexHandler)
             handler.add(attributes)
 
-    def reindex(self, obj, attributes=None):
+    def reindex(self, obj, attributes=None, update_metadata=1):
         """Reindex the given object."""
         self.index(obj, attributes)
 
