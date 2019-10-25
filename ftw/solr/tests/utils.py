@@ -7,6 +7,10 @@ def get_data(filename):
     return open(filename, 'r').read()
 
 
+def normalize_whitespaces(text):
+    return ' '.join(text.strip().split())
+
+
 class MockHTTPResponse(object):
     def __init__(self, status=200, body=''):
         self.status = status
