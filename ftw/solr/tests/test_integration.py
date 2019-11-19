@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-from collective.indexing.queue import getQueue
 from datetime import datetime
 from ftw.solr.connection import SolrResponse
 from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrIndexQueueProcessor
+from ftw.solr.interfaces import PLONE51
 from ftw.solr.schema import SolrSchema
-from ftw.solr.testing import FTW_SOLR_COLLECTIVE_INDEXING_INTEGRATION_TESTING
+from ftw.solr.testing import FTW_SOLR_INTEGRATION_TESTING
 from ftw.solr.tests.utils import get_data
+from ftw.solr.tests.utils import normalize_whitespaces
 from ftw.testing import freeze
 from mock import call
 from mock import MagicMock
@@ -22,12 +23,18 @@ from zope.interface import alsoProvides
 import unittest
 
 
-class TestCollectiveIndexingIntegration(unittest.TestCase):
+if PLONE51:
+    from Products.CMFCore.indexing import getQueue
+else:
+    from collective.indexing.queue import getQueue
 
-    layer = FTW_SOLR_COLLECTIVE_INDEXING_INTEGRATION_TESTING
+
+class TestIntegration(unittest.TestCase):
+
+    layer = FTW_SOLR_INTEGRATION_TESTING
 
     def setUp(self):
-        super(TestCollectiveIndexingIntegration, self).setUp()
+        super(TestIntegration, self).setUp()
         self.portal = self.layer['portal']
         login(self.portal, TEST_USER_NAME)
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
@@ -88,15 +95,20 @@ class TestCollectiveIndexingIntegration(unittest.TestCase):
             self.subfolder.reindexObject()
         getQueue().process()
 
-        self.connection.add.assert_called_once_with({
-            u'UID': IUUID(self.subfolder),
-            u'Title': u'My Subfolder',
-            u'modified': u'2018-08-31T11:45:00.000Z',
-            u'SearchableText': 'subfolder  My Subfolder ',
-            u'allowedRolesAndUsers': ['Other'],
-            u'path': u'/plone/folder/subfolder',
-            u'path_depth': 3,
-        })
+        data = self.manager.connection.add.call_args[0][0]
+        data['SearchableText'] = normalize_whitespaces(data['SearchableText'])
+        self.assertEqual(
+            {
+                u'UID': IUUID(self.subfolder).decode('utf8'),
+                u'Title': u'My Subfolder',
+                u'modified': u'2018-08-31T11:45:00.000Z',
+                u'SearchableText': u'subfolder My Subfolder',
+                u'allowedRolesAndUsers': [u'Other'],
+                u'path': u'/plone/folder/subfolder',
+                u'path_depth': 3,
+            },
+            data
+        )
 
     def test_reindex_object_with_idxs_causes_atomic_update(self):
         self.subfolder.reindexObject(idxs=['Title'])

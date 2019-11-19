@@ -32,6 +32,8 @@ setup(
         "Environment :: Web Environment",
         "Framework :: Plone",
         "Framework :: Plone :: 4.3",
+        "Framework :: Plone :: 5.0",
+        "Framework :: Plone :: 5.1",
         "Programming Language :: Python",
         "Programming Language :: Python :: 2.7",
         "Operating System :: OS Independent",
@@ -49,13 +51,16 @@ setup(
     install_requires=[
         # -*- Extra requirements: -*-
         'setuptools',
-        'collective.indexing',
         'plone.app.contentlisting',
         'plone.app.layout',
         'plone.namedfile[blobs]',
         'ftw.upgrade',
     ],
-    extras_require=dict(test=tests_require, tests=tests_require),
+    extras_require=dict(
+        test=tests_require,
+        tests=tests_require,
+        cindexing=['collective.indexing'],
+    ),
     entry_points="""
     [z3c.autoinclude.plugin]
     target = plone

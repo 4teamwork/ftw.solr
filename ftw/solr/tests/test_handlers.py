@@ -5,9 +5,10 @@ from ftw.solr.handlers import ATBlobFileIndexHandler
 from ftw.solr.handlers import DefaultIndexHandler
 from ftw.solr.handlers import DexterityItemIndexHandler
 from ftw.solr.schema import SolrSchema
-from ftw.solr.testing import FTW_SOLR_DEXTERITY_INTEGRATION_TESTING
+from ftw.solr.testing import FTW_SOLR_AT_INTEGRATION_TESTING
 from ftw.solr.testing import FTW_SOLR_INTEGRATION_TESTING
 from ftw.solr.tests.utils import get_data
+from ftw.solr.tests.utils import normalize_whitespaces
 from mock import MagicMock
 from mock import PropertyMock
 from plone import api
@@ -18,6 +19,7 @@ from plone.app.testing import TEST_USER_NAME
 from plone.namedfile.file import NamedBlobFile
 from plone.uuid.interfaces import IMutableUUID
 from Products.CMFPlone.utils import base_hasattr
+from Products.CMFPlone.utils import getFSVersionTuple
 import unittest
 
 
@@ -50,6 +52,8 @@ class TestDefaultIndexHandler(unittest.TestCase):
         self.handler = DefaultIndexHandler(self.doc, self.manager)
 
     def test_get_data_without_attributes_gets_all_fields(self):
+        data = self.handler.get_data(None)
+        data['SearchableText'] = normalize_whitespaces(data['SearchableText'])
         self.assertEqual(
             {
                 u'Title': u'My Document',
@@ -58,9 +62,9 @@ class TestDefaultIndexHandler(unittest.TestCase):
                 u'path': u'/plone/doc',
                 u'path_depth': 2,
                 u'modified': u'2017-01-21T17:18:19.000Z',
-                u'SearchableText': 'doc  My Document ',
+                u'SearchableText': 'doc My Document',
             },
-            self.handler.get_data(None)
+            data
         )
 
     def test_get_data_gets_only_specified_attributes(self):
@@ -104,15 +108,20 @@ class TestDefaultIndexHandler(unittest.TestCase):
     def test_add_without_attributes_adds_full_documemt(self):
         self.manager.connection.add = MagicMock(name='add')
         self.handler.add(None)
-        self.manager.connection.add.assert_called_once_with({
-            u'UID': u'09baa75b67f44383880a6dab8b3200b6',
-            u'Title': u'My Document',
-            u'modified': u'2017-01-21T17:18:19.000Z',
-            u'SearchableText': 'doc  My Document ',
-            u'allowedRolesAndUsers': [u'Anonymous'],
-            u'path': u'/plone/doc',
-            u'path_depth': 2,
-        })
+        data = self.manager.connection.add.call_args[0][0]
+        data['SearchableText'] = normalize_whitespaces(data['SearchableText'])
+        self.assertEqual(
+            {
+                u'UID': u'09baa75b67f44383880a6dab8b3200b6',
+                u'Title': u'My Document',
+                u'modified': u'2017-01-21T17:18:19.000Z',
+                u'SearchableText': 'doc My Document',
+                u'allowedRolesAndUsers': [u'Anonymous'],
+                u'path': u'/plone/doc',
+                u'path_depth': 2,
+            },
+            data
+        )
 
     def test_add_with_attributes_does_atomic_update(self):
         self.manager.connection.add = MagicMock(name='add')
@@ -135,9 +144,11 @@ class TestDefaultIndexHandler(unittest.TestCase):
             u'09baa75b67f44383880a6dab8b3200b6')
 
 
+@unittest.skipIf(getFSVersionTuple() >= (5, 0),
+                 'Files are not AT-based on Plone 5 and later')
 class TestATBlobFileIndexHandler(unittest.TestCase):
 
-    layer = FTW_SOLR_INTEGRATION_TESTING
+    layer = FTW_SOLR_AT_INTEGRATION_TESTING
 
     def setUp(self):
         self.portal = self.layer['portal']
@@ -225,7 +236,7 @@ class TestATBlobFileIndexHandler(unittest.TestCase):
 
 class TestDexterityItemIndexHandler(unittest.TestCase):
 
-    layer = FTW_SOLR_DEXTERITY_INTEGRATION_TESTING
+    layer = FTW_SOLR_INTEGRATION_TESTING
 
     def setUp(self):
         self.portal = self.layer['portal']

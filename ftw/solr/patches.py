@@ -1,13 +1,17 @@
-from collective.indexing import monkey  # noqa
-from Products.Archetypes.CatalogMultiplex import CatalogMultiplex
-from Products.CMFCore.CMFCatalogAware import CMFCatalogAware
+from ftw.solr.interfaces import PLONE51
 from plone.indexer.interfaces import IIndexer
+from Products.Archetypes.CatalogMultiplex import CatalogMultiplex
 from Products.Archetypes.config import TOOL_NAME
 from Products.Archetypes.utils import isFactoryContained
+from Products.CMFCore.CMFCatalogAware import CMFCatalogAware
 from Products.CMFCore.interfaces import ICatalogTool
 from Products.CMFCore.interfaces._content import ICatalogAware
 from Products.CMFCore.utils import getToolByName
 from zope.component import queryMultiAdapter
+
+if not PLONE51:
+    # Make sure collective.indexing patches are applied before our patches
+    import collective.indexing.monkey  # noqa
 
 
 def is_index_value_equal(old, new):

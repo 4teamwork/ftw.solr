@@ -73,7 +73,7 @@ class DefaultIndexHandler(object):
             wrapped = self.context
 
         schema = self.manager.schema
-        if attributes is None:
+        if not attributes:
             attributes = set(schema.fields.keys())
         else:
             attributes = set(schema.fields.keys()).intersection(attributes)
