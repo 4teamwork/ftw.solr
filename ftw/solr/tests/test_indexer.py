@@ -6,6 +6,8 @@ from ftw.solr.interfaces import ISolrSettings
 from ftw.solr.testing import FTW_SOLR_INTEGRATION_TESTING
 from mock import MagicMock
 from mock import PropertyMock
+from plone.app.testing import popGlobalRegistry
+from plone.app.testing import pushGlobalRegistry
 from plone.registry.interfaces import IRegistry
 from zope.component import provideAdapter
 from zope.component import provideUtility
@@ -30,6 +32,7 @@ class TestSolrIndexQueueProcessor(unittest.TestCase):
     def setUp(self):
         self.indexer = SolrIndexQueueProcessor()
         self.indexer._manager = MagicMock(name='SolrConnectionManager')
+        pushGlobalRegistry(self.layer['portal'])
         provideAdapter(
             MockSolrIndexHandler,
             adapts=(Interface, MagicMock),
@@ -39,6 +42,9 @@ class TestSolrIndexQueueProcessor(unittest.TestCase):
         conn.commit = MagicMock(name='commit')
         type(self.indexer._manager).connection = PropertyMock(
             return_value=conn)
+
+    def tearDown(self):
+        popGlobalRegistry(self.layer['portal'])
 
     def disable_indexing(self):
         registry = queryUtility(IRegistry)

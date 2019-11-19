@@ -29,12 +29,12 @@ else:
     from collective.indexing.queue import getQueue
 
 
-class TestCollectiveIndexingIntegration(unittest.TestCase):
+class TestIntegration(unittest.TestCase):
 
     layer = FTW_SOLR_INTEGRATION_TESTING
 
     def setUp(self):
-        super(TestCollectiveIndexingIntegration, self).setUp()
+        super(TestIntegration, self).setUp()
         self.portal = self.layer['portal']
         login(self.portal, TEST_USER_NAME)
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
