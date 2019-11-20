@@ -195,17 +195,25 @@ class SolrMaintenanceView(BrowserView):
         catalog_uids = set([item.UID for item in items])
         catalog_modified = set(
             [(item.UID, solr_date(item.modified)) for item in items])
-
+        catalog_roles = set([
+            (item.UID,
+             u','.join(sorted(catalog.getIndexDataForRID(item.getRID()).get(
+                'allowedRolesAndUsers', []))))
+            for item in items
+        ])
         conn = self.manager.connection
         resp = conn.search({
             u'query': u'*:*',
             u'limit': 10000000,
-            u'params': {u'fl': ['UID', 'modified']},
+            u'params': {u'fl': ['UID', 'modified', 'allowedRolesAndUsers']},
         })
         solr_uids = set([doc['UID'].encode('utf8') for doc in resp.docs])
         solr_modified = set(
             [(doc['UID'], doc.get('modified', u'2000-01-01T00:00:00.000Z'))
              for doc in resp.docs])
+        solr_roles = set([
+            (doc['UID'], u','.join(sorted(doc.get('allowedRolesAndUsers', []))))
+            for doc in resp.docs])
 
         self.log('Portal Catalog contains %s items.', len(catalog_uids))
         self.log('Solr contains %s items.',  len(solr_uids))
@@ -218,7 +226,10 @@ class SolrMaintenanceView(BrowserView):
             self.log('Items not in Solr: %s', ', '.join(not_in_solr))
         if not not_in_catalog and not not_in_solr:
             self.log('Solr and Portal Catalog contain the same items. :-)')
-        not_in_sync = [item[0] for item in catalog_modified - solr_modified]
+        modified_diff = set(
+            [item[0] for item in catalog_modified - solr_modified])
+        roles_diff = set([item[0] for item in catalog_roles - solr_roles])
+        not_in_sync = modified_diff | roles_diff
         if not_in_sync:
             self.log(
                 'Items not in sync with catalog: %s', ', '.join(not_in_sync))

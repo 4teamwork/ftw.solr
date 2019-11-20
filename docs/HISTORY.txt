@@ -7,6 +7,9 @@ Changelog
 - Add support for Plone 5.0 and 5.1.
   [buchi]
 
+- Also compare allowedRolesAndUsers when diffing with the catalog.
+  [buchi]
+
 
 2.7.0 (2019-09-16)
 ------------------
