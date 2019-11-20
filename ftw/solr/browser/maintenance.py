@@ -51,6 +51,13 @@ def solr_date(date):
     return value
 
 
+def items_repr(items):
+    """Representation of a sequence including max. 3 items."""
+    if len(items) > 3:
+        items = list(items)[:3] + ['...']
+    return '[{}]'.format(', '.join(items))
+
+
 class SolrMaintenanceView(BrowserView):
     """Helper view for indexing content in Solr."""
 
@@ -219,11 +226,12 @@ class SolrMaintenanceView(BrowserView):
         self.log('Solr contains %s items.',  len(solr_uids))
         not_in_catalog = solr_uids - catalog_uids
         if not_in_catalog:
-            self.log(
-                'Items not in Portal Catalog: %s', ', '.join(not_in_catalog))
+            self.log('%s items not in Portal Catalog: %s',
+                     len(not_in_catalog), items_repr(not_in_catalog))
         not_in_solr = catalog_uids - solr_uids
         if not_in_solr:
-            self.log('Items not in Solr: %s', ', '.join(not_in_solr))
+            self.log('%s items not in Solr: %s',
+                     len(not_in_solr), items_repr(not_in_solr))
         if not not_in_catalog and not not_in_solr:
             self.log('Solr and Portal Catalog contain the same items. :-)')
         modified_diff = set(
@@ -232,7 +240,8 @@ class SolrMaintenanceView(BrowserView):
         not_in_sync = modified_diff | roles_diff
         if not_in_sync:
             self.log(
-                'Items not in sync with catalog: %s', ', '.join(not_in_sync))
+                '%s items not in sync with catalog: %s',
+                len(not_in_sync), items_repr(not_in_sync))
         return not_in_catalog, not_in_solr, not_in_sync
 
     def sync(self, commit_interval=100, idxs=None, doom=True):

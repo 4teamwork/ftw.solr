@@ -10,6 +10,9 @@ Changelog
 - Also compare allowedRolesAndUsers when diffing with the catalog.
   [buchi]
 
+- Output max. 3 items in diff view.
+  [buchi]
+
 
 2.7.0 (2019-09-16)
 ------------------
