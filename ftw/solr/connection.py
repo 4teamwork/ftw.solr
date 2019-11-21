@@ -1,4 +1,6 @@
+from ftw.solr.helpers import chunked_file_reader
 from ftw.solr.helpers import group_by_two
+from ftw.solr.helpers import http_chunked_encoder
 from ftw.solr.interfaces import ISolrConnectionConfig
 from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.schema import SolrSchema
@@ -24,10 +26,11 @@ local_data = local()
 @implementer(ISolrConnectionConfig)
 class SolrConnectionConfig(object):
 
-    def __init__(self, host, port, base):
+    def __init__(self, host, port, base, upload_blobs=False):
         self.host = host
         self.port = port
         self.base = base
+        self.upload_blobs = upload_blobs
 
 
 class SolrConnection(object):
@@ -35,11 +38,12 @@ class SolrConnection(object):
     post_headers = {'Content-Type': 'application/json'}
 
     def __init__(self, host='localhost', port=8983, base='/solr',
-                 timeout=None):
+                 timeout=None, upload_blobs=False):
         self.timeout = timeout
         self.host = host
         self.port = port
         self.base = base
+        self.upload_blobs = upload_blobs
         self.conn = HTTPConnection(self.host, self.port, timeout=self.timeout)
         self.update_commands = []
         self.extract_commands = []
@@ -69,6 +73,38 @@ class SolrConnection(object):
         return self.request(
             'POST', path, data, headers, log_error=log_error)
 
+    def post_chunked(self, path, blob, content_type=None, log_error=True):
+        if not content_type:
+            content_type = 'application/octet-stream'
+
+        try:
+            if self.reconnect_before_request:
+                self.reconnect()
+
+            self.conn.putrequest('POST', self.base + path)
+            self.conn.putheader('Transfer-Encoding', 'chunked')
+            self.conn.putheader('Content-Type', content_type)
+            self.conn.endheaders()
+
+            with open(blob.committed(), 'rb') as file_:
+                reader = chunked_file_reader(file_)
+                for chunk in http_chunked_encoder(reader):
+                    self.conn.send(chunk)
+
+            resp = self.conn.getresponse()
+            body = resp.read()
+            status = resp.status
+            self.reconnect_before_request = False
+            return SolrResponse(body, status, log_error=log_error)
+
+        except (socket.error, HTTPException) as exc:
+            if not self.reconnect_before_request:
+                self.reconnect_before_request = True
+                return self.post_chunked(path, blob, content_type=content_type)
+            else:
+                self.reconnect_before_request = False
+                return SolrResponse(exception=exc, log_error=log_error)
+
     def get(self, path, headers={}, log_error=True):
         return self.request('GET', path, headers=headers, log_error=log_error)
 
@@ -79,9 +115,9 @@ class SolrConnection(object):
     def add(self, data):
         self.update_commands.append('"add": ' + json.dumps({'doc': data}))
 
-    def extract(self, blob, field, data):
+    def extract(self, blob, field, data, content_type):
         """Add blob using Solr's Extracting Request Handler."""
-        self.extract_commands.append((blob, field, data))
+        self.extract_commands.append((blob, field, data, content_type))
 
     def delete(self, id_):
         self.update_commands.append(
@@ -116,15 +152,28 @@ class SolrConnection(object):
             def hook(succeeded, extract_commands):
                 if not succeeded:
                     return
-                for blob, field, data in extract_commands:
+                for blob, field, data, content_type in extract_commands:
                     file_ = blob.committed()
                     params = {}
-                    params['stream.file'] = file_
                     params['extractOnly'] = 'true'
-                    resp = self.post(
-                        '/update/extract?%s' % urlencode(params, doseq=True),
-                        headers={'Content-Type': 'application/x-www-form-urlencoded'},  # noqa
-                        log_error=False)
+
+                    if self.upload_blobs:
+                        # Upload blobs to extract handler via POST
+                        resp = self.post_chunked(
+                            '/update/extract?%s' % urlencode(params, doseq=True),
+                            blob,
+                            content_type=content_type,
+                            log_error=False)
+                        extracted_fulltext_key = ''
+                    else:
+                        # Make extract handler retrieve blobs via filesystem
+                        params['stream.file'] = file_
+                        resp = self.post(
+                            '/update/extract?%s' % urlencode(params, doseq=True),
+                            headers={'Content-Type': 'application/x-www-form-urlencoded'},  # noqa
+                            log_error=False)
+                        extracted_fulltext_key = os.path.basename(file_)
+
                     if not resp.is_ok():
                         logger.error(
                             'Extract command for UID=%s with blob %s failed. '
@@ -134,7 +183,7 @@ class SolrConnection(object):
 
                     update_command = {"add": {"doc": data}}
                     update_command["add"]["doc"][field] = {
-                        "set": resp.body.get(os.path.basename(file_)),
+                        "set": resp.body.get(extracted_fulltext_key),
                     }
                     resp = self.post(
                         '/update',
@@ -181,7 +230,8 @@ class SolrConnectionManager(object):
             config = queryUtility(ISolrConnectionConfig)
             if config is not None:
                 conn = SolrConnection(
-                    host=config.host, port=config.port, base=config.base)
+                    host=config.host, port=config.port, base=config.base,
+                    upload_blobs=config.upload_blobs)
             else:
                 conn = None
                 logger.warning('Solr configuration missing.')

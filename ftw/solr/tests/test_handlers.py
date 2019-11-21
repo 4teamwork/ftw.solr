@@ -158,6 +158,11 @@ class TestATBlobFileIndexHandler(unittest.TestCase):
         self.doc = api.content.create(
             type='File', title='My File', id='doc',
             file='File data ...', container=self.portal)
+
+        field = self.doc.getPrimaryField().get(self.doc)
+        field.setFilename('document.docx')
+        field.setContentType('application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+
         if base_hasattr(self.doc, '_setUID'):
             self.doc._setUID('09baa75b67f44383880a6dab8b3200b6')
             self.doc.setModificationDate(DateTime('2017-01-21T17:18:19+00:00'))
@@ -190,6 +195,7 @@ class TestATBlobFileIndexHandler(unittest.TestCase):
             self.doc.getFile().blob,
             'SearchableText',
             {u'UID': u'09baa75b67f44383880a6dab8b3200b6'},
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
 
     def test_add_with_attributes_without_searchabletext_calls_add(self):
@@ -215,6 +221,7 @@ class TestATBlobFileIndexHandler(unittest.TestCase):
             self.doc.getFile().blob,
             'SearchableText',
             {u'UID': u'09baa75b67f44383880a6dab8b3200b6'},
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
 
     def test_add_with_searchabletext_only_calls_extract(self):
@@ -226,6 +233,7 @@ class TestATBlobFileIndexHandler(unittest.TestCase):
             self.doc.getFile().blob,
             'SearchableText',
             {u'UID': u'09baa75b67f44383880a6dab8b3200b6'},
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
 
     def test_add_with_attributes_without_data_does_nothing(self):
@@ -246,7 +254,7 @@ class TestDexterityItemIndexHandler(unittest.TestCase):
         namedfile = NamedBlobFile(
             data='File data ...',
             filename=u'document.docx',
-            contentType='application/vnd.openxmlformats-officedocument. wordprocessingml.document')
+            contentType='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
         self.doc = api.content.create(
             type='File', title='My File', id='doc',
             file=namedfile, container=self.portal)
@@ -283,6 +291,7 @@ class TestDexterityItemIndexHandler(unittest.TestCase):
             self.doc.file._blob,
             'SearchableText',
             {u'UID': u'09baa75b67f44383880a6dab8b3200b6'},
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
 
     def test_add_with_attributes_without_searchabletext_calls_add(self):
@@ -304,6 +313,7 @@ class TestDexterityItemIndexHandler(unittest.TestCase):
             self.doc.file._blob,
             'SearchableText',
             {u'UID': u'09baa75b67f44383880a6dab8b3200b6'},
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
 
     def test_add_with_searchabletext_only_calls_extract(self):
@@ -313,6 +323,7 @@ class TestDexterityItemIndexHandler(unittest.TestCase):
             self.doc.file._blob,
             'SearchableText',
             {u'UID': u'09baa75b67f44383880a6dab8b3200b6'},
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
 
     def test_add_without_attributes_for_item_without_blob_calls_add(self):

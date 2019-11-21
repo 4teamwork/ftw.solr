@@ -58,6 +58,20 @@ buildout. Example::
             <solr:connection host="localhost" port="8983" base="/solr/mycore"/>
        </configure>
 
+By default, ``ftw.solr`` will do full text extraction by passing the blob's
+filesystem path to the Solr Cell extract handler, assuming that Solr runs on
+the same machine and has access to the blob storage.
+
+For setups where this isn't desired, the connection option ``upload_blobs``
+can be set to ``true`` in order to make ``ftw.solr`` upload the blobs directly
+to the extract handler via HTTP POST:
+
+    [instance]
+    zcml-additional =
+        <configure xmlns:solr="http://namespaces.plone.org/solr">
+            <solr:connection host="localhost" port="8983" base="/solr/mycore" upload_blobs="true"/>
+       </configure>
+
 
 Run buildout
 ------------

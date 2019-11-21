@@ -163,8 +163,10 @@ class ATBlobFileIndexHandler(DefaultIndexHandler):
         if extract:
             field = self.context.getPrimaryField()
             blob = field.get(self.context).blob
+            content_type = field.get(self.context).getContentType()
             self.manager.connection.extract(
-                blob, 'SearchableText', {unique_key: data[unique_key]})
+                blob, 'SearchableText', {unique_key: data[unique_key]},
+                content_type)
 
 
 @implementer(ISolrIndexHandler)
@@ -180,12 +182,14 @@ class DexterityItemIndexHandler(DefaultIndexHandler):
             return
 
         blob = None
+        content_type = None
         try:
             info = IPrimaryFieldInfo(self.context, None)
         except TypeError:
             info = None
         if info is not None and INamedBlobFile.providedBy(info.value):
             blob = info.value._blob
+            content_type = info.value.contentType
 
         if attributes is None:
             attributes = self.manager.schema.fields.keys()
@@ -205,4 +209,5 @@ class DexterityItemIndexHandler(DefaultIndexHandler):
 
         if extract:
             self.manager.connection.extract(
-                blob, 'SearchableText', {unique_key: data[unique_key]})
+                blob, 'SearchableText', {unique_key: data[unique_key]},
+                content_type)
