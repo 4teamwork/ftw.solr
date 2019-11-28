@@ -10,6 +10,7 @@
       right: -$line-height-base !important;
       left: auto !important;
       top: ($line-height-base + 3 * $padding-vertical) !important;
+      max-width: 80vw;
 
       &:after, &:before {
         visibility: visible !important;
