@@ -4,7 +4,7 @@ Changelog
 1.13.2 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Add max width for search result overlay on desktop computers. [busykoala]
 
 
 1.13.1 (2019-10-21)
