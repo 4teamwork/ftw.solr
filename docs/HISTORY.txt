@@ -1,8 +1,11 @@
 Changelog
 =========
 
-2.7.1 (unreleased)
+2.8.0 (unreleased)
 ------------------
+
+- Add support for uploading blobs to extract handler.
+  [lgraf]
 
 - Add support for Plone 5.0 and 5.1.
   [buchi]

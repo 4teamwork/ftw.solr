@@ -28,9 +28,16 @@ class ISolrConnectionConfigDirective(Interface):
         required=True,
     )
 
+    upload_blobs = schema.Bool(
+        title=u"Upload Blobs",
+        description=u"Upload blobs to extract handler via HTTP POST instead "
+                    u"of making Solr retrieve them via filesystem.",
+        default=False,
+    )
 
-def solr_connection_config_directive(_context, host, port, base):
+
+def solr_connection_config_directive(_context, host, port, base, upload_blobs):
 
     utility(_context,
             provides=ISolrConnectionConfig,
-            component=SolrConnectionConfig(host, port, base))
+            component=SolrConnectionConfig(host, port, base, upload_blobs))
