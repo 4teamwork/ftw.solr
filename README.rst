@@ -64,7 +64,7 @@ the same machine and has access to the blob storage.
 
 For setups where this isn't desired, the connection option ``upload_blobs``
 can be set to ``true`` in order to make ``ftw.solr`` upload the blobs directly
-to the extract handler via HTTP POST:
+to the extract handler via HTTP POST::
 
     [instance]
     zcml-additional =
