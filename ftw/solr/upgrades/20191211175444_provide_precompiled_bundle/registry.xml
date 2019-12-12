@@ -1,0 +1,18 @@
+<registry>
+    <records prefix="plone.bundles/ftw-solr-resources"
+             interface="Products.CMFPlone.interfaces.IBundleRegistry">
+        <value key="resources" purge="True"></value>
+        <value key="enabled">True</value>
+        <value key="depends">plone-legacy</value>
+        <value key="compile">False</value>
+        <value key="jscompilation">++resources++ftw.solr/solr-compiled.js</value>
+        <value key="csscompilation">++resources++ftw.solr/solr-compiled.css</value>
+        <value key="merge_with">default</value>
+    </records>
+
+    <records prefix="plone.resources/ftwsolr_liveserch" interface="Products.CMFPlone.interfaces.IResourceRegistry" remove="True"/>
+    <records prefix="plone.resources/ftwsolr_facets" interface="Products.CMFPlone.interfaces.IResourceRegistry" remove="True"/>
+    <records prefix="plone.resources/ftwsolr_jquery_history" interface="Products.CMFPlone.interfaces.IResourceRegistry" remove="True"/>
+    <records prefix="plone.resources/ftwsolr_jquery_legazy_highlight" interface="Products.CMFPlone.interfaces.IResourceRegistry" remove="True"/>
+    <records prefix="plone.resources/ftwsolr_search" interface="Products.CMFPlone.interfaces.IResourceRegistry" remove="True"/>
+</registry>

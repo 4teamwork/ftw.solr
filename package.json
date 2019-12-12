@@ -1,0 +1,18 @@
+{
+  "name": "ftw.solr",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:4teamwork/ftw.solr.git",
+  "author": "4teamwork AG <info@4teamwork.ch>",
+  "license": "GPL2",
+  "devDependencies": {
+    "chokidar-cli": "^2.1.0",
+    "requirejs": "^2.3.6"
+  },
+  "scripts": {
+    "build": "r.js -o build.js && r.js -o buildcss.js",
+    "build-css": "r.js -o buildcss.js",
+    "build-js": "r.js -o build.js",
+    "watch": "chokidar \"./ftw/solr/browser/resources/(*.js|*.css)\" -i \"**/*-compiled.(js|css)\" -c \"yarn build\""
+  }
+}

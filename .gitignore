@@ -13,3 +13,6 @@ eggs/
 parts/
 src/
 var/
+node_modules/
+yarn-debug.log
+yarn-error.log

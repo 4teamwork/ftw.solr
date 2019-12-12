@@ -78,11 +78,9 @@
     <browser:resourceDirectory
         name="ftw.solr"
         directory="resources" />
-    
-    <plone:static directory="resources" name="ftw.solr" type="plone"/>
 
-
-    <!-- necessary for plone4 to override the global search.js -->
+    <!-- Necessary for Plone 4 - START -->
+    <!-- Necessary to override the global search.js -->
     <browser:resource
         name="search.js"
         file="resources/search.js"
@@ -95,5 +93,6 @@
     <browser:resource
         name="ftw.solr.suggest.js"
         file="suggest.js" />
+    <!-- Necessary for Plone 4 - END -->
 
 </configure>
