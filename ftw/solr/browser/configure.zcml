@@ -13,6 +13,16 @@
         allowed_attributes="facet_parameters"
         layer="ftw.solr.interfaces.IFtwSolrLayer" />
 
+    <!-- We use this in livesearch and so it must also be available for items as context -->
+    <browser:page
+        for="OFS.interfaces.IItem"
+        name="search-facets"
+        template="facets.pt"
+        class=".facets.SearchFacetsView"
+        permission="zope2.View"
+        allowed_attributes="facet_parameters"
+        layer="ftw.solr.interfaces.IFtwSolrLayer" />
+
     <browser:page
         for="OFS.interfaces.IFolder"
         name="available-facets"
