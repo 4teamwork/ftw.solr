@@ -1,49 +1,12 @@
 <registry>
-
-    <records prefix="plone.resources/ftwsolr_liveserch"
-             interface="Products.CMFPlone.interfaces.IResourceRegistry">
-        <value key="js">++resource++ftw.solr/livesearch.js</value>
-        <value key="deps">jquery</value>
-    </records>
-
-    <records prefix="plone.resources/ftwsolr_facets"
-             interface="Products.CMFPlone.interfaces.IResourceRegistry">
-        <value key="js">++resource++ftw.solr/facets.js</value>
-        <value key="deps">jquery</value>
-    </records>
-
-    <records prefix="plone.resources/ftwsolr_jquery_history"
-             interface="Products.CMFPlone.interfaces.IResourceRegistry">
-        <value key="js">++resource++ftw.solr/jquery.history.js</value>
-        <value key="deps">jquery</value>
-    </records>
-
-    <records prefix="plone.resources/ftwsolr_jquery_legazy_highlight"
-             interface="Products.CMFPlone.interfaces.IResourceRegistry">
-        <value key="js">++resource++ftw.solr/jquery.highlightsearchterms.js</value>
-        <value key="deps">jquery</value>
-    </records>
-
-
-    <records prefix="plone.resources/ftwsolr_search"
-             interface="Products.CMFPlone.interfaces.IResourceRegistry">
-        <value key="js">++resource++ftw.solr/search.js</value>
-        <value key="deps">jquery</value>
-    </records>
-
     <records prefix="plone.bundles/ftw-solr-resources"
              interface="Products.CMFPlone.interfaces.IBundleRegistry">
-        <value key="resources">
-            <element>ftwsolr_liveserch</element>
-            <element>ftwsolr_facets</element>
-            <element>ftwsolr_jquery_legazy_highlight</element>
-            <element>ftwsolr_jquery_history</element>
-            <element>ftwsolr_search</element>
-        </value>
+        <value key="resources" purge="True"></value>
         <value key="enabled">True</value>
         <value key="depends">plone-legacy</value>
         <value key="compile">False</value>
-        <value key="jscompilation">++plone++ftwsolr/ftw-solr-compiled.js</value>
+        <value key="jscompilation">++resource++ftw.solr/solr-compiled.js</value>
+        <value key="csscompilation">++resource++ftw.solr/solr-compiled.css</value>
         <value key="merge_with">default</value>
     </records>
 

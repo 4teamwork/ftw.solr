@@ -6,6 +6,7 @@ Changelog
 
 - Add max width for search result overlay on desktop computers. [busykoala]
 - Fix livesearch on contentish [Nachtalb]
+- Provide precompiled bundle [Nachtalb]
 
 
 1.13.1 (2019-10-21)
