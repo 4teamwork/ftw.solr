@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.13.2 (unreleased)
+1.13.2 (2019-12-17)
 -------------------
 
 - Add max width for search result overlay on desktop computers. [busykoala]
