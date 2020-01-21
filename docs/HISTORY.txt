@@ -4,7 +4,7 @@ Changelog
 1.13.3 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fix broken upgrade step introduced in 1.13.2. [mathias.leimgruber]
 
 
 1.13.2 (2019-12-17)

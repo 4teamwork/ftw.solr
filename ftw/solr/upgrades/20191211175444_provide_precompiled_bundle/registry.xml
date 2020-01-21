@@ -5,8 +5,8 @@
         <value key="enabled">True</value>
         <value key="depends">plone-legacy</value>
         <value key="compile">False</value>
-        <value key="jscompilation">++resources++ftw.solr/solr-compiled.js</value>
-        <value key="csscompilation">++resources++ftw.solr/solr-compiled.css</value>
+        <value key="jscompilation">++resource++ftw.solr/solr-compiled.js</value>
+        <value key="csscompilation">++resource++ftw.solr/solr-compiled.css</value>
         <value key="merge_with">default</value>
     </records>
 
