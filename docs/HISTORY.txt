@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.13.3 (unreleased)
+1.13.3 (2020-01-21)
 -------------------
 
 - Fix broken upgrade step introduced in 1.13.2. [mathias.leimgruber]
