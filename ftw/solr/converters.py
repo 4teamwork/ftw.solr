@@ -13,12 +13,15 @@ def to_iso8601(value, multivalued=False):
         if value.tzinfo is not None:
             # Convert to timezone naive in UTC
             value = (value - value.utcoffset()).replace(tzinfo=None)
-        value = u'%s.%03dZ' % (
-            value.strftime('%Y-%m-%dT%H:%M:%S'),
-            value.microsecond / 1000
+
+        value = u'%04d-%02d-%02dT%02d:%02d:%02d.%03dZ' % (
+            value.year, value.month, value.day, value.hour, value.minute,
+            value.second, value.microsecond / 1000
         )
     elif isinstance(value, date):
-        value = value.strftime('%Y-%m-%dT%H:%M:%S.000Z').decode()
+        value = u'%04d-%02d-%02dT%02d:%02d:%02d.%03dZ' % (
+            value.year, value.month, value.day, 0, 0, 0, 0
+        )
     else:
         value = None
     return value
