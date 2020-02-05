@@ -32,10 +32,40 @@ class TestDateTimeConverter(unittest.TestCase):
         self.assertIsInstance(dt, unicode)
         self.assertEqual(dt, u'2017-10-21T14:28:16.936Z')
 
+    def test_datetime_before_1900_converts_to_iso8601(self):
+        dt = to_iso8601(datetime(1871, 3, 30, 1, 2))
+        self.assertIsInstance(dt, unicode)
+        self.assertEqual(dt, u'1871-03-30T01:02:00.000Z')
+
+    def test_datetime_before_1000_converts_to_iso8601(self):
+        dt = to_iso8601(datetime(971, 3, 30, 17))
+        self.assertIsInstance(dt, unicode)
+        self.assertEqual(dt, u'0971-03-30T17:00:00.000Z')
+
+    def test_datetime_before_100_converts_to_iso8601(self):
+        dt = to_iso8601(datetime(71, 3, 30))
+        self.assertIsInstance(dt, unicode)
+        self.assertEqual(dt, u'0071-03-30T00:00:00.000Z')
+
     def test_python_date_converts_to_iso8601(self):
         dt = to_iso8601(date(2017, 10, 21))
         self.assertIsInstance(dt, unicode)
         self.assertEqual(dt, u'2017-10-21T00:00:00.000Z')
+
+    def test_date_before_1900_converts_to_iso8601(self):
+        dt = to_iso8601(date(1871, 3, 30))
+        self.assertIsInstance(dt, unicode)
+        self.assertEqual(dt, u'1871-03-30T00:00:00.000Z')
+
+    def test_date_before_1000_converts_to_iso8601(self):
+        dt = to_iso8601(date(971, 3, 30))
+        self.assertIsInstance(dt, unicode)
+        self.assertEqual(dt, u'0971-03-30T00:00:00.000Z')
+
+    def test_date_before_100_converts_to_iso8601(self):
+        dt = to_iso8601(date(71, 3, 30))
+        self.assertIsInstance(dt, unicode)
+        self.assertEqual(dt, u'0071-03-30T00:00:00.000Z')
 
     def test_invalid_date_converts_to_none(self):
         self.assertEqual(to_iso8601('30'), None)
