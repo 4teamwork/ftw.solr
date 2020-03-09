@@ -191,7 +191,7 @@ class DexterityItemIndexHandler(DefaultIndexHandler):
             blob = info.value._blob
             content_type = info.value.contentType
 
-        if attributes is None:
+        if not attributes:
             attributes = self.manager.schema.fields.keys()
 
         extract = False
