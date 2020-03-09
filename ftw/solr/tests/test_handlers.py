@@ -294,6 +294,23 @@ class TestDexterityItemIndexHandler(unittest.TestCase):
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
 
+    def test_add_with_empty_list_attributes_calls_add_and_extract(self):
+        self.handler.add([])
+        self.manager.connection.add.assert_called_once_with({
+            u'UID': u'09baa75b67f44383880a6dab8b3200b6',
+            u'Title': {u'set': u'My File'},
+            u'modified': {u'set': u'2017-01-21T17:18:19.000Z'},
+            u'allowedRolesAndUsers': {u'set': [u'Anonymous']},
+            u'path': {u'set': u'/plone/doc'},
+            u'path_depth': {u'set': 2},
+        })
+        self.manager.connection.extract.assert_called_once_with(
+            self.doc.file._blob,
+            'SearchableText',
+            {u'UID': u'09baa75b67f44383880a6dab8b3200b6'},
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        )
+
     def test_add_with_attributes_without_searchabletext_calls_add(self):
         self.handler.add(['Title', 'modified'])
         self.manager.connection.add.assert_called_once_with({

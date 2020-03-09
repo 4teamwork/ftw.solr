@@ -4,7 +4,7 @@ Changelog
 2.8.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix blob extraction for DX items. [mbaechtold]
 
 
 2.8.1 (2020-02-05)
