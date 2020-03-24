@@ -15,6 +15,7 @@ from time import time
 from zope.component import getMultiAdapter
 from zope.component import queryUtility
 from zope.component.hooks import getSite
+
 import logging
 import transaction
 
@@ -101,7 +102,7 @@ class SolrMaintenanceView(BrowserView):
             zodb_conn.cacheGC()
             self.log(
                 'Intermediate commit (%d items processed, last batch in %s)',
-                processed, lap.next())
+                processed, next(lap))
 
         cpi = checkpoint_iterator(commit, interval=commit_interval)
         self.log('Reindexing Solr...')
@@ -113,13 +114,13 @@ class SolrMaintenanceView(BrowserView):
             handler = getMultiAdapter((obj, self.manager), ISolrIndexHandler)
             handler.add(idxs)
             processed += 1
-            cpi.next()
+            next(cpi)
 
         commit()
         self.log('Solr index rebuilt.')
         self.log(
             'Processed %d items in %s (%s cpu time).',
-            processed, real.next(), cpu.next())
+            processed, next(real), next(cpu))
 
     def reindex_cataloged(self, commit_interval=100, idxs=None, start=0,
                           end=-1, query=None, doom=True):
@@ -162,7 +163,7 @@ class SolrMaintenanceView(BrowserView):
             zodb_conn.cacheGC()
             self.log(
                 'Intermediate commit (%d items processed, last batch in %s)',
-                processed, lap.next())
+                processed, next(lap))
 
         cpi = checkpoint_iterator(commit, interval=commit_interval)
         self.log('Reindexing Solr...')
@@ -177,13 +178,13 @@ class SolrMaintenanceView(BrowserView):
             handler = getMultiAdapter((obj, self.manager), ISolrIndexHandler)
             handler.add(idxs)
             processed += 1
-            cpi.next()
+            next(cpi)
 
         commit()
         self.log('Solr index rebuilt.')
         self.log(
             'Processed %d items in %s (%s cpu time).',
-            processed, real.next(), cpu.next())
+            processed, next(real), next(cpu))
 
     def diff(self):
         """Diff with portal catalog"""
@@ -252,7 +253,7 @@ class SolrMaintenanceView(BrowserView):
             zodb_conn.cacheGC()
             self.log(
                 'Intermediate commit (%d items processed, last batch in %s)',
-                processed, lap.next())
+                processed, next(lap))
 
         cpi = checkpoint_iterator(commit, interval=commit_interval)
         self.log('Syncing Solr...')
@@ -263,7 +264,7 @@ class SolrMaintenanceView(BrowserView):
             handler = getMultiAdapter((obj, self.manager), ISolrIndexHandler)
             handler.add(idxs)
             processed += 1
-            cpi.next()
+            next(cpi)
 
         commit()
 
@@ -276,7 +277,7 @@ class SolrMaintenanceView(BrowserView):
         self.log('Solr index synced.')
         self.log(
             'Processed %d items in %s (%s cpu time).',
-            processed, real.next(), cpu.next())
+            processed, next(real), next(cpu))
 
     def log(self, msg, *args):
         logger.info(msg, *args)

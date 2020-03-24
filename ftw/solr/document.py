@@ -1,7 +1,10 @@
 from ftw.solr.interfaces import ISolrDocument
+from six.moves import map
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.interface import implementer
+
+import six
 
 
 @implementer(ISolrDocument)
@@ -62,10 +65,10 @@ class SolrDocument(object):
 
 
 def unicode2bytes(data):
-    if isinstance(data, unicode):
+    if isinstance(data, six.text_type):
         return data.encode('utf8')
     elif isinstance(data, dict):
-        return dict(map(unicode2bytes, data.iteritems()))
+        return dict(map(unicode2bytes, six.iteritems(data)))
     elif isinstance(data, (list, tuple)):
         return list(map(unicode2bytes, data))
     else:

@@ -3,17 +3,18 @@ from ftw.solr.connection import SolrConnection
 from ftw.solr.connection import SolrConnectionConfig
 from ftw.solr.connection import SolrConnectionManager
 from ftw.solr.connection import SolrResponse
-from ftw.solr.tests.utils import get_data
-from ftw.solr.tests.utils import MockHTTPResponse
-from ftw.solr.tests.utils import MockBlob
 from ftw.solr.interfaces import ISolrConnectionConfig
-from mock import patch
+from ftw.solr.tests.utils import get_data
+from ftw.solr.tests.utils import MockBlob
+from ftw.solr.tests.utils import MockHTTPResponse
 from mock import MagicMock
-from zope.component import provideUtility
+from mock import patch
 from plone.testing import zca
-import unittest
-import transaction
+from zope.component import provideUtility
+
 import socket
+import transaction
+import unittest
 
 
 class TestConnection(unittest.TestCase):

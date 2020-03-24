@@ -9,6 +9,7 @@ from Products.CMFCore.interfaces._content import ICatalogAware
 from Products.CMFCore.utils import getToolByName
 from zope.component import queryMultiAdapter
 
+
 if not PLONE51:
     # Make sure collective.indexing patches are applied before our patches
     import collective.indexing.monkey  # noqa

@@ -20,6 +20,7 @@ from plone.app.testing import TEST_USER_NAME
 from plone.uuid.interfaces import IUUID
 from zope.component import getUtility
 from zope.interface import alsoProvides
+
 import unittest
 
 

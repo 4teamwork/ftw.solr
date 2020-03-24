@@ -4,13 +4,14 @@ from ftw.solr.helpers import http_chunked_encoder
 from ftw.solr.interfaces import ISolrConnectionConfig
 from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.schema import SolrSchema
-from httplib import HTTPConnection
-from httplib import HTTPException
 from logging import getLogger
+from six.moves.http_client import HTTPConnection
+from six.moves.http_client import HTTPException
+from six.moves.urllib.parse import urlencode
 from threading import local
-from urllib import urlencode
 from zope.component import queryUtility
 from zope.interface import implementer
+
 import json
 import os.path
 import socket
