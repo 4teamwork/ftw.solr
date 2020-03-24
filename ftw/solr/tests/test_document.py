@@ -4,6 +4,7 @@ from ftw.solr.testing import FTW_SOLR_INTEGRATION_TESTING
 from ftw.solr.tests.utils import get_data
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
+
 import json
 import unittest
 

@@ -22,6 +22,7 @@ from plone.namedfile.file import NamedBlobFile
 from plone.uuid.interfaces import IMutableUUID
 from Products.CMFPlone.utils import base_hasattr
 from Products.CMFPlone.utils import getFSVersionTuple
+
 import unittest
 
 

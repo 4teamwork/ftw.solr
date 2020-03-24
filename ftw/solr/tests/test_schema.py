@@ -3,6 +3,7 @@ from ftw.solr.schema import SolrSchema
 from ftw.solr.tests.utils import get_data
 from mock import MagicMock
 from mock import PropertyMock
+
 import unittest
 
 
@@ -21,7 +22,7 @@ class TestSchema(unittest.TestCase):
         self.assertEqual(schema.version, 1.6)
         self.assertEqual(schema.unique_key, 'UID')
         self.assertItemsEqual(
-            schema.fields.keys(),
+            list(schema.fields),
             [
                 u'Title',
                 u'modified',
@@ -33,10 +34,10 @@ class TestSchema(unittest.TestCase):
                 u'path',
                 u'path_depth',
             ])
-        self.assertEqual(schema.copy_fields.keys(), [])
-        self.assertEqual(schema.dynamic_fields.keys(), [])
+        self.assertEqual(list(schema.copy_fields), [])
+        self.assertEqual(list(schema.dynamic_fields), [])
         self.assertItemsEqual(
-            schema.field_types.keys(),
+            list(schema.field_types),
             [
                 u'boolean',
                 u'string',

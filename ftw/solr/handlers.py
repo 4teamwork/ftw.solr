@@ -1,10 +1,10 @@
-from Products.CMFCore.utils import getToolByName
 from ftw.solr.converters import CONVERTERS
 from ftw.solr.interfaces import ISolrIndexHandler
 from logging import getLogger
 from plone.indexer.interfaces import IIndexableObject
 from plone.namedfile.interfaces import INamedBlobFile
 from plone.rfc822.interfaces import IPrimaryFieldInfo
+from Products.CMFCore.utils import getToolByName
 from zope.component import queryMultiAdapter
 from zope.interface import implementer
 

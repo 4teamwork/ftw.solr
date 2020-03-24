@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from zope.interface import Interface
+from ftw.solr.connection import SolrConnectionConfig
+from ftw.solr.interfaces import ISolrConnectionConfig
 from zope import schema
 from zope.component.zcml import utility
-from ftw.solr.interfaces import ISolrConnectionConfig
-from ftw.solr.connection import SolrConnectionConfig
+from zope.interface import Interface
 
 
 class ISolrConnectionConfigDirective(Interface):
