@@ -15,6 +15,8 @@ from plone.registry.interfaces import IRegistry
 from plone.testing import zca
 from zope.component import provideAdapter
 from zope.component import provideUtility
+
+import six
 import unittest
 
 
@@ -114,8 +116,8 @@ class TestMakeQuery(unittest.TestCase):
             u'AND (Title:eight) AND (Title:nine) AND (Title:ten))')
 
     def test_query_string_is_unicode(self):
-        self.assertTrue(isinstance(make_query('über'), unicode))
-        self.assertTrue(isinstance(make_query(u'über'), unicode))
+        self.assertTrue(isinstance(make_query('über'), six.text_type))
+        self.assertTrue(isinstance(make_query(u'über'), six.text_type))
 
 
 class TestMakeFilters(unittest.TestCase):

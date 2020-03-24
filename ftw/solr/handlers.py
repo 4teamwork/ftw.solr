@@ -1,10 +1,10 @@
-from Products.CMFCore.utils import getToolByName
 from ftw.solr.converters import CONVERTERS
 from ftw.solr.interfaces import ISolrIndexHandler
 from logging import getLogger
 from plone.indexer.interfaces import IIndexableObject
 from plone.namedfile.interfaces import INamedBlobFile
 from plone.rfc822.interfaces import IPrimaryFieldInfo
+from Products.CMFCore.utils import getToolByName
 from zope.component import queryMultiAdapter
 from zope.interface import implementer
 
@@ -146,7 +146,7 @@ class ATBlobFileIndexHandler(DefaultIndexHandler):
             return
 
         if attributes is None:
-            attributes = self.manager.schema.fields.keys()
+            attributes = list(self.manager.schema.fields)
 
         extract = False
         if 'SearchableText' in attributes:
@@ -196,7 +196,7 @@ class DexterityItemIndexHandler(DefaultIndexHandler):
             content_type = info.value.contentType
 
         if not attributes:
-            attributes = self.manager.schema.fields.keys()
+            attributes = list(self.manager.schema.fields)
 
         extract = False
         if 'SearchableText' in attributes and blob is not None:

@@ -2,6 +2,7 @@
 from ftw.solr.helpers import chunked_file_reader
 from ftw.solr.helpers import http_chunked_encoder
 from StringIO import StringIO
+
 import unittest
 
 

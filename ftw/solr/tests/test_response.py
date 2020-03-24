@@ -1,5 +1,6 @@
 from ftw.solr.connection import SolrResponse
 from ftw.solr.tests.utils import get_data
+
 import socket
 import unittest
 

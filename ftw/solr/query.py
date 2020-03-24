@@ -3,6 +3,7 @@ from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrSettings
 from logging import getLogger
 from plone.registry.interfaces import IRegistry
+from six.moves import range
 from zope.component import getUtility
 from ZPublisher.HTTPRequest import record
 
