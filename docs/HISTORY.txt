@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.8.2 (unreleased)
+2.8.2 (2020-03-27)
 ------------------
 
 - Fix to_iso8601 prevent rounding errors with DateTime milliseconds above 999500. [deiferni]
