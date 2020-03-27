@@ -4,6 +4,7 @@ Changelog
 2.8.2 (unreleased)
 ------------------
 
+- Fix to_iso8601 prevent rounding errors with DateTime milliseconds above 999500. [deiferni]
 - Fix blob extraction for DX items. [mbaechtold]
 
 
