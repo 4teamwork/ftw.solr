@@ -72,24 +72,28 @@ class TestDateTimeConverter(unittest.TestCase):
         self.assertEqual(to_iso8601(30), None)
 
     def test_zope_datetime_high_millis_does_not_cause_rounding_error_low(self):
-        dt = to_iso8601(DateTime('2017-10-21 16:28:16.999501'))
+        dt = to_iso8601(DateTime('2017-10-21 16:28:59.999501'))
         self.assertIsInstance(dt, unicode)
-        self.assertEqual(dt, u'2017-10-21T16:28:16.999Z')
+        self.assertNotEqual(dt, u'2017-10-21T16:28:60.000Z')
+        self.assertEqual(dt, u'2017-10-21T16:28:59.999Z')
 
     def test_zope_datetime_high_millis_does_not_cause_rounding_error_high(self):
-        dt = to_iso8601(DateTime('2017-10-21 16:28:16.999999'))
+        dt = to_iso8601(DateTime('2017-10-21 16:28:59.999999'))
         self.assertIsInstance(dt, unicode)
-        self.assertEqual(dt, u'2017-10-21T16:28:16.999Z')
+        self.assertNotEqual(dt, u'2017-10-21T16:28:60.000Z')
+        self.assertEqual(dt, u'2017-10-21T16:28:59.999Z')
 
     def test_datetime_high_millis_does_not_cause_rounding_error_low(self):
-        dt = to_iso8601(datetime(2017, 10, 21, 16, 28, 16, 999501))
+        dt = to_iso8601(datetime(2017, 10, 21, 16, 28, 59, 999501))
         self.assertIsInstance(dt, unicode)
-        self.assertEqual(dt, u'2017-10-21T16:28:16.999Z')
+        self.assertNotEqual(dt, u'2017-10-21T16:28:60.000Z')
+        self.assertEqual(dt, u'2017-10-21T16:28:59.999Z')
 
     def test_datetime_high_millis_does_not_cause_rounding_error_high(self):
-        dt = to_iso8601(datetime(2017, 10, 21, 16, 28, 16, 999999))
+        dt = to_iso8601(datetime(2017, 10, 21, 16, 28, 59, 999999))
         self.assertIsInstance(dt, unicode)
-        self.assertEqual(dt, u'2017-10-21T16:28:16.999Z')
+        self.assertNotEqual(dt, u'2017-10-21T16:28:60.000Z')
+        self.assertEqual(dt, u'2017-10-21T16:28:59.999Z')
 
 
 class TestStringConverter(unittest.TestCase):
