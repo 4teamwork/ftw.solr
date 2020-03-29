@@ -16,6 +16,7 @@ from plone.testing import zca
 from zope.component import provideUtility
 from zope.component import queryUtility
 
+import json
 import socket
 import transaction
 import unittest
@@ -24,6 +25,11 @@ import unittest
 class TestConnection(unittest.TestCase):
 
     layer = FTW_SOLR_INTEGRATION_TESTING
+
+    def assert_equal_commands(self, first, second):
+        return self.assertEqual(
+            json.loads('{' + ','.join(first) + '}'),
+            json.loads('{' + ','.join(second) + '}'))
 
     def test_connection_initialization(self):
         conn = SolrConnection(host='mysolrserver', base='/solr/mycore')
@@ -88,7 +94,7 @@ class TestConnection(unittest.TestCase):
         conn.flush = MagicMock(name='flush')
         conn.commit()
         conn.flush.assert_called_once_with(after_commit=True)
-        self.assertEqual(
+        self.assert_equal_commands(
             conn.update_commands,
             ['"commit": {"softCommit": true, "waitSearcher": true}'])
 
