@@ -8,6 +8,7 @@ from zope.component import getUtility
 from ZPublisher.HTTPRequest import record
 
 import re
+import six
 
 logger = getLogger('ftw.solr.query')
 
@@ -58,7 +59,7 @@ def split_simple_search(phrase):
 
 def make_query(phrase):
     phrase = phrase.strip()
-    if isinstance(phrase, str):
+    if isinstance(phrase, six.binary_type):
         phrase = phrase.decode('utf8')
     registry = getUtility(IRegistry)
     settings = registry.forInterface(ISolrSettings)

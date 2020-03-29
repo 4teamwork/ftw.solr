@@ -11,7 +11,7 @@ import six
 class SolrDocument(object):
 
     def __init__(self, data, fields=None):
-        self.data = unicode2bytes(data)
+        self.data = text2str(data)
         self.fields = fields or list()
 
     def __getitem__(self, key):
@@ -70,12 +70,12 @@ class SolrDocument(object):
             return None
 
 
-def unicode2bytes(data):
+def text2str(data):
     if isinstance(data, six.text_type):
-        return data.encode('utf8')
+        return six.ensure_str(data)
     elif isinstance(data, dict):
-        return dict(map(unicode2bytes, six.iteritems(data)))
+        return dict(map(text2str, six.iteritems(data)))
     elif isinstance(data, (list, tuple)):
-        return list(map(unicode2bytes, data))
+        return list(map(text2str, data))
     else:
         return data
