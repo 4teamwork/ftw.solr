@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from ftw.solr.helpers import chunked_file_reader
 from ftw.solr.helpers import http_chunked_encoder
-from StringIO import StringIO
+from six import StringIO
 
 import unittest
 
