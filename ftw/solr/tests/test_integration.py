@@ -100,7 +100,7 @@ class TestIntegration(unittest.TestCase):
         data['SearchableText'] = normalize_whitespaces(data['SearchableText'])
         self.assertEqual(
             {
-                u'UID': IUUID(self.subfolder).decode('utf8'),
+                u'UID': IUUID(self.subfolder),
                 u'Title': u'My Subfolder',
                 u'modified': u'2018-08-31T11:45:00.000Z',
                 u'SearchableText': u'subfolder My Subfolder',

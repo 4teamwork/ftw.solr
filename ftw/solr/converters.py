@@ -1,7 +1,9 @@
 from datetime import date
 from datetime import datetime
 from DateTime import DateTime
+
 import math
+import six
 
 
 def to_iso8601(value, multivalued=False):
@@ -36,7 +38,7 @@ def to_unicode(value, multivalued=False):
     if not isinstance(value, list):
         value = [value]
     for i, v in enumerate(value):
-        if isinstance(v, str):
+        if isinstance(v, six.binary_type):
             v = v.decode('utf8')
         value[i] = v
     if not multivalued:
