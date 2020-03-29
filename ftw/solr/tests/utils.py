@@ -4,7 +4,8 @@ import os.path
 def get_data(filename):
     """Return content from a file in the test data folder """
     filename = os.path.join(os.path.dirname(__file__), 'data', filename)
-    return open(filename, 'r').read()
+    with open(filename, 'r') as data_file:
+        return data_file.read()
 
 
 def normalize_whitespaces(text):
