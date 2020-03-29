@@ -24,7 +24,7 @@ tests_require = [
 
 setup(
     name='ftw.solr',
-    version='2.10.1.dev0',
+    version='2.11.0.dev0',
     description="Solr integration for Plone",
     long_description=long_description,
     # Get more from https://pypi.python.org/pypi?%3Aaction=list_classifiers
@@ -34,8 +34,10 @@ setup(
         "Framework :: Plone :: 4.3",
         "Framework :: Plone :: 5.0",
         "Framework :: Plone :: 5.1",
+        "Framework :: Plone :: 5.2",
         "Programming Language :: Python",
         "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.7",
         "Operating System :: OS Independent",
         "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
     ],
@@ -55,6 +57,7 @@ setup(
         'plone.app.layout',
         'plone.namedfile[blobs]',
         'ftw.upgrade',
+        'six >= 1.12.0',
     ],
     extras_require=dict(
         test=tests_require,

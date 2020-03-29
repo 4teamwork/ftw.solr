@@ -1,10 +1,11 @@
 Changelog
 =========
 
-2.10.1 (unreleased)
+2.11.0 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Add support for Plone 5.2 and Python 3.
+  [buchi]
 
 
 2.10.0 (2021-09-21)
