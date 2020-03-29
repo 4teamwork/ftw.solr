@@ -25,9 +25,13 @@
   <adapter for="*
                 ftw.solr.interfaces.ISolrConnectionManager"
            factory="ftw.solr.handlers.DefaultIndexHandler" />
-  <adapter for="plone.app.blob.interfaces.IATBlobFile
-                ftw.solr.interfaces.ISolrConnectionManager"
-           factory="ftw.solr.handlers.ATBlobFileIndexHandler" />
+
+  <configure zcml:condition="installed plone.app.blob"> 
+    <adapter for="plone.app.blob.interfaces.IATBlobFile
+                  ftw.solr.interfaces.ISolrConnectionManager"
+             factory="ftw.solr.handlers.ATBlobFileIndexHandler" />
+  </configure>
+
   <adapter for="plone.dexterity.interfaces.IDexterityItem
                 ftw.solr.interfaces.ISolrConnectionManager"
            factory="ftw.solr.handlers.DexterityItemIndexHandler" />
