@@ -9,7 +9,6 @@ from ftw.solr.testing import FTW_SOLR_INTEGRATION_TESTING
 from ftw.solr.tests.utils import get_data
 from ftw.solr.tests.utils import normalize_whitespaces
 from ftw.testing import freeze
-from mock import call
 from mock import MagicMock
 from mock import PropertyMock
 from plone import api
@@ -22,6 +21,7 @@ from Products.CMFPlone.utils import getFSVersionTuple
 from zope.component import getUtility
 from zope.interface import alsoProvides
 
+import six
 import unittest
 
 
@@ -101,6 +101,19 @@ class TestIntegration(unittest.TestCase):
         queue_processor = getUtility(ISolrIndexQueueProcessor, name='ftw.solr')
         queue_processor._manager = None
 
+    def assert_add_call_with_allowed_roles_and_users(self, uid, expected):
+        # Order of queue processing is not consistent
+        # Therefore we make order independent assertions
+        add_calls = {
+            call.args[0][u'UID']: call.args for call
+            in self.connection.add.call_args_list
+        }
+        six.assertCountEqual(
+            self,
+            add_calls[uid][0][u'allowedRolesAndUsers'][u'set'],
+            expected[u'set'],
+        )
+
     def test_reindex_object_causes_full_reindex_in_solr(self):
         with freeze(datetime(2018, 8, 31, 13, 45)):
             self.subfolder.reindexObject()
@@ -154,17 +167,11 @@ class TestIntegration(unittest.TestCase):
         self.folder.reindexObjectSecurity()
         getQueue().process()
 
-        expected_calls = [
-            call({
-                'allowedRolesAndUsers': {'set': [u'Reader']},
-                u'UID': IUUID(self.folder)}),
-            call({
-                'allowedRolesAndUsers': {'set': [u'Other', u'Reader']},
-                u'UID': IUUID(self.subfolder)})
-        ]
-        self.assertEqual(2, len(self.connection.add.mock_calls))
-        # XXX: Why isn't call order stable here?
-        self.connection.add.assert_has_calls(expected_calls, any_order=True)
+        self.assertEqual(self.connection.add.call_count, 2)
+        self.assert_add_call_with_allowed_roles_and_users(
+            IUUID(self.folder), {u'set': [u'Reader']})
+        self.assert_add_call_with_allowed_roles_and_users(
+            IUUID(self.subfolder), {u'set': [u'Reader', u'Other']})
 
     def test_system_roles_dont_mistakenly_terminate_recursion(self):
         """This test makes sure that the special shortcut treatment of the
@@ -201,21 +208,19 @@ class TestIntegration(unittest.TestCase):
         self.subfolder2_without_aq.reindexObjectSecurity()
         getQueue().process()
 
-        expected_calls = [
-            # folder2 only has the Authenticated role indexed (but not Reader)
-            # because of the shortcut in the allowedRolesAndUsers indexer
-            call({
-                'allowedRolesAndUsers': {'set': [u'Authenticated']},
-                u'UID': IUUID(self.folder2)}),
-            # subfolder2_without_aq has TEST_USER_ID in its
-            # allowedRolesAndUsers because he gets View via the inherited
-            # Reader local role
-            call({
-                'allowedRolesAndUsers': {'set': [u'user:test_user_1_', u'Reader']},
-                u'UID': IUUID(self.subfolder2_without_aq)})
-        ]
-        self.assertEqual(2, len(self.connection.add.mock_calls))
-        self.connection.add.assert_has_calls(expected_calls, any_order=True)
+        self.assertEqual(self.connection.add.call_count, 2)
+        # folder2 only has the Authenticated role indexed (but not Reader)
+        # because of the shortcut in the allowedRolesAndUsers indexer
+        self.assert_add_call_with_allowed_roles_and_users(
+            IUUID(self.folder2), {u'set': [u'Authenticated']})
+        # subfolder2_without_aq has TEST_USER_ID in its
+        # allowedRolesAndUsers because he gets View via the inherited
+        # Reader local role
+        self.assert_add_call_with_allowed_roles_and_users(
+            IUUID(self.subfolder2_without_aq),
+            {u'set': [u'user:test_user_1_', u'Reader']},
+        )
+
         self.connection.add.reset_mock()
 
         # Now remove the Reader local role for TEST_USER_ID
@@ -224,18 +229,13 @@ class TestIntegration(unittest.TestCase):
         self.folder2.reindexObjectSecurity()
         getQueue().process()
 
-        expected_calls = [
-            call({
-                'allowedRolesAndUsers': {'set': [u'Authenticated']},
-                u'UID': IUUID(self.folder2)}),
-            # TEST_USER_ID should be gone from allowedRolesAndUsers, because
-            # he doesn't inherit the Reader local role anymore
-            call({
-                'allowedRolesAndUsers': {'set': [u'Reader']},
-                u'UID': IUUID(self.subfolder2_without_aq)})
-        ]
-        self.assertEqual(2, len(self.connection.add.mock_calls))
-        self.connection.add.assert_has_calls(expected_calls, any_order=True)
+        self.assertEqual(self.connection.add.call_count, 2)
+        self.assert_add_call_with_allowed_roles_and_users(
+            IUUID(self.folder2), {u'set': [u'Authenticated']})
+        # TEST_USER_ID should be gone from allowedRolesAndUsers, because
+        # he doesn't inherit the Reader local role anymore
+        self.assert_add_call_with_allowed_roles_and_users(
+            IUUID(self.subfolder2_without_aq), {u'set': [u'Reader']})
 
     def test_reindex_object_security_honors_skip_self(self):
         self.subfolder.manage_permission(
