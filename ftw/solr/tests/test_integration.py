@@ -18,6 +18,7 @@ from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.uuid.interfaces import IUUID
+from Products.CMFPlone.utils import getFSVersionTuple
 from zope.component import getUtility
 from zope.interface import alsoProvides
 
@@ -28,6 +29,11 @@ if PLONE51:
     from Products.CMFCore.indexing import getQueue
 else:
     from collective.indexing.queue import getQueue
+
+
+ALLOWED_ROLES_AND_USERS_PERMISSION = 'View'
+if getFSVersionTuple() > (5, 2):
+    ALLOWED_ROLES_AND_USERS_PERMISSION = 'Access contents information'
 
 
 class TestIntegration(unittest.TestCase):
@@ -46,22 +52,26 @@ class TestIntegration(unittest.TestCase):
         self.folder = api.content.create(
             type='Folder', title='My Folder',
             id='folder', container=self.portal)
-        self.folder.manage_permission('View', roles=['Other'], acquire=False)
+        self.folder.manage_permission(
+            ALLOWED_ROLES_AND_USERS_PERMISSION, roles=['Other'], acquire=False)
 
         self.subfolder = api.content.create(
             type='Folder', title='My Subfolder',
             id='subfolder', container=self.folder)
-        self.subfolder.manage_permission('View', roles=['Other'], acquire=True)
+        self.subfolder.manage_permission(
+            ALLOWED_ROLES_AND_USERS_PERMISSION, roles=['Other'], acquire=True)
 
         self.folder2 = api.content.create(
             type='Folder', title='My Folder 2',
             id='folder2', container=self.portal)
-        self.folder2.manage_permission('View', roles=['Other'], acquire=False)
+        self.folder2.manage_permission(
+            ALLOWED_ROLES_AND_USERS_PERMISSION, roles=['Other'], acquire=False)
 
         self.subfolder2_without_aq = api.content.create(
             type='Folder', title='My Subfolder without acquired permission',
             id='subfolder2_without_aq', container=self.folder2)
-        self.subfolder2_without_aq.manage_permission('View', roles=['Other'], acquire=False)
+        self.subfolder2_without_aq.manage_permission(
+            ALLOWED_ROLES_AND_USERS_PERMISSION, roles=['Other'], acquire=False)
 
         self.folder.reindexObjectSecurity()
         self.folder2.reindexObjectSecurity()
@@ -124,7 +134,7 @@ class TestIntegration(unittest.TestCase):
         # Subfolder previously hasn't had 'View' mapped to any roles.
         # Explicitly give it to 'Reader' role.
         self.subfolder.manage_permission(
-            'View', roles=['Reader'], acquire=False)
+            ALLOWED_ROLES_AND_USERS_PERMISSION, roles=['Reader'], acquire=False)
 
         self.subfolder.reindexObjectSecurity()
         getQueue().process()
@@ -138,7 +148,8 @@ class TestIntegration(unittest.TestCase):
         # Both folder and subfolder haven't previously had 'View' mapped to
         # any roles. Subfolder has 'View' set to acquire though. Giving it
         # to 'Reader' on Folder should therefore propagate down to Subfolder.
-        self.folder.manage_permission('View', roles=['Reader'], acquire=False)
+        self.folder.manage_permission(
+            ALLOWED_ROLES_AND_USERS_PERMISSION, roles=['Reader'], acquire=False)
 
         self.folder.reindexObjectSecurity()
         getQueue().process()
@@ -172,9 +183,11 @@ class TestIntegration(unittest.TestCase):
         #   subfolder2_without_aq. This is the *only* setting by which he
         #   gets the 'View' permission on subfolder2_without_aq
         self.folder2.manage_permission(
-            'View', roles=['Authenticated', 'Reader'], acquire=False)
+            ALLOWED_ROLES_AND_USERS_PERMISSION,
+            roles=['Authenticated', 'Reader'], acquire=False)
         self.subfolder2_without_aq.manage_permission(
-            'View', roles=['Reader'], acquire=False)
+            ALLOWED_ROLES_AND_USERS_PERMISSION,
+            roles=['Reader'], acquire=False)
 
         self.folder2.manage_setLocalRoles(TEST_USER_ID, ['Reader'])
 
@@ -225,7 +238,8 @@ class TestIntegration(unittest.TestCase):
         self.connection.add.assert_has_calls(expected_calls, any_order=True)
 
     def test_reindex_object_security_honors_skip_self(self):
-        self.subfolder.manage_permission('View', roles=['Reader'], acquire=False)
+        self.subfolder.manage_permission(
+            ALLOWED_ROLES_AND_USERS_PERMISSION, roles=['Reader'], acquire=False)
 
         self.subfolder.reindexObjectSecurity(skip_self=True)
         getQueue().process()
@@ -237,7 +251,8 @@ class TestIntegration(unittest.TestCase):
         # mapped to any roles. subfolder_without_aq has Acquisition diabled
         # for 'View', and should therefore be skipped during reindex because
         # it's effective security index contents don't change.
-        self.folder2.manage_permission('View', roles=['Reader'], acquire=False)
+        self.folder2.manage_permission(
+            ALLOWED_ROLES_AND_USERS_PERMISSION, roles=['Reader'], acquire=False)
 
         self.folder2.reindexObjectSecurity()
         getQueue().process()
