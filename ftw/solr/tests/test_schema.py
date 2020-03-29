@@ -4,6 +4,7 @@ from ftw.solr.tests.utils import get_data
 from mock import MagicMock
 from mock import PropertyMock
 
+import six
 import unittest
 
 
@@ -21,7 +22,8 @@ class TestSchema(unittest.TestCase):
         schema = self.schema
         self.assertEqual(schema.version, 1.6)
         self.assertEqual(schema.unique_key, 'UID')
-        self.assertItemsEqual(
+        six.assertCountEqual(
+            self,
             list(schema.fields),
             [
                 u'Title',
@@ -36,7 +38,8 @@ class TestSchema(unittest.TestCase):
             ])
         self.assertEqual(list(schema.copy_fields), [])
         self.assertEqual(list(schema.dynamic_fields), [])
-        self.assertItemsEqual(
+        six.assertCountEqual(
+            self,
             list(schema.field_types),
             [
                 u'boolean',
