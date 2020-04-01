@@ -95,6 +95,18 @@ class TestDateTimeConverter(unittest.TestCase):
         self.assertNotEqual(dt, u'2017-10-21T16:28:60.000Z')
         self.assertEqual(dt, u'2017-10-21T16:28:59.999Z')
 
+    def test_zope_and_python_datetimes_get_converted_identically_high_millis(self):
+        tz = pytz.timezone('Europe/Zurich')
+        python_datetime = tz.localize(datetime(2017, 10, 21, 16, 28, 59, 999999))
+        zope_datetime = DateTime(python_datetime)
+        self.assertEqual(to_iso8601(python_datetime), to_iso8601(zope_datetime))
+
+    def test_zope_and_python_datetimes_get_converted_identically_low_millis(self):
+        tz = pytz.timezone('Europe/Zurich')
+        python_datetime = tz.localize(datetime(2017, 10, 21, 16, 28, 59, 111111))
+        zope_datetime = DateTime(python_datetime)
+        self.assertEqual(to_iso8601(python_datetime), to_iso8601(zope_datetime))
+
 
 class TestStringConverter(unittest.TestCase):
 
