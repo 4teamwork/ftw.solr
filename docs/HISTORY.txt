@@ -4,7 +4,7 @@ Changelog
 2.8.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix update of the modified index. [njohner]
 
 
 2.8.3 (2020-04-02)

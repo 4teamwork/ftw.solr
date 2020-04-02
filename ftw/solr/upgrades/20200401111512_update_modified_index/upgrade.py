@@ -14,7 +14,6 @@ from time import clock
 from zope.component import getMultiAdapter
 from zope.component import queryUtility
 import logging
-import transaction
 
 
 def _pre_datetime_format_fix_to_iso8601(value, multivalued=False):
@@ -64,6 +63,8 @@ class UpdateModifiedIndex(UpgradeStep):
     """Update modified index.
     """
 
+    deferrable = True
+
     def __call__(self):
         self.logger = logging.getLogger('ftw.upgrade')
 
@@ -108,7 +109,7 @@ class UpdateModifiedIndex(UpgradeStep):
         to_correct = not_in_sync - pre_datetime_format_fix_not_in_sync
         return to_correct
 
-    def sync(self, commit_interval=100, idxs=None, doom=True):
+    def sync(self, commit_interval=100, idxs=None):
         """Sync Solr with portal catalog"""
         if not self.is_enabled():
             return 'Solr indexing is disabled.'
@@ -120,9 +121,6 @@ class UpdateModifiedIndex(UpgradeStep):
         real = timer()
         lap = timer()
         cpu = timer(clock)
-
-        if doom:
-            transaction.doom()
 
         def commit():
             conn = self.manager.connection
