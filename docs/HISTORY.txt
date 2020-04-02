@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.8.3 (unreleased)
+2.8.3 (2020-04-02)
 ------------------
 
 - Update the modified index to match new rounding of DateTime. [njohner]
