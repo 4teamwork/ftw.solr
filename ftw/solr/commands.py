@@ -1,4 +1,5 @@
 from AccessControl.SecurityManagement import newSecurityManager
+from AccessControl.SpecialUsers import system as system_user
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Testing.makerequest import makerequest
 from zope.component import queryMultiAdapter
@@ -23,7 +24,7 @@ def setup_site(app, options):
     if not portal:
         sys.exit("Plone site not found at %s" % options.plone_site)
 
-    user = portal.getOwner()
+    user = system_user.__of__(app.acl_users)
     newSecurityManager(app, user)
 
     setSite(portal)
@@ -33,7 +34,7 @@ def setup_site(app, options):
 def get_plone_sites(root):
     result = []
     for obj in root.values():
-        if obj.meta_type is 'Folder':
+        if obj.meta_type == 'Folder':
             result = result + get_plone_sites(obj)
         elif IPloneSiteRoot.providedBy(obj):
             result.append(obj)

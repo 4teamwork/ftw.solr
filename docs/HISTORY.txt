@@ -4,7 +4,7 @@ Changelog
 2.8.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Make sure maintenance scripts are run as system user. [njohner]
 
 
 2.8.4 (2020-04-02)
