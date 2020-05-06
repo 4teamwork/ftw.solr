@@ -34,7 +34,7 @@ def setup_site(app, options):
 def get_plone_sites(root):
     result = []
     for obj in root.values():
-        if obj.meta_type is 'Folder':
+        if obj.meta_type == 'Folder':
             result = result + get_plone_sites(obj)
         elif IPloneSiteRoot.providedBy(obj):
             result.append(obj)
