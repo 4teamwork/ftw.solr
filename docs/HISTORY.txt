@@ -4,7 +4,7 @@ Changelog
 2.8.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add option to limit items logged in diff, switch default to only diff 5 items. [deiferni]
 
 
 2.8.5 (2020-05-06)
