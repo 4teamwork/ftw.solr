@@ -3,6 +3,7 @@ from ftw.solr.converters import to_iso8601
 from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrIndexHandler
 from ftw.solr.interfaces import ISolrSettings
+from itertools import islice
 from logging import getLogger
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces import ICatalogAware
@@ -49,6 +50,16 @@ def solr_date(date):
     if value.endswith('.000Z'):
         value = value[:-5] + 'Z'
     return value
+
+
+def ellipsified_join(items, max):
+    if max is not None:
+        items_to_join = list(islice(items, max))
+        if len(items) > max:
+            items_to_join.append('...')
+    else:
+        items_to_join = items
+    return ', '.join(items_to_join)
 
 
 class SolrMaintenanceView(BrowserView):
@@ -185,7 +196,7 @@ class SolrMaintenanceView(BrowserView):
             'Processed %d items in %s (%s cpu time).',
             processed, real.next(), cpu.next())
 
-    def diff(self):
+    def diff(self, max_diff=5):
         """Diff with portal catalog"""
         if not self.is_enabled():
             return 'Solr indexing is disabled.'
@@ -208,29 +219,36 @@ class SolrMaintenanceView(BrowserView):
              for doc in resp.docs])
 
         self.log('Portal Catalog contains %s items.', len(catalog_uids))
-        self.log('Solr contains %s items.',  len(solr_uids))
+        self.log('Solr contains %s items.', len(solr_uids))
         not_in_catalog = solr_uids - catalog_uids
         if not_in_catalog:
             self.log(
-                'Items not in Portal Catalog: %s', ', '.join(not_in_catalog))
+                'Total of %s items not in Portal Catalog: %s',
+                len(not_in_catalog),
+                ellipsified_join(not_in_catalog, max_diff))
         not_in_solr = catalog_uids - solr_uids
         if not_in_solr:
-            self.log('Items not in Solr: %s', ', '.join(not_in_solr))
+            self.log(
+                'Total of %s items not in Solr: %s',
+                len(not_in_solr),
+                ellipsified_join(not_in_solr, max_diff))
         if not not_in_catalog and not not_in_solr:
             self.log('Solr and Portal Catalog contain the same items. :-)')
         not_in_sync = [item[0] for item in catalog_modified - solr_modified]
         if not_in_sync:
             self.log(
-                'Items not in sync with catalog: %s', ', '.join(not_in_sync))
+                'Total of %s items not in sync: %s',
+                len(not_in_sync),
+                ellipsified_join(not_in_sync, max_diff))
         return not_in_catalog, not_in_solr, not_in_sync
 
-    def sync(self, commit_interval=100, idxs=None, doom=True):
+    def sync(self, commit_interval=100, idxs=None, doom=True, max_diff=5):
         """Sync Solr with portal catalog"""
         if not self.is_enabled():
             return 'Solr indexing is disabled.'
 
         catalog = getToolByName(self.context, 'portal_catalog')
-        not_in_catalog, not_in_solr, not_in_sync = self.diff()
+        not_in_catalog, not_in_solr, not_in_sync = self.diff(max_diff=max_diff)
 
         if not not_in_sync and not not_in_catalog:
             return
