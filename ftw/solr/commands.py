@@ -55,9 +55,16 @@ def solr(app, args):
                         help='Interval for intermediate commits')
     parser.add_argument('-i', '--indexes', nargs='*',
                         help='Perform command on the given indexes')
+    parser.add_argument('--max-diff', dest='max_diff', default=5, type=int,
+                        help="Maximum items to log in diff. Use negative "
+                             "number for infinite.")
     options = parser.parse_args(args[2:])
     app = makerequest(app)
     site = setup_site(app, options)
+
+    max_diff = options.max_diff
+    if max_diff < 0:
+        max_diff = None
 
     solr_maintenance = queryMultiAdapter(
         (site, site.REQUEST), name=u'solr-maintenance')
@@ -69,7 +76,8 @@ def solr(app, args):
             commit_interval=options.commit_interval, idxs=options.indexes)
     elif options.command == 'sync':
         solr_maintenance.sync(
-            commit_interval=options.commit_interval, idxs=options.indexes)
+            commit_interval=options.commit_interval, idxs=options.indexes,
+            max_diff=max_diff)
     elif options.command == 'optimize':
         solr_maintenance.optimize()
         print("Solr index optimized.")
@@ -77,6 +85,6 @@ def solr(app, args):
         solr_maintenance.clear()
         print("Solr index cleared.")
     elif options.command == 'diff':
-        solr_maintenance.diff()
+        solr_maintenance.diff(max_diff=max_diff)
     else:
         sys.exit("Unknown command '%s'." % options.command)
