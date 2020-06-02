@@ -4,6 +4,7 @@ Changelog
 2.8.6 (unreleased)
 ------------------
 
+- Log maintenance commands to a dedicated logfile. [lgraf]
 - Add option to limit items logged in diff, switch default to only diff 5 items. [deiferni]
 - Add helper for creating Solr filters from catalog queries.
   [buchi]
