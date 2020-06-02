@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.8.6 (unreleased)
+2.8.6 (2020-06-02)
 ------------------
 
 - Log maintenance commands to a dedicated logfile. [lgraf]
