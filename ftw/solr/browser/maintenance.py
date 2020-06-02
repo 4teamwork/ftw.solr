@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
+from App.config import getConfiguration
 from ftw.solr.converters import to_iso8601
 from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrIndexHandler
 from ftw.solr.interfaces import ISolrSettings
 from itertools import islice
 from logging import getLogger
+from os.path import dirname
+from os.path import join as pjoin
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces import ICatalogAware
 from Products.CMFCore.utils import getToolByName
@@ -17,11 +20,45 @@ from zope.component import getMultiAdapter
 from zope.component import queryUtility
 from zope.component.hooks import getSite
 import logging
+from logging.handlers import TimedRotatingFileHandler
 import transaction
 
 
 logger = getLogger('ftw.solr.maintenance')
 logger.setLevel(logging.DEBUG)
+
+
+def get_logfile_path():
+    """Determine the path for solr-maintenance.log.
+    This will be derived from Zope2's EventLog location, in order to not
+    have to figure out the path to var/log/ and the instance name ourselves.
+    """
+    zconf = getConfiguration()
+    eventlog = getattr(zconf, 'eventlog', None)
+    if eventlog is None:
+        return None
+
+    handler_factories = eventlog.handler_factories
+    eventlog_path = handler_factories[0].section.path
+    logdir = dirname(eventlog_path)
+    return pjoin(logdir, 'solr-maintenance.log')
+
+
+def setup_maintenance_loghandler():
+    logfile_path = get_logfile_path()
+    if not logfile_path:
+        return
+
+    handler = TimedRotatingFileHandler(
+        logfile_path,
+        when='midnight', backupCount=7)
+    handler.setLevel(logging.DEBUG)
+    fmt = "%(asctime)s - %(levelname)s - %(message)s"
+    handler.setFormatter(logging.Formatter(fmt))
+    logger.addHandler(handler)
+
+
+setup_maintenance_loghandler()
 
 
 def timer(func=time):
