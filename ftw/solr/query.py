@@ -1,9 +1,14 @@
+from ftw.solr.converters import to_iso8601
+from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrSettings
+from logging import getLogger
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
+from ZPublisher.HTTPRequest import record
 
 import re
 
+logger = getLogger('ftw.solr.query')
 
 SPECIAL_CHARS = [
     '+', '-', '&&', '||', '!', '(', ')', '{', '}', '[', ']', '^', '"', '~',
@@ -75,3 +80,78 @@ def make_query(phrase):
     if settings.local_query_parameters:
         query = settings.local_query_parameters + query
     return query
+
+
+def make_path_filter(path, depth=0, include_self=False):
+    filters = []
+    if depth == 0:
+        filters.append(u'path:{}'.format(ensure_text(escape(path))))
+    else:
+        filters.append(u'path_parent:{}'.format(ensure_text(escape(path))))
+    if depth > 0:
+        current_depth = len(path.split('/')) - 1
+        min_depth = current_depth if include_self else current_depth + 1
+        max_depth = current_depth + depth
+        if max_depth == min_depth:
+            filters.append(u'path_depth:{}'.format(max_depth))
+        else:
+            filters.append(u'path_depth:[{} TO {}]'.format(
+                min_depth, max_depth))
+    return filters
+
+
+def make_filters(**kwargs):
+    manager = getUtility(ISolrConnectionManager)
+    filters = []
+    for key, value in kwargs.items():
+        if key not in manager.schema.fields:
+            logger.warning(
+                'Ignoring filter criteria for unknown field %s', key)
+            continue
+        elif key == 'path':
+            if isinstance(value, dict):
+                filters.extend(make_path_filter(
+                    value.get('query'), depth=value.get('depth', 0)))
+            else:
+                filters.extend(make_path_filter(value))
+        elif isinstance(value, (list, tuple)):
+            filters.append(u'{}:({})'.format(
+                key, escape(u' OR '.join(ensure_text(value)))))
+        elif isinstance(value, bool):
+            filters.append(u'{}:{}'.format(key, u'true' if value else u'false'))
+        elif isinstance(value, (dict, record)):
+            query = value.get('query')
+            operator = value.get('operator')
+            range_ = value.get('range', None)
+            if query and isinstance(query, (list, tuple)) and operator:
+                operator = u' {} '.format(operator.upper())
+                filters.append(u'{}:({})'.format(
+                    key, escape(operator.join(ensure_text(query)))))
+            elif query and range_ in ['min', 'max', 'minmax']:
+                if not isinstance(query, (list, tuple)):
+                    query = [query]
+                if range_ == 'min':
+                    filters.append(u'{}:[{} TO *]'.format(
+                        key, escape(to_iso8601(query[0]))))
+                elif range_ == 'max':
+                    filters.append(u'{}:[* TO {}]'.format(
+                        key, escape(to_iso8601(query[0]))))
+                elif range_ == 'minmax' and len(query) > 1:
+                    filters.append(u'{}:[{} TO {}]'.format(
+                        key,
+                        escape(to_iso8601(min(query))),
+                        escape(to_iso8601(max(query))),
+                    ))
+        else:
+            filters.append(u'{}:{}'.format(key, escape(ensure_text(value))))
+    return filters
+
+
+def ensure_text(value):
+    if isinstance(value, bytes):
+        value = value.decode('utf8')
+    elif isinstance(value, (int, float)):
+        value = unicode(value)
+    elif isinstance(value, (list, tuple)):
+        value = [ensure_text(v) for v in value]
+    return value

@@ -5,6 +5,8 @@ Changelog
 ------------------
 
 - Add option to limit items logged in diff, switch default to only diff 5 items. [deiferni]
+- Add helper for creating Solr filters from catalog queries.
+  [buchi]
 
 
 2.8.5 (2020-05-06)

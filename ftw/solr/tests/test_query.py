@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
+from DateTime import DateTime
+from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrSettings
 from ftw.solr.query import escape
 from ftw.solr.query import is_simple_search
+from ftw.solr.query import make_filters
+from ftw.solr.query import make_path_filter
 from ftw.solr.query import make_query
 from ftw.solr.query import split_simple_search
+from mock import Mock
 from plone.registry import Registry
 from plone.registry.fieldfactory import persistentFieldAdapter
 from plone.registry.interfaces import IRegistry
@@ -111,3 +116,117 @@ class TestMakeQuery(unittest.TestCase):
     def test_query_string_is_unicode(self):
         self.assertTrue(isinstance(make_query('über'), unicode))
         self.assertTrue(isinstance(make_query(u'über'), unicode))
+
+
+class TestMakeFilters(unittest.TestCase):
+
+    layer = zca.UNIT_TESTING
+
+    def setUp(self):
+        manager = Mock()
+        manager.schema.fields = {
+            'UID': None,
+            'Title': None,
+            'is_folderish': None,
+            'modified': None,
+            'path': None,
+        }
+        provideUtility(manager, ISolrConnectionManager)
+
+    def test_make_filters_from_string(self):
+        self.assertEqual(
+            make_filters(UID='85bed8c49f6d4f8b841693c6a7c6cff1'),
+            [u'UID:85bed8c49f6d4f8b841693c6a7c6cff1'],
+        )
+
+    def test_make_filters_from_list(self):
+        self.assertEqual(
+            make_filters(UID=[
+                '85bed8c49f6d4f8b841693c6a7c6cff1',
+                '85a29144758f494c88df19182f749ed6',
+            ]),
+            ['UID:(85bed8c49f6d4f8b841693c6a7c6cff1 OR '
+             '85a29144758f494c88df19182f749ed6)'],
+        )
+
+    def test_make_filters_from_boolean(self):
+        self.assertEqual(
+            make_filters(is_folderish=True), ['is_folderish:true'])
+        self.assertEqual(
+            make_filters(is_folderish=False), ['is_folderish:false'])
+
+    def test_make_filters_from_date_range(self):
+        self.assertEqual(
+            make_filters(modified={
+                'query': DateTime('2020-05-27T10:00:00'),
+                'range': 'min',
+            }),
+            ['modified:[2020\\-05\\-27T10\\:00\\:00.000Z TO *]'],
+        )
+        self.assertEqual(
+            make_filters(modified={
+                'query': DateTime('2019-05-27T10:00:00'),
+                'range': 'max',
+            }),
+            ['modified:[* TO 2019\\-05\\-27T10\\:00\\:00.000Z]'],
+        )
+        self.assertEqual(
+            make_filters(modified={
+                'query': [
+                    DateTime('2020-05-27T10:00:00'),
+                    DateTime('2019-05-27T10:00:00'),
+                ],
+                'range': 'minmax',
+            }),
+            ['modified:[2019\\-05\\-27T10\\:00\\:00.000Z TO '
+             '2020\\-05\\-27T10\\:00\\:00.000Z]'],
+        )
+
+    def test_make_filters_from_path(self):
+        self.assertEqual(
+            make_filters(path='/plone/folder'),
+            ['path:\\/plone\\/folder'],
+        )
+        self.assertEqual(
+            make_filters(path={'query': '/plone/folder', 'depth': 1}),
+            ['path_parent:\\/plone\\/folder', 'path_depth:3'],
+        )
+
+    def test_make_filters_ignores_fields_not_in_schema(self):
+        self.assertEqual(make_filters(unknown_field='foo bar'), [])
+
+    def test_make_filters_with_utf8_chars(self):
+        self.assertEqual(make_filters(Title='schön'), [u'Title:schön'])
+        self.assertEqual(
+            make_filters(Title=['schön', 'schöner']),
+            [u'Title:(schön OR schöner)']
+        )
+        self.assertEqual(
+            make_filters(Title={
+                'query': ['schön', 'schöner'],
+                'operator': 'AND',
+            }),
+            [u'Title:(schön AND schöner)'],
+        )
+
+    def test_make_path_filter(self):
+        self.assertEqual(
+            make_path_filter('/plone/folder'),
+            ['path:\\/plone\\/folder'],
+        )
+        self.assertEqual(
+            make_path_filter('/plone/folder', depth=-1),
+            ['path_parent:\\/plone\\/folder'],
+        )
+        self.assertEqual(
+            make_path_filter('/plone/folder', depth=1),
+            ['path_parent:\\/plone\\/folder', 'path_depth:3'],
+        )
+        self.assertEqual(
+            make_path_filter('/plone/folder', depth=2),
+            ['path_parent:\\/plone\\/folder', 'path_depth:[3 TO 4]'],
+        )
+        self.assertEqual(
+            make_path_filter('/plone/folder', depth=2, include_self=True),
+            ['path_parent:\\/plone\\/folder', 'path_depth:[2 TO 4]'],
+        )
