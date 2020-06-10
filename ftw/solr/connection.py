@@ -38,7 +38,7 @@ class SolrConnection(object):
     post_headers = {'Content-Type': 'application/json'}
 
     def __init__(self, host='localhost', port=8983, base='/solr',
-                 timeout=None, upload_blobs=False):
+                 timeout=None, upload_blobs=False, logger=logger):
         self.timeout = timeout
         self.host = host
         self.port = port
@@ -48,6 +48,7 @@ class SolrConnection(object):
         self.update_commands = []
         self.extract_commands = []
         self.reconnect_before_request = False
+        self.logger = logger
 
     def request(self, method, path, data=None, headers={}, log_error=True):
         try:
@@ -59,14 +60,16 @@ class SolrConnection(object):
             body = resp.read()
             status = resp.status
             self.reconnect_before_request = False
-            return SolrResponse(body, status, log_error=log_error)
+            return SolrResponse(body, status, log_error=log_error,
+                                logger=self.logger)
         except (socket.error, HTTPException) as exc:
             if not self.reconnect_before_request:
                 self.reconnect_before_request = True
                 return self.request(method, path, data=data, headers=headers)
             else:
                 self.reconnect_before_request = False
-                return SolrResponse(exception=exc, log_error=log_error)
+                return SolrResponse(exception=exc, log_error=log_error,
+                                    logger=self.logger)
 
     def post(self, path, data=None, headers={}, log_error=True):
         headers = headers if headers else self.post_headers
@@ -145,7 +148,7 @@ class SolrConnection(object):
             data = '{%s}' % ','.join(self.update_commands)
             resp = self.post('/update', data=data, log_error=False)
             if not resp.is_ok():
-                logger.error('Update command failed. %s', resp.error_msg())
+                self.logger.error('Update command failed. %s', resp.error_msg())
             self.update_commands = []
 
         if self.extract_commands:
@@ -175,7 +178,7 @@ class SolrConnection(object):
                         extracted_fulltext_key = os.path.basename(file_)
 
                     if not resp.is_ok():
-                        logger.error(
+                        self.logger.error(
                             'Extract command for UID=%s with blob %s failed. '
                             '%s',
                             data.get(u'UID'), file_, resp.error_msg())
@@ -190,7 +193,7 @@ class SolrConnection(object):
                         data=json.dumps(update_command),
                         log_error=False)
                     if not resp.is_ok():
-                        logger.error(
+                        self.logger.error(
                             'Update command failed. %s', resp.error_msg())
 
             if extract_after_commit:
@@ -223,6 +226,9 @@ _no_connection_marker = object()
 @implementer(ISolrConnectionManager)
 class SolrConnectionManager(object):
 
+    def __init__(self):
+        self.logger = logger
+
     @property
     def connection(self):
         conn = getattr(local_data, 'connection', _no_connection_marker)
@@ -231,10 +237,10 @@ class SolrConnectionManager(object):
             if config is not None:
                 conn = SolrConnection(
                     host=config.host, port=config.port, base=config.base,
-                    upload_blobs=config.upload_blobs)
+                    upload_blobs=config.upload_blobs, logger=self.logger)
             else:
                 conn = None
-                logger.warning('Solr configuration missing.')
+                self.logger.warning('Solr configuration missing.')
             setattr(local_data, 'connection', conn)
         return conn
 
@@ -250,7 +256,7 @@ class SolrConnectionManager(object):
 class SolrResponse(object):
 
     def __init__(self, body='null', status=None, exception=None,
-                 log_error=True):
+                 log_error=True, logger=logger):
         self.http_status = status
         self.exception = exception
         self.status = -1
@@ -261,10 +267,11 @@ class SolrResponse(object):
         self.num_found = 0
         self.start = 0
         self.body = {}
+        self.logger = logger
         if self.http_status:
             self.parse(body)
         if log_error and not self.is_ok():
-            logger.error('Solr response error. %s', self.error_msg())
+            self.logger.error('Solr response error. %s', self.error_msg())
 
     def parse(self, data):
         try:

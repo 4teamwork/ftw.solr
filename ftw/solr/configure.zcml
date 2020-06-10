@@ -16,7 +16,7 @@
 
   <!-- Load collective.indexing's ZCML to make sure its Catalog patches are
   applied before ftw.solr's -->
-  <configure zcml:condition="installed collective.indexing"> 
+  <configure zcml:condition="installed collective.indexing">
     <include package="collective.indexing" />
   </configure>
 

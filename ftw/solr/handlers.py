@@ -18,6 +18,7 @@ class DefaultIndexHandler(object):
     def __init__(self, context, manager):
         self.context = context
         self.manager = manager
+        self.logger = logger
 
     def add(self, attributes):
         if self.manager.connection is None:
@@ -25,14 +26,15 @@ class DefaultIndexHandler(object):
 
         error = self.get_schema_error()
         if error:
-            logger.warning('%s, skipping indexing of %r', error, self.context)
+            self.logger.warning(
+                '%s, skipping indexing of %r', error, self.context)
             return
 
         data = self.get_data(attributes)
 
         unique_key = self.manager.schema.unique_key
         if unique_key not in data:
-            logger.warning(
+            self.logger.warning(
                 'Object is missing unique key, skipping indexing of %r',
                 self.context)
             return
@@ -49,14 +51,14 @@ class DefaultIndexHandler(object):
 
         error = self.get_schema_error()
         if error:
-            logger.warning(
+            self.logger.warning(
                 '%s, skipping unindexing of %r', error, self.context)
             return
 
         unique_key = self.manager.schema.unique_key
         data = self.get_data([unique_key])
         if unique_key not in data:
-            logger.warning(
+            self.logger.warning(
                 'Object is missing unique key, skipping unindexing of %r',
                 self.context)
             return
@@ -141,7 +143,7 @@ class ATBlobFileIndexHandler(DefaultIndexHandler):
 
         error = self.get_schema_error()
         if error:
-            logger.warning('%s, skipping indexing of %r', error, self.context)
+            self.logger.warning('%s, skipping indexing of %r', error, self.context)
             return
 
         if attributes is None:
@@ -178,7 +180,8 @@ class DexterityItemIndexHandler(DefaultIndexHandler):
 
         error = self.get_schema_error()
         if error:
-            logger.warning('%s, skipping indexing of %r', error, self.context)
+            self.logger.warning(
+                '%s, skipping indexing of %r', error, self.context)
             return
 
         blob = None
