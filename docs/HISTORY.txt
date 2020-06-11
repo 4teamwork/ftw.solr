@@ -4,7 +4,7 @@ Changelog
 1.13.4 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Support plone 5 paginator new html structure on search result page. [mathias.leimgruber]
 
 
 1.13.3 (2020-01-21)
