@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.8.7 (unreleased)
+2.9.0 (unreleased)
 ------------------
 
 - Treat docs with no created field as out of sync in `diff`. [deiferni]
