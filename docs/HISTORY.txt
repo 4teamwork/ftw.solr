@@ -4,7 +4,7 @@ Changelog
 2.8.7 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Treat docs with no created field as out of sync in `diff`. [deiferni]
 
 
 2.8.6 (2020-06-02)
