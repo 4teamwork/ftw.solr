@@ -271,7 +271,14 @@ class SolrMaintenanceView(BrowserView):
                 ellipsified_join(not_in_solr, max_diff))
         if not not_in_catalog and not not_in_solr:
             self.log('Solr and Portal Catalog contain the same items. :-)')
+
         not_in_sync = [item[0] for item in catalog_modified - solr_modified]
+        incomplete = conn.search({
+            u'query': u'-created:[* TO *]',
+            u'limit': 10000000,
+            u'params': {u'fl': 'UID'},
+        })
+        not_in_sync.extend([doc['UID'] for doc in incomplete.docs])
         if not_in_sync:
             self.log(
                 'Total of %s items not in sync: %s',
