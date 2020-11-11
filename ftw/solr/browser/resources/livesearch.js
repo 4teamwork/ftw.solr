@@ -35,7 +35,7 @@
 
     var baseUrl = $("base").length === 1 ? $("base").attr("href") : $("body").data("base-url");
     var options = {
-      source: baseUrl + "/ftw_solr_livesearch_reply",
+      source: baseUrl.replace(/\/$/, "") + "/ftw_solr_livesearch_reply",
       minLength: 3,
       select: selectItem,
       focus: focusItem,
