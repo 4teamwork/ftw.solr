@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.13.6 (unreleased)
+1.13.6 (2020-11-17)
 -------------------
 
 - Only use ajax pagination on search view. [mathias.leimgruber]
