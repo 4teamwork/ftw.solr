@@ -4,7 +4,7 @@ Changelog
 2.9.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Cleanup extract_commands before sending them to solr. [njohner]
 
 
 2.9.0 (2020-08-04)
