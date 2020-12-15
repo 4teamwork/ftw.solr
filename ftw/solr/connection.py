@@ -139,6 +139,27 @@ class SolrConnection(object):
             '"optimize": ' + json.dumps({'waitSearcher': wait_searcher}))
         self.flush()
 
+    def filter_extract_commands(self):
+        """We filter the extract commands to only keep the last one
+        for each field and UID. The others are not necessary as their result
+        would anyway be overwritten by a later extract command. Moreover it
+        happens that earlier commands point to outdated blobs, leading to
+        errors
+        """
+        added = set()
+        filtered_extract_commands = []
+        for command in reversed(self.extract_commands):
+            blob, field, data, content_type = command
+            uid = data.get("UID")
+            if uid is None:
+                # This should not happen, but better safe than sorry
+                filtered_extract_commands.append(command)
+            if (uid, field) in added:
+                continue
+            filtered_extract_commands.append(command)
+            added.add((uid, field))
+        self.extract_commands = reversed(filtered_extract_commands)
+
     def flush(self, extract_after_commit=True):
         """Send queued update commands to Solr."""
         if self.update_commands:
@@ -193,6 +214,7 @@ class SolrConnection(object):
                         logger.error(
                             'Update command failed. %s', resp.error_msg())
 
+            self.filter_extract_commands()
             if extract_after_commit:
                 transaction.get().addAfterCommitHook(
                     hook, args=[self.extract_commands])

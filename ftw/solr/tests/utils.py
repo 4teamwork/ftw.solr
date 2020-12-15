@@ -21,5 +21,8 @@ class MockHTTPResponse(object):
 
 
 class MockBlob(object):
+    def __init__(self, path='/folder/file'):
+        self.path = path
+
     def committed(self):
-        return '/folder/file'
+        return self.path

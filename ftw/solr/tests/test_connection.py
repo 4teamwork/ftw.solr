@@ -130,6 +130,65 @@ class TestConnection(unittest.TestCase):
              'log_error': False})
         self.assertEqual(conn.extract_commands, [])
 
+    def test_flush_operation_posts_filtered_extract_commands(self):
+        conn = SolrConnection(base='/solr/mycore')
+        conn.post = MagicMock(name='post')
+        conn.post.return_value.body.get.return_value = 'The searchable text'
+        tr = transaction.begin()
+        conn.extract(MockBlob('file1'), 'SearchableText', {'UID': '1'},
+                     'application/octet-stream')
+        conn.extract(MockBlob('file2'), 'SearchableText', {'UID': '2'},
+                     'application/octet-stream')
+        conn.extract(MockBlob('file3'), 'SearchableText', {'UID': '2'},
+                     'application/octet-stream')
+        conn.extract(MockBlob('file4'), 'OtherField', {'UID': '1'},
+                     'application/octet-stream')
+        conn.flush()
+        tr.commit()
+
+        self.assertEqual(6, len(conn.post.call_args_list))
+
+        self.assertEqual(
+            (('/update/extract?extractOnly=true&stream.file=file1',),
+             {'headers': {'Content-Type': 'application/x-www-form-urlencoded'},
+              'log_error': False}),
+            conn.post.call_args_list[0])
+
+        self.assertEqual(
+            (('/update',),
+             {'data': '{"add": {"doc": {"UID": "1", "SearchableText": {"set": '
+                      '"The searchable text"}}}}',
+              'log_error': False}),
+            conn.post.call_args_list[1])
+
+        self.assertEqual(
+            (('/update/extract?extractOnly=true&stream.file=file3',),
+             {'headers': {'Content-Type': 'application/x-www-form-urlencoded'},
+              'log_error': False}),
+            conn.post.call_args_list[2])
+
+        self.assertEqual(
+            (('/update',),
+             {'data': '{"add": {"doc": {"UID": "2", "SearchableText": {"set": '
+                      '"The searchable text"}}}}',
+              'log_error': False}),
+            conn.post.call_args_list[3])
+
+        self.assertEqual(
+            (('/update/extract?extractOnly=true&stream.file=file4',),
+             {'headers': {'Content-Type': 'application/x-www-form-urlencoded'},
+              'log_error': False}),
+            conn.post.call_args_list[4])
+
+        self.assertEqual(
+            (('/update',),
+             {'data': '{"add": {"doc": {"OtherField": {"set": '
+                      '"The searchable text"}, "UID": "1"}}}',
+              'log_error': False}),
+            conn.post.call_args_list[5])
+
+        self.assertEqual(conn.extract_commands, [])
+
     def test_flush_operation_posts_extract_commands_with_blobs_if_configured(self):
         conn = SolrConnection(base='/solr/mycore')
         conn.upload_blobs = True
