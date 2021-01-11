@@ -4,7 +4,7 @@ Changelog
 2.9.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Do not ignore None values when indexing data in solr. [njohner]
 
 
 2.9.1 (2020-12-15)
