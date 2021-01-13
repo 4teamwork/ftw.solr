@@ -104,8 +104,6 @@ class DefaultIndexHandler(object):
                 except (AttributeError, TypeError):
                     continue
 
-            if value is None:
-                continue
             field_class = schema.field_types[
                 schema.fields[name][u'type']][u'class']
             multivalued = schema.fields[name].get(u'multiValued', False)
