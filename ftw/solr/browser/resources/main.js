@@ -1,1 +1,1 @@
-require(['facets', 'jquery.highlightsearchterms', 'jquery.history', 'livesearch', 'search'], function(facets, jquery_highlightsearchterms, jquery_history, livesearch, search){});
+require(['facets', 'jquery.highlightsearchterms', 'livesearch'], function(facets, jquery_highlightsearchterms, livesearch){});
