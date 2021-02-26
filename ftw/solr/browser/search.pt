@@ -13,7 +13,9 @@
             tal:define="here_url context/@@plone_context_state/object_url;"
             tal:condition="request/SearchableText|nothing"
             tal:attributes="href string:$here_url/search_rss?${request/QUERY_STRING}"/>
-
+      <script type="application/javascript"
+              defer
+              tal:attributes="src string:${context/@@plone_portal_state/portal_url}/++resource++ftw.solr/solr-search-compiled.js"></script>
     </metal:block>
 
     <metal:block fill-slot="top_slot"

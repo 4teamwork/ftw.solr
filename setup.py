@@ -47,6 +47,7 @@ setup(name='ftw.solr',
           'requests',
           'setuptools',
           'z3c.unconfigure',
+          'PyJWT<2a',
       ],
 
       tests_require=tests_require,

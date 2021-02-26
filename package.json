@@ -10,9 +10,9 @@
     "requirejs": "^2.3.6"
   },
   "scripts": {
-    "build": "r.js -o build.js && r.js -o buildcss.js",
+    "build": "yarn build-js && yarn build-css",
     "build-css": "r.js -o buildcss.js",
-    "build-js": "r.js -o build.js",
+    "build-js": "r.js -o build.js & r.js -o build-search.js",
     "watch": "chokidar \"./ftw/solr/browser/resources/(*.js|*.css)\" -i \"**/*-compiled.(js|css)\" -c \"yarn build\""
   }
 }
