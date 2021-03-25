@@ -137,6 +137,9 @@ class ATBlobFileIndexHandler(DefaultIndexHandler):
         if self.manager.connection is None:
             return
 
+        if isinstance(attributes, tuple):
+            attributes = list(attributes)
+
         error = self.get_schema_error()
         if error:
             logger.warning('%s, skipping indexing of %r', error, self.context)
@@ -173,6 +176,9 @@ class DexterityItemIndexHandler(DefaultIndexHandler):
     def add(self, attributes):
         if self.manager.connection is None:
             return
+
+        if isinstance(attributes, tuple):
+            attributes = list(attributes)
 
         error = self.get_schema_error()
         if error:
