@@ -257,6 +257,19 @@ class TestATBlobFileIndexHandler(unittest.TestCase):
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
 
+    def test_add_with_only_searchable_text_and_uid_calls_extract(self):
+        self.manager.connection.add = MagicMock(name='add')
+        self.manager.connection.extract = MagicMock(name='extract')
+
+        self.handler.add(('SearchableText', 'UID'))
+        self.manager.connection.add.assert_not_called()
+        self.manager.connection.extract.assert_called_once_with(
+            self.doc.getFile().blob,
+            'SearchableText',
+            {u'UID': u'09baa75b67f44383880a6dab8b3200b6'},
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        )
+
 
 class TestDexterityItemIndexHandler(unittest.TestCase):
 
@@ -406,6 +419,16 @@ class TestDexterityItemIndexHandler(unittest.TestCase):
             u'UID': u'09baa75b67f44383880a6dab8b3200b6',
             u'modified': {'set': u'2017-01-21T17:18:19.000Z'},
         })
+        self.manager.connection.extract.assert_called_once_with(
+            self.doc.file._blob,
+            'SearchableText',
+            {u'UID': u'09baa75b67f44383880a6dab8b3200b6'},
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        )
+
+    def test_add_with_only_searchable_text_and_uid_calls_extract(self):
+        self.handler.add(('SearchableText', 'UID'))
+        self.manager.connection.add.assert_not_called()
         self.manager.connection.extract.assert_called_once_with(
             self.doc.file._blob,
             'SearchableText',
