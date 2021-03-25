@@ -1,5 +1,5 @@
 <div tal:omit-tag=""
-     tal:define="facets view/facets; selected view/selected"
+     tal:define="facets view/facets | nothing; selected view/selected | nothing"
      tal:condition="python: selected"
      i18n:domain="solr">
 
