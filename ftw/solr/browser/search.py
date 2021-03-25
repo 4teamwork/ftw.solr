@@ -232,7 +232,11 @@ class SearchView(SEARCH_VIEW):
 
         # Path may be a list, but wie deal only with the first item anyway
         path = isinstance(path, list) and path[0] or path
-        item = self.context.unrestrictedTraverse(path)
+        try:
+            item = self.context.unrestrictedTraverse(path)
+        except KeyError:
+            # Path doesn't exist
+            return None
         del query_dict['path']
 
         return {'search_url': '{0}?{1}'.format(self.request.get('ACTUAL_URL'),
