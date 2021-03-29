@@ -137,6 +137,9 @@ class ATBlobFileIndexHandler(DefaultIndexHandler):
         if self.manager.connection is None:
             return
 
+        if isinstance(attributes, tuple):
+            attributes = list(attributes)
+
         error = self.get_schema_error()
         if error:
             logger.warning('%s, skipping indexing of %r', error, self.context)
@@ -151,10 +154,10 @@ class ATBlobFileIndexHandler(DefaultIndexHandler):
             extract = True
 
         unique_key = self.manager.schema.unique_key
-        data = self.get_data(attributes)
+        raw_data = self.get_data(attributes)
 
         if attributes:
-            data = self.add_atomic_update_modifier(data, unique_key)
+            data = self.add_atomic_update_modifier(raw_data, unique_key)
             if data:
                 self.manager.connection.add(data)
 
@@ -163,7 +166,7 @@ class ATBlobFileIndexHandler(DefaultIndexHandler):
             blob = field.get(self.context).blob
             content_type = field.get(self.context).getContentType()
             self.manager.connection.extract(
-                blob, 'SearchableText', {unique_key: data[unique_key]},
+                blob, 'SearchableText', {unique_key: raw_data[unique_key]},
                 content_type)
 
 
@@ -173,6 +176,9 @@ class DexterityItemIndexHandler(DefaultIndexHandler):
     def add(self, attributes):
         if self.manager.connection is None:
             return
+
+        if isinstance(attributes, tuple):
+            attributes = list(attributes)
 
         error = self.get_schema_error()
         if error:
@@ -198,14 +204,14 @@ class DexterityItemIndexHandler(DefaultIndexHandler):
             extract = True
 
         unique_key = self.manager.schema.unique_key
-        data = self.get_data(attributes)
+        raw_data = self.get_data(attributes)
 
         if attributes:
-            data = self.add_atomic_update_modifier(data, unique_key)
+            data = self.add_atomic_update_modifier(raw_data, unique_key)
             if data:
                 self.manager.connection.add(data)
 
         if extract:
             self.manager.connection.extract(
-                blob, 'SearchableText', {unique_key: data[unique_key]},
+                blob, 'SearchableText', {unique_key: raw_data[unique_key]},
                 content_type)
