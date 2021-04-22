@@ -24,7 +24,7 @@ tests_require = [
 
 setup(
     name='ftw.solr',
-    version='2.9.3',
+    version='2.9.4.dev0',
     description="Solr integration for Plone",
     long_description=long_description,
     # Get more from https://pypi.python.org/pypi?%3Aaction=list_classifiers
