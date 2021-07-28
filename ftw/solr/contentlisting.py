@@ -1,10 +1,12 @@
 from DateTime import DateTime
 from ftw.solr.document import SolrDocument
+from ftw.solr.interfaces import ISolrConnectionManager
 from plone.app.contentlisting.contentlisting import BaseContentListingObject
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.app.layout.icons.interfaces import IContentIcon
 from time import localtime
+from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
@@ -18,6 +20,8 @@ class SolrContentListing(object):
 
     def __init__(self, resp):
         self.resp = resp
+        manager = getUtility(ISolrConnectionManager)
+        self.fields = set(manager.schema.fields.keys())
 
     def __getitem__(self, key):
         return self._create_content_listing_object(self.resp.docs[key])
@@ -34,7 +38,7 @@ class SolrContentListing(object):
             yield self._create_content_listing_object(doc)
 
     def _create_content_listing_object(self, doc):
-        doc = self.doc_type(doc)
+        doc = self.doc_type(doc, self.fields)
         self._add_snippets(doc)
         return IContentListingObject(doc)
 

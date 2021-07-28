@@ -50,3 +50,13 @@ class TestSolrDocument(unittest.TestCase):
         portal.invokeFactory('Document', 'my-document.docx')
         portal.invokeFactory('Folder', 'my-folder-1')
         self.assertEqual(self.doc.getObject(), None)
+
+    def test_get_missing_field_raises(self):
+        self.assertFalse(hasattr(self.doc, "foo"))
+        with self.assertRaises(AttributeError):
+            self.doc.foo
+
+    def test_get_field_not_in_data_returns_none(self):
+        doc = SolrDocument(json.loads(get_data('doc.json')), fields=["foo"])
+        self.assertTrue(hasattr(doc, "foo"))
+        self.assertIsNone(doc.foo)

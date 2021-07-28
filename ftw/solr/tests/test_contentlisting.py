@@ -4,13 +4,17 @@ from ftw.solr.connection import SolrResponse
 from ftw.solr.contentlisting import SolrContentListing
 from ftw.solr.contentlisting import SolrContentListingObject
 from ftw.solr.contentlisting import SolrDocument
+from ftw.solr.interfaces import ISolrConnectionManager
+from ftw.solr.schema import SolrSchema
 from ftw.solr.testing import FTW_SOLR_INTEGRATION_TESTING
 from ftw.solr.tests.utils import get_data
+from mock import MagicMock
+from mock import PropertyMock
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
-
+from zope.interface import alsoProvides
 import json
 import unittest
 
@@ -37,6 +41,36 @@ class TestContentListing(unittest.TestCase):
     def test_contentlisting_iteration(self):
         self.assertTrue(IContentListingObject.providedBy(
             [item for item in self.contentlisting][0]))
+
+
+class TestContentListingIntegration(unittest.TestCase):
+
+    layer = FTW_SOLR_INTEGRATION_TESTING
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        self.manager = MagicMock(name='SolrConnectionManager')
+        alsoProvides(self.manager, ISolrConnectionManager)
+
+        conn = MagicMock(name='SolrConnection')
+        conn.get = MagicMock(name='get', return_value=SolrResponse(
+            body=get_data('schema.json'), status=200))
+        type(self.manager).connection = PropertyMock(return_value=conn)
+        type(self.manager).schema = PropertyMock(
+            return_value=SolrSchema(self.manager))
+
+        sm = self.portal.getSiteManager()
+        sm.registerUtility(self.manager, ISolrConnectionManager)
+
+        self.resp = SolrResponse(body=get_data('search.json'), status=200)
+        self.contentlisting = SolrContentListing(self.resp)
+
+    def test_contentlisting_object_documents_are_aware_of_existing_fields(self):
+        doc1 = self.contentlisting[0]
+        self.assertIn("path_depth", self.contentlisting.fields)
+        self.assertNotIn("path_depth", doc1.doc.data)
+        self.assertTrue(hasattr(doc1.doc, "path_depth"))
+        self.assertIsNone(doc1.doc.path_depth)
 
 
 class TestContentListingObject(unittest.TestCase):
