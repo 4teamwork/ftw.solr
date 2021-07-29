@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.9.4 (unreleased)
+2.9.4 (2021-07-29)
 ------------------
 
 - SolrDocument returns None for existing fields with missing value. [njohner]
