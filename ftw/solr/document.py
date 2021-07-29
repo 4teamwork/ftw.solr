@@ -9,6 +9,7 @@ class SolrDocument(object):
 
     def __init__(self, data, fields=None):
         self.data = unicode2bytes(data)
+        self.fields = fields or list()
 
     def __getitem__(self, key):
         return self.data[key]
@@ -25,6 +26,11 @@ class SolrDocument(object):
     def __getattr__(self, name):
         if name in self.data:
             return self.data[name]
+        if name in self.fields:
+            # Solr response does not include fields that don't have a value
+            # But that should not be treated as an AttributeError. It instead
+            # means the value for that field is None
+            return None
         else:
             raise AttributeError("'%s' object has no attribute '%s'" % (
                 self.__class__.__name__, name))
