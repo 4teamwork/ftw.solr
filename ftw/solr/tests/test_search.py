@@ -105,3 +105,20 @@ class TestSearch(unittest.TestCase):
         self.solr.search(request_handler='/query')
         args, kwargs = self.conn.search.call_args
         self.assertEqual(kwargs, {'request_handler': u'/query'})
+
+    def test_search_contains_security_filters(self):
+        self.solr.search()
+        args, kwargs = self.conn.search.call_args
+        self.assertEqual(
+            args[0][u'filter'],
+            [u'allowedRolesAndUsers:(Member OR Authenticated OR Anonymous OR '
+             u'user\\:AuthenticatedUsers OR user\\:test_user_1_)'])
+
+    def test_search_does_not_allow_unrestricted_keyword(self):
+        with self.assertRaises(TypeError):
+            self.solr.search(unrestricted=True)
+
+    def test_unrestricted_search_does_not_contain_security_filters(self):
+        self.solr.unrestricted_search()
+        args, kwargs = self.conn.search.call_args
+        self.assertEqual(args[0][u'filter'], [])
