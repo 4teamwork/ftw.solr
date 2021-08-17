@@ -20,8 +20,8 @@ class SolrSearch(object):
             self._manager = queryUtility(ISolrConnectionManager)
         return self._manager
 
-    def search(self, request_handler=u'/select', query=u'*:*', filters=None,
-               start=0, rows=1000, sort=None, **params):
+    def _search(self, request_handler=u'/select', query=u'*:*', filters=None,
+                start=0, rows=1000, sort=None, unrestricted=False, **params):
         conn = self.manager.connection
         params = {u'params': params}
         params[u'query'] = query
@@ -33,9 +33,22 @@ class SolrSearch(object):
             filters = []
         if not isinstance(filters, list):
             filters = [filters]
-        filters.insert(0, self.security_filter())
+        if not unrestricted:
+            filters.insert(0, self.security_filter())
         params[u'filter'] = filters
         return conn.search(params, request_handler=request_handler)
+
+    def search(self, request_handler=u'/select', query=u'*:*', filters=None,
+               start=0, rows=1000, sort=None, **params):
+        return self._search(
+            request_handler=request_handler, query=query, filters=filters,
+            start=start, rows=rows, sort=sort, unrestricted=False, **params)
+
+    def unrestricted_search(self, request_handler=u'/select', query=u'*:*',
+                            filters=None, start=0, rows=1000, sort=None, **params):
+        return self._search(
+            request_handler=request_handler, query=query, filters=filters,
+            start=start, rows=rows, sort=sort, unrestricted=True, **params)
 
     def security_filter(self):
         user = getSecurityManager().getUser()
