@@ -4,7 +4,7 @@ Changelog
 2.9.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add flag to force clearing solr even when solr is not enabled. [njohner]
 
 
 2.9.5 (2021-08-17)

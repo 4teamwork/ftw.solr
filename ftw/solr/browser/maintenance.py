@@ -119,9 +119,9 @@ class SolrMaintenanceView(BrowserView):
         conn.optimize()
         return 'Solr index optimized.'
 
-    def clear(self):
+    def clear(self, force=False):
         """Clear all data from Solr index."""
-        if not self.is_enabled():
+        if not force and not self.is_enabled():
             return 'Solr indexing is disabled.'
         conn = self.manager.connection
         conn.delete_by_query('*:*')
