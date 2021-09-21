@@ -1,8 +1,8 @@
 Changelog
 =========
 
-2.9.6 (unreleased)
-------------------
+2.10.0 (2021-09-21)
+-------------------
 
 - Add flag to force clearing solr even when solr is not enabled. [njohner]
 
