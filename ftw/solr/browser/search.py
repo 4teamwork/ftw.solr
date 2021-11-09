@@ -58,6 +58,9 @@ class SearchView(SEARCH_VIEW):
     template = ViewPageTemplateFile('search.pt')
     results_template = ViewPageTemplateFile('results.pt')
 
+    def munge_search_term(self, q):
+        return q
+
     def __call__(self):
         if 'ajax' in self.request.form:
             del self.request.form['ajax']
