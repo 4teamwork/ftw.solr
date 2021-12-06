@@ -94,7 +94,7 @@ msgstr ""
 #. Default: "${number} items matching your search terms in ${path_link}"
 #: ./ftw/solr/browser/results.pt:70
 msgid "batch_x_items_matching_your_criteria_in"
-msgstr "${number} Artikel im Bereich ${path_link} gefunden."
+msgstr "${number} Artikel unter dem Pfad ${path_link} gefunden."
 
 #: ./ftw/solr/configure.zcml:39
 msgid "ftw.solr"
