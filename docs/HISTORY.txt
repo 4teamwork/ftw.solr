@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.13.10 (unreleased)
+1.13.10 (2021-12-06)
 --------------------
 
 - Change translations for path restricted results. [mathias.leimgruber]
