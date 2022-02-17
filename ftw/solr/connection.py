@@ -233,7 +233,7 @@ class SolrConnection(object):
                     }
                     resp = self.post(
                         '/update',
-                        data=json.dumps(update_command),
+                        data=json.dumps(update_command, sort_keys=True),
                         log_error=False)
                     if not resp.is_ok():
                         logger.error(

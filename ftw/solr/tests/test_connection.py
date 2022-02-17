@@ -163,8 +163,8 @@ class TestConnection(unittest.TestCase):
         self.assertEqual(args, ('/update',))
         self.assertEqual(
             kwargs,
-            {'data': '{"add": {"doc": {"id": "1", "SearchableText": {"set": "T'
-                     'he searchable text"}}}}',
+            {'data': '{"add": {"doc": {"SearchableText": {"set": "The '
+                     'searchable text"}, "id": "1"}}}',
              'log_error': False})
         self.assertEqual(conn.extract_commands, [])
 
@@ -194,8 +194,8 @@ class TestConnection(unittest.TestCase):
 
         self.assertEqual(
             (('/update',),
-             {'data': '{"add": {"doc": {"UID": "1", "SearchableText": {"set": '
-                      '"The searchable text"}}}}',
+             {'data': '{"add": {"doc": {"SearchableText": {"set": '
+                      '"The searchable text"}, "UID": "1"}}}',
               'log_error': False}),
             conn.post.call_args_list[1])
 
@@ -207,8 +207,8 @@ class TestConnection(unittest.TestCase):
 
         self.assertEqual(
             (('/update',),
-             {'data': '{"add": {"doc": {"UID": "2", "SearchableText": {"set": '
-                      '"The searchable text"}}}}',
+             {'data': '{"add": {"doc": {"SearchableText": {"set": '
+                      '"The searchable text"}, "UID": "2"}}}',
               'log_error': False}),
             conn.post.call_args_list[3])
 
@@ -224,7 +224,6 @@ class TestConnection(unittest.TestCase):
                       '"The searchable text"}, "UID": "1"}}}',
               'log_error': False}),
             conn.post.call_args_list[5])
-
         self.assertEqual(conn.extract_commands, [])
 
     def test_flush_operation_posts_extract_commands_with_blobs_if_configured(self):
@@ -252,9 +251,10 @@ class TestConnection(unittest.TestCase):
         self.assertEqual(args, ('/update',))
         self.assertEqual(
             kwargs,
-            {'data': '{"add": {"doc": {"id": "1", "SearchableText": {"set": "T'
-                     'he searchable text"}}}}',
+            {'data': '{"add": {"doc": {"SearchableText": {"set": "The '
+                     'searchable text"}, "id": "1"}}}',
              'log_error': False})
+
         self.assertEqual(conn.extract_commands, [])
 
     def test_flush_operation_without_after_commit_hook(self):
@@ -278,8 +278,8 @@ class TestConnection(unittest.TestCase):
         self.assertEqual(args, ('/update',))
         self.assertEqual(
             kwargs,
-            {'data': '{"add": {"doc": {"id": "1", "SearchableText": {"set": "T'
-                     'he searchable text"}}}}',
+            {'data': '{"add": {"doc": {"SearchableText": {"set": "The '
+                     'searchable text"}, "id": "1"}}}',
              'log_error': False})
 
         self.assertEqual(conn.extract_commands, [])
