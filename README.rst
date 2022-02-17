@@ -80,6 +80,19 @@ After running buildout and restarting your instance you can install the ftw.solr
 addon in Plone.
 
 
+Python 3.7 - Plone 5.2
+----------------------
+
+Install and run tests locally:
+
+.. code::
+
+    python3 -m venv .
+    ./bin/pip install -r requirements.txt
+    ./bin/buildout -c test-plone-5.2.x-py37.cfg
+    ./bin/test
+
+
 Usage
 =====
 

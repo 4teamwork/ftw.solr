@@ -1,2 +1,2 @@
-zc.buildout==2.9.5
-setuptools==33.1.1
+setuptools==42.0.2
+zc.buildout==2.13.4
