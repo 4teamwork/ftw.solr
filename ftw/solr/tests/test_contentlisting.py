@@ -92,11 +92,11 @@ class TestContentListingObject(unittest.TestCase):
 
     def test_idublincore_created(self):
         self.assertEqual(
-            self.obj.created(), DateTime('2017/08/01 13:17:0.009000 GMT+2'))
+            self.obj.created(zone='utc'), DateTime('2017/08/01 11:17:0.009000 UTC'))
 
     def test_idublincore_modified(self):
         self.assertEqual(
-            self.obj.modified(), DateTime('2017/12/31 12:17:0.137000 GMT+1'))
+            self.obj.modified(zone='utc'), DateTime('2017/12/31 11:17:0.137000 UTC'))
 
     def test_idublincore_effective(self):
         self.assertEqual(
@@ -108,11 +108,11 @@ class TestContentListingObject(unittest.TestCase):
 
     def test_idublincore_creationdate(self):
         self.assertEqual(
-            self.obj.CreationDate(), '2017-08-01T13:17:00+02:00')
+            self.obj.CreationDate(zone='utc'), '2017-08-01T11:17:00+00:00')
 
     def test_idublincore_modificationdate(self):
         self.assertEqual(
-            self.obj.ModificationDate(), '2017-12-31T12:17:00+01:00')
+            self.obj.ModificationDate(zone='utc'), '2017-12-31T11:17:00+00:00')
 
     def test_idublincore_effectivedate(self):
         self.assertEqual(

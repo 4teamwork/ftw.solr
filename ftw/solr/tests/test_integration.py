@@ -21,6 +21,7 @@ from Products.CMFPlone.utils import getFSVersionTuple
 from zope.component import getUtility
 from zope.interface import alsoProvides
 
+import pytz
 import six
 import unittest
 
@@ -115,7 +116,7 @@ class TestIntegration(unittest.TestCase):
         )
 
     def test_reindex_object_causes_full_reindex_in_solr(self):
-        with freeze(datetime(2018, 8, 31, 13, 45)):
+        with freeze(datetime(2018, 8, 31, 13, 45, tzinfo=pytz.UTC)):
             self.subfolder.reindexObject()
         getQueue().process()
 
@@ -125,7 +126,7 @@ class TestIntegration(unittest.TestCase):
             {
                 u'UID': IUUID(self.subfolder),
                 u'Title': u'My Subfolder',
-                u'modified': u'2018-08-31T11:45:00.000Z',
+                u'modified': u'2018-08-31T13:45:00.000Z',
                 u'SearchableText': u'subfolder My Subfolder',
                 u'allowedRolesAndUsers': [u'Other'],
                 u'path': u'/plone/folder/subfolder',
