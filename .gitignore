@@ -2,9 +2,12 @@
 *.mo
 *.pyc
 *.pyo
+*-mxdev.txt
 .installed.cfg
 .mr.developer.cfg
 .Python
+.make-sentinels
+.installed.txt
 pip-selfcheck.json
 bin/
 build/
