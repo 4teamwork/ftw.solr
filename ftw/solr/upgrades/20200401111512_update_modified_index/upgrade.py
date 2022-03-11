@@ -10,10 +10,16 @@ from ftw.solr.interfaces import ISolrSettings
 from ftw.upgrade import UpgradeStep
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
-from time import clock
 from zope.component import getMultiAdapter
 from zope.component import queryUtility
 import logging
+
+
+# Python 3.8 and up compatibility
+try:
+    from time import clock
+except ImportError:
+    from time import process_time as clock
 
 
 def _pre_datetime_format_fix_to_iso8601(value, multivalued=False):
