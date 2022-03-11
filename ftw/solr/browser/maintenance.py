@@ -15,12 +15,19 @@ from Products.CMFCore.interfaces import ICatalogAware
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import base_hasattr
 from Products.Five.browser import BrowserView
-from time import clock
 from time import strftime
 from time import time
 from zope.component import getMultiAdapter
 from zope.component import queryUtility
 from zope.component.hooks import getSite
+
+
+# Python 3.8 and up compatibility
+try:
+    from time import clock
+except ImportError:
+    from time import process_time as clock
+    
 
 import logging
 import transaction
