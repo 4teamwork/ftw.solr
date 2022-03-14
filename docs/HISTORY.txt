@@ -7,6 +7,10 @@ Changelog
 - Add support for Plone 5.2 and Python 3.
   [buchi]
 
+- Add make file based Plone 6 / Python 3.9 test setup.
+- Add Python 3.8 and up compatibility.
+  [mathias.leimgruber]
+
 
 2.10.0 (2021-09-21)
 -------------------
