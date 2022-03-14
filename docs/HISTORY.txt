@@ -7,6 +7,9 @@ Changelog
 - Add support for Plone 5.2 and Python 3.
   [buchi]
 
+- Add Python 3.8 and up compatibility.
+  [mathias.leimgruber]
+
 
 2.12.1 (2022-08-03)
 -------------------
