@@ -20,6 +20,7 @@ from time import time
 from zope.component import getMultiAdapter
 from zope.component import queryUtility
 from zope.component.hooks import getSite
+import six
 
 
 # Python 3.8 and up compatibility
@@ -375,7 +376,9 @@ class SolrMaintenanceView(BrowserView):
     def log(self, msg, *args):
         logger.info(msg, *args)
         self.request.RESPONSE.write(
-            strftime('%Y-%m-%d %H:%M:%S ') + msg % args + '\n')
+            six.ensure_binary(
+                strftime('%Y-%m-%d %H:%M:%S ') + msg % args + '\n')
+            )
 
     @property
     def manager(self):
