@@ -21,8 +21,7 @@ class PloneFlare(flare.PloneFlare):
         else:
             return value
 
-    def getURL(self):
+    def getURL(self, relative=False):
         if self.getRemoteUrl and self.getRemoteUrl.startswith('http'):
             return self.getRemoteUrl
         return super(PloneFlare, self).getURL()
-
