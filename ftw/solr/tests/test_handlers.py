@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from DateTime import DateTime
+from ftw.solr.config import SolrConfig
 from ftw.solr.connection import SolrResponse
 from ftw.solr.handlers import ATBlobFileIndexHandler
 from ftw.solr.handlers import DefaultIndexHandler
@@ -9,6 +10,7 @@ from ftw.solr.testing import FTW_SOLR_AT_INTEGRATION_TESTING
 from ftw.solr.testing import FTW_SOLR_INTEGRATION_TESTING
 from ftw.solr.tests.utils import get_data
 from ftw.solr.tests.utils import normalize_whitespaces
+from mock import call
 from mock import MagicMock
 from mock import PropertyMock
 from plone import api
@@ -142,6 +144,66 @@ class TestDefaultIndexHandler(unittest.TestCase):
         self.handler.delete()
         self.manager.connection.delete.assert_called_once_with(
             u'09baa75b67f44383880a6dab8b3200b6')
+
+
+class TestDefaultIndexHandlerWithLangIdProcessor(unittest.TestCase):
+
+    layer = FTW_SOLR_INTEGRATION_TESTING
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        login(self.portal, TEST_USER_NAME)
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
+        self.doc = api.content.create(
+            type='Document', title='My Document', id='doc',
+            container=self.portal)
+        if base_hasattr(self.doc, '_setUID'):
+            self.doc._setUID('09baa75b67f44383880a6dab8b3200b6')
+            self.doc.setModificationDate(DateTime('2017-01-21T17:18:19+00:00'))
+        else:
+            IMutableUUID(self.doc).set('09baa75b67f44383880a6dab8b3200b6')
+            self.doc.modification_date = DateTime('2017-01-21T17:18:19+00:00')
+
+        conn = MagicMock(name='SolrConnection')
+        conn.get = MagicMock(name='get', return_value=SolrResponse(
+            body=get_data('schema_langid.json'), status=200))
+        self.manager = MagicMock(name='SolrConnectionManager')
+        type(self.manager).connection = PropertyMock(return_value=conn)
+        type(self.manager).schema = PropertyMock(return_value=SolrSchema(
+            self.manager))
+        conn.get = MagicMock(name='get', return_value=SolrResponse(
+            body=get_data('config_langid.json'), status=200))
+        type(self.manager).config = PropertyMock(return_value=SolrConfig(
+            self.manager))
+        self.handler = DefaultIndexHandler(self.doc, self.manager)
+
+    def test_all_indexable_fields_does_not_include_lang_fields(self):
+        fields = self.handler.all_indexable_fields()
+        self.assertIn(u'Title', fields)
+        self.assertNotIn(u'Title_de', fields)
+        self.assertNotIn(u'Title_en', fields)
+        self.assertNotIn(u'Title_fr', fields)
+        self.assertNotIn(u'Title_general', fields)
+
+    def test_add_lang_field_deletes_all_language_variants(self):
+        self.manager.connection.add = MagicMock(name='add')
+        self.handler.add(['Title', 'modified'])
+        expected = [
+            call({
+                u'Title_de': {u'set': None},
+                u'Title_en': {u'set': None},
+                u'Title_fr': {u'set': None},
+                u'Title_general': {u'set': None},
+                u'UID': u'09baa75b67f44383880a6dab8b3200b6',
+            }),
+            call({
+                u'UID': u'09baa75b67f44383880a6dab8b3200b6',
+                u'modified': {u'set': u'2017-01-21T17:18:19.000Z'},
+                u'Title': {u'set': u'My Document'},
+            }),
+        ]
+        assert self.manager.connection.add.call_args_list == expected
 
 
 @unittest.skipIf(getFSVersionTuple() >= (5, 0),

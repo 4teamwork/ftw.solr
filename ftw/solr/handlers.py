@@ -38,6 +38,7 @@ class DefaultIndexHandler(object):
             return
 
         if attributes:
+            self.unset_lang_fields(attributes, data)
             data = self.add_atomic_update_modifier(data, unique_key)
 
         if data:
@@ -74,9 +75,9 @@ class DefaultIndexHandler(object):
 
         schema = self.manager.schema
         if not attributes:
-            attributes = set(schema.fields.keys())
+            attributes = self.all_indexable_fields()
         else:
-            attributes = set(schema.fields.keys()).intersection(attributes)
+            attributes = self.all_indexable_fields().intersection(attributes)
 
         if schema.unique_key not in attributes:
             attributes.add(schema.unique_key)
@@ -129,6 +130,25 @@ class DefaultIndexHandler(object):
         data[unique_key] = id_
         return data
 
+    def unset_lang_fields(self, attributes, data):
+        unset_lang_fields = {}
+        for field in self.manager.config.langid_fields:
+            if field in attributes:
+                unset_lang_fields.update({
+                    '{}_{}'.format(field, lang): {'set': None}
+                    for lang in self.manager.config.langid_langs
+                })
+        if unset_lang_fields:
+            unique_key = self.manager.schema.unique_key
+            unset_lang_fields[unique_key] = data[unique_key]
+            self.manager.connection.add(unset_lang_fields)
+
+    def all_indexable_fields(self):
+        return (
+            set(self.manager.schema.fields.keys())
+            - set(self.manager.config.langid_langfields)
+        )
+
 
 @implementer(ISolrIndexHandler)
 class ATBlobFileIndexHandler(DefaultIndexHandler):
@@ -146,7 +166,7 @@ class ATBlobFileIndexHandler(DefaultIndexHandler):
             return
 
         if attributes is None:
-            attributes = self.manager.schema.fields.keys()
+            attributes = self.all_indexable_fields()
 
         extract = False
         if 'SearchableText' in attributes:
@@ -157,11 +177,13 @@ class ATBlobFileIndexHandler(DefaultIndexHandler):
         raw_data = self.get_data(attributes)
 
         if attributes:
+            self.unset_lang_fields(attributes, raw_data)
             data = self.add_atomic_update_modifier(raw_data, unique_key)
             if data:
                 self.manager.connection.add(data)
 
         if extract:
+            self.unset_lang_fields(['SearchableText'], raw_data)
             field = self.context.getPrimaryField()
             blob = field.get(self.context).blob
             content_type = field.get(self.context).getContentType()
@@ -196,7 +218,7 @@ class DexterityItemIndexHandler(DefaultIndexHandler):
             content_type = info.value.contentType
 
         if not attributes:
-            attributes = self.manager.schema.fields.keys()
+            attributes = self.all_indexable_fields()
 
         extract = False
         if 'SearchableText' in attributes and blob is not None:
@@ -207,11 +229,13 @@ class DexterityItemIndexHandler(DefaultIndexHandler):
         raw_data = self.get_data(attributes)
 
         if attributes:
+            self.unset_lang_fields(attributes, raw_data)
             data = self.add_atomic_update_modifier(raw_data, unique_key)
             if data:
                 self.manager.connection.add(data)
 
         if extract:
+            self.unset_lang_fields(['SearchableText'], raw_data)
             self.manager.connection.extract(
                 blob, 'SearchableText', {unique_key: raw_data[unique_key]},
                 content_type)

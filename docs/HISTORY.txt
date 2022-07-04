@@ -4,7 +4,7 @@ Changelog
 2.10.1 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Add support for language specific fields. [buchi]
 
 
 2.10.0 (2021-09-21)

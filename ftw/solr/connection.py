@@ -1,3 +1,4 @@
+from ftw.solr.config import SolrConfig
 from ftw.solr.helpers import chunked_file_reader
 from ftw.solr.helpers import group_by_two
 from ftw.solr.helpers import http_chunked_encoder
@@ -267,6 +268,14 @@ class SolrConnectionManager(object):
             schema = SolrSchema(manager=self)
             setattr(local_data, 'schema', schema)
         return schema
+
+    @property
+    def config(self):
+        config = getattr(local_data, 'config', None)
+        if not config:
+            config = SolrConfig(manager=self)
+            setattr(local_data, 'config', config)
+        return config
 
 
 class SolrResponse(object):
