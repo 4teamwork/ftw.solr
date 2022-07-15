@@ -16,6 +16,7 @@ import json
 import os.path
 import socket
 import transaction
+import time
 
 
 logger = getLogger('ftw.solr.connection')
@@ -47,6 +48,7 @@ class SolrConnection(object):
         self.upload_blobs = upload_blobs
         self.conn = HTTPConnection(self.host, self.port, timeout=self.timeout)
         self.update_commands = []
+        self.post_commit_update_commands = []
         self.extract_commands = []
         self.reconnect_before_request = False
 
@@ -113,8 +115,11 @@ class SolrConnection(object):
         self.conn.close()
         self.conn.connect()
 
-    def add(self, data):
-        self.update_commands.append('"add": ' + json.dumps({'doc': data}))
+    def add(self, data, post_commit=False):
+        if post_commit:
+            self.post_commit_update_commands.append('"add": ' + json.dumps({'doc': data}))
+        else:
+            self.update_commands.append('"add": ' + json.dumps({'doc': data}))
 
     def extract(self, blob, field, data, content_type):
         """Add blob using Solr's Extracting Request Handler."""
@@ -133,6 +138,10 @@ class SolrConnection(object):
         self.update_commands.append(
             '"commit": ' + json.dumps(
                 {'waitSearcher': wait_searcher, 'softCommit': soft_commit}))
+        if self.post_commit_update_commands:
+            self.post_commit_update_commands.append(
+                '"commit": ' + json.dumps(
+                    {'waitSearcher': wait_searcher, 'softCommit': soft_commit}))
         self.flush(extract_after_commit=extract_after_commit)
 
     def optimize(self, wait_searcher=True):
@@ -222,6 +231,19 @@ class SolrConnection(object):
             else:
                 hook(True, self.extract_commands)
             self.extract_commands = []
+
+        if self.post_commit_update_commands:
+            def hook(succeeded, post_commit_update_commands):
+                if not succeeded:
+                    return
+                data = '{%s}' % ','.join(post_commit_update_commands)
+                resp = self.post('/update', data=data, log_error=False)
+                if not resp.is_ok():
+                    logger.error('Post commit update command failed. %s', resp.error_msg())
+            transaction.get().addAfterCommitHook(
+                hook, args=[self.post_commit_update_commands])
+
+            self.post_commit_update_commands = []
 
     def abort(self):
         """Abort all pending commands."""

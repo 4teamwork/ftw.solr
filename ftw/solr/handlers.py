@@ -42,7 +42,10 @@ class DefaultIndexHandler(object):
             data = self.add_atomic_update_modifier(data, unique_key)
 
         if data:
-            self.manager.connection.add(data)
+            if len(data.keys()) == 2 and 'allowedRolesAndUsers' in data:
+                self.manager.connection.add(data, post_commit=True)
+            else:
+                self.manager.connection.add(data, post_commit=False)
 
     def delete(self):
         if self.manager.connection is None:
@@ -232,7 +235,10 @@ class DexterityItemIndexHandler(DefaultIndexHandler):
             self.unset_lang_fields(attributes, raw_data)
             data = self.add_atomic_update_modifier(raw_data, unique_key)
             if data:
-                self.manager.connection.add(data)
+                if len(data.keys()) == 2 and 'allowedRolesAndUsers' in data:
+                    self.manager.connection.add(data, post_commit=True)
+                else:
+                    self.manager.connection.add(data, post_commit=False)
 
         if extract:
             self.unset_lang_fields(['SearchableText'], raw_data)
