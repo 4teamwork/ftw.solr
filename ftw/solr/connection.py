@@ -165,9 +165,20 @@ class SolrConnection(object):
         """Send queued update commands to Solr."""
         if self.update_commands:
             data = '{%s}' % ','.join(self.update_commands)
-            resp = self.post('/update', data=data, log_error=False)
-            if not resp.is_ok():
-                logger.error('Update command failed. %s', resp.error_msg())
+
+            def hook(succeeded, data):
+                if not succeeded:
+                    return
+                resp = self.post('/update', data=data, log_error=False)
+                if not resp.is_ok():
+                    logger.error('Post commit update command failed. %s',
+                                 resp.error_msg())
+            transaction.get().addAfterCommitHook(
+                hook, args=[data])
+
+            # resp = self.post('/update', data=data, log_error=False)
+            # if not resp.is_ok():
+            #     logger.error('Update command failed. %s', resp.error_msg())
             self.update_commands = []
 
         if self.extract_commands:
