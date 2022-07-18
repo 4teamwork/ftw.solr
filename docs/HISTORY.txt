@@ -4,7 +4,7 @@ Changelog
 2.11.1 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Add option to also check allowedRolesAndUsers when determining items not up to date in Solr. [njohner]
 
 
 2.11.0 (2022-07-04)

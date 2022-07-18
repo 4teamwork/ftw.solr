@@ -58,6 +58,12 @@ def solr(app, args):
     parser.add_argument('--max-diff', dest='max_diff', default=5, type=int,
                         help="Maximum items to log in diff. Use negative "
                              "number for infinite.")
+    parser.add_argument('--include-allowed-roles-and-users',
+                        dest='include_allowed_roles_and_users',
+                        default=False,
+                        type=bool,
+                        help="Include allowedRolesAndUsers index when checking"
+                             "whether a document is up to date in solr.")
     options = parser.parse_args(args[2:])
     app = makerequest(app)
     site = setup_site(app, options)
@@ -77,7 +83,8 @@ def solr(app, args):
     elif options.command == 'sync':
         solr_maintenance.sync(
             commit_interval=options.commit_interval, idxs=options.indexes,
-            max_diff=max_diff)
+            max_diff=max_diff,
+            include_allowed_roles_and_users=options.include_allowed_roles_and_users)
     elif options.command == 'optimize':
         solr_maintenance.optimize()
         print("Solr index optimized.")
@@ -85,6 +92,8 @@ def solr(app, args):
         solr_maintenance.clear()
         print("Solr index cleared.")
     elif options.command == 'diff':
-        solr_maintenance.diff(max_diff=max_diff)
+        solr_maintenance.diff(
+            max_diff=max_diff,
+            include_allowed_roles_and_users=options.include_allowed_roles_and_users)
     else:
         sys.exit("Unknown command '%s'." % options.command)

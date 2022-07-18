@@ -6,8 +6,10 @@ from ftw.solr.interfaces import ISolrIndexHandler
 from ftw.solr.interfaces import ISolrSettings
 from itertools import islice
 from logging import getLogger
+from logging.handlers import TimedRotatingFileHandler
 from os.path import dirname
 from os.path import join as pjoin
+from plone import api
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces import ICatalogAware
 from Products.CMFCore.utils import getToolByName
@@ -20,7 +22,6 @@ from zope.component import getMultiAdapter
 from zope.component import queryUtility
 from zope.component.hooks import getSite
 import logging
-from logging.handlers import TimedRotatingFileHandler
 import transaction
 
 
@@ -233,7 +234,7 @@ class SolrMaintenanceView(BrowserView):
             'Processed %d items in %s (%s cpu time).',
             processed, real.next(), cpu.next())
 
-    def diff(self, max_diff=5):
+    def diff(self, max_diff=5, include_allowed_roles_and_users=False):
         """Diff with portal catalog"""
         if not self.is_enabled():
             return 'Solr indexing is disabled.'
@@ -245,10 +246,13 @@ class SolrMaintenanceView(BrowserView):
             [(item.UID, solr_date(item.modified)) for item in items])
 
         conn = self.manager.connection
+        fl = ['UID', 'modified']
+        if include_allowed_roles_and_users:
+            fl.append('allowedRolesAndUsers')
         resp = conn.search({
             u'query': u'*:*',
             u'limit': 10000000,
-            u'params': {u'fl': ['UID', 'modified']},
+            u'params': {u'fl': fl},
         })
         solr_uids = set([doc['UID'].encode('utf8') for doc in resp.docs])
         solr_modified = set(
@@ -272,13 +276,30 @@ class SolrMaintenanceView(BrowserView):
         if not not_in_catalog and not not_in_solr:
             self.log('Solr and Portal Catalog contain the same items. :-)')
 
-        not_in_sync = [item[0] for item in catalog_modified - solr_modified]
+        not_in_sync = {item[0] for item in catalog_modified - solr_modified}
+
+        if include_allowed_roles_and_users:
+            catalog = api.portal.get_tool('portal_catalog')
+            allowedRolesAndUsers_index = catalog._catalog.getIndex('allowedRolesAndUsers')
+
+            def get_allowed_roles_and_users(brain):
+                return allowedRolesAndUsers_index.getEntryForObject(catalog._catalog.uids[brain.getPath()])
+
+            catalog_arau = set(
+                [(item.UID, tuple(sorted(get_allowed_roles_and_users(item)))) for item in items])
+
+            solr_arau = set(
+                [(doc['UID'], tuple(sorted(doc.get('allowedRolesAndUsers', tuple()))))
+                 for doc in resp.docs])
+            not_in_sync.update({item[0] for item in catalog_arau - solr_arau})
+
         incomplete = conn.search({
             u'query': u'-created:[* TO *]',
             u'limit': 10000000,
             u'params': {u'fl': 'UID'},
         })
-        not_in_sync.extend([doc['UID'] for doc in incomplete.docs])
+        not_in_sync.update({doc['UID'] for doc in incomplete.docs})
+        not_in_sync = list(not_in_sync)
         if not_in_sync:
             self.log(
                 'Total of %s items not in sync: %s',
@@ -286,13 +307,16 @@ class SolrMaintenanceView(BrowserView):
                 ellipsified_join(not_in_sync, max_diff))
         return not_in_catalog, not_in_solr, not_in_sync
 
-    def sync(self, commit_interval=100, idxs=None, doom=True, max_diff=5):
+    def sync(self, commit_interval=100, idxs=None, doom=True, max_diff=5,
+             include_allowed_roles_and_users=False):
         """Sync Solr with portal catalog"""
         if not self.is_enabled():
             return 'Solr indexing is disabled.'
 
         catalog = getToolByName(self.context, 'portal_catalog')
-        not_in_catalog, not_in_solr, not_in_sync = self.diff(max_diff=max_diff)
+        not_in_catalog, not_in_solr, not_in_sync = self.diff(
+            max_diff=max_diff,
+            include_allowed_roles_and_users=include_allowed_roles_and_users)
 
         if not not_in_sync and not not_in_catalog:
             return
