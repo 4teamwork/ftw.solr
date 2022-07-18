@@ -3,20 +3,26 @@ from ftw.solr.connection import SolrConnection
 from ftw.solr.connection import SolrConnectionConfig
 from ftw.solr.connection import SolrConnectionManager
 from ftw.solr.connection import SolrResponse
-from ftw.solr.tests.utils import get_data
-from ftw.solr.tests.utils import MockHTTPResponse
-from ftw.solr.tests.utils import MockBlob
 from ftw.solr.interfaces import ISolrConnectionConfig
-from mock import patch
+from ftw.solr.interfaces import ISolrSettings
+from ftw.solr.testing import FTW_SOLR_INTEGRATION_TESTING
+from ftw.solr.tests.utils import get_data
+from ftw.solr.tests.utils import MockBlob
+from ftw.solr.tests.utils import MockHTTPResponse
 from mock import MagicMock
-from zope.component import provideUtility
+from mock import patch
+from plone.registry.interfaces import IRegistry
 from plone.testing import zca
-import unittest
-import transaction
+from zope.component import provideUtility
+from zope.component import queryUtility
 import socket
+import transaction
+import unittest
 
 
 class TestConnection(unittest.TestCase):
+
+    layer = FTW_SOLR_INTEGRATION_TESTING
 
     def test_connection_initialization(self):
         conn = SolrConnection(host='mysolrserver', base='/solr/mycore')
@@ -102,6 +108,31 @@ class TestConnection(unittest.TestCase):
         conn.post.assert_called_once_with(
             '/update', data='{"add": {"doc": {"id": "1"}}}', log_error=False)
         self.assertEqual(conn.update_commands, [])
+
+    def test_flush_operation_adds_updates_to_post_commit_hook_if_enabled(self):
+        registry = queryUtility(IRegistry)
+        settings = registry.forInterface(ISolrSettings)
+        settings.enable_updates_in_post_commit_hook = True
+
+        hooks = list(transaction.get().getAfterCommitHooks())
+        self.assertEqual(0, len(hooks))
+
+        conn = SolrConnection(base='/solr/mycore')
+        conn.post = MagicMock(name='post', return_value=SolrResponse(
+            body='{"responseHeader":{"status":0}}', status=200))
+        conn.add({'id': '1'})
+        conn.flush()
+        self.assertEqual(conn.update_commands, [])
+        self.assertEqual(0, conn.post.call_count)
+
+        hooks = list(transaction.get().getAfterCommitHooks())
+        self.assertEqual(1, len(hooks))
+        hook = hooks[0]
+        hook[0](True, *hook[1], **hook[2])
+
+        self.assertEqual(1, conn.post.call_count)
+        conn.post.assert_called_once_with(
+            '/update', data='{"add": {"doc": {"id": "1"}}}', log_error=False)
 
     def test_flush_operation_posts_extract_commands_and_clears_queue(self):
         conn = SolrConnection(base='/solr/mycore')

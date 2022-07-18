@@ -87,3 +87,11 @@ class ISolrSettings(Interface):
                     u'query.',
         default=u'Title:({phrase})^10 OR SearchableText:({phrase})',
     )
+
+    enable_updates_in_post_commit_hook = Bool(
+        title=u'Enable performing update operations in a post commit hook.',
+        description=u'Check this to allow performing update operations in a '
+                    u'post commit hook. This allows to optimize the time the '
+                    u'zodb is locked.',
+        default=False,
+    )

@@ -5,6 +5,7 @@ Changelog
 -------------------
 
 - Add option to also check allowedRolesAndUsers when determining items not up to date in Solr. [njohner]
+- Add option to execute update commands in post commit hook. [njohner]
 
 
 2.11.0 (2022-07-04)

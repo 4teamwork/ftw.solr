@@ -4,10 +4,12 @@ from ftw.solr.helpers import group_by_two
 from ftw.solr.helpers import http_chunked_encoder
 from ftw.solr.interfaces import ISolrConnectionConfig
 from ftw.solr.interfaces import ISolrConnectionManager
+from ftw.solr.interfaces import ISolrSettings
 from ftw.solr.schema import SolrSchema
 from httplib import HTTPConnection
 from httplib import HTTPException
 from logging import getLogger
+from plone.registry.interfaces import IRegistry
 from threading import local
 from urllib import urlencode
 from zope.component import queryUtility
@@ -161,13 +163,31 @@ class SolrConnection(object):
             added.add((uid, field))
         self.extract_commands = reversed(filtered_extract_commands)
 
+    def updates_in_post_commit_enabled(self):
+        registry = queryUtility(IRegistry)
+        settings = registry.forInterface(ISolrSettings)
+        return settings.enable_updates_in_post_commit_hook
+
     def flush(self, extract_after_commit=True):
         """Send queued update commands to Solr."""
         if self.update_commands:
             data = '{%s}' % ','.join(self.update_commands)
-            resp = self.post('/update', data=data, log_error=False)
-            if not resp.is_ok():
-                logger.error('Update command failed. %s', resp.error_msg())
+
+            if self.updates_in_post_commit_enabled():
+                def hook(succeeded, data):
+                    if not succeeded:
+                        return
+                    resp = self.post('/update', data=data, log_error=False)
+                    if not resp.is_ok():
+                        logger.error('Post commit update command failed. %s',
+                                     resp.error_msg())
+                transaction.get().addAfterCommitHook(
+                    hook, args=[data])
+            else:
+                resp = self.post('/update', data=data, log_error=False)
+                if not resp.is_ok():
+                    logger.error('Update command failed. %s', resp.error_msg())
+
             self.update_commands = []
 
         if self.extract_commands:
