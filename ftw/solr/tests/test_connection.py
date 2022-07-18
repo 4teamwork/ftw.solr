@@ -86,7 +86,7 @@ class TestConnection(unittest.TestCase):
         conn = SolrConnection(base='/solr/mycore')
         conn.flush = MagicMock(name='flush')
         conn.commit()
-        conn.flush.assert_called_once_with(extract_after_commit=True)
+        conn.flush.assert_called_once_with(after_commit=True)
         self.assertEqual(
             conn.update_commands,
             ['"commit": {"softCommit": true, "waitSearcher": true}'])
@@ -256,7 +256,7 @@ class TestConnection(unittest.TestCase):
         conn.post.return_value.body.get.return_value = 'The searchable text'
         conn.extract(MockBlob(), 'SearchableText', {'id': '1'},
                      'application/octet-stream')
-        conn.flush(extract_after_commit=False)
+        conn.flush(after_commit=False)
 
         args, kwargs = conn.post.call_args_list[0]
         self.assertEqual(

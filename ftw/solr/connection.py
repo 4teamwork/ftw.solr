@@ -131,11 +131,11 @@ class SolrConnection(object):
             '"delete": ' + json.dumps({'query': query}))
 
     def commit(self, wait_searcher=True, soft_commit=True,
-               extract_after_commit=True):
+               after_commit=True):
         self.update_commands.append(
             '"commit": ' + json.dumps(
                 {'waitSearcher': wait_searcher, 'softCommit': soft_commit}))
-        self.flush(extract_after_commit=extract_after_commit)
+        self.flush(after_commit=after_commit)
 
     def optimize(self, wait_searcher=True):
         self.update_commands.append(
@@ -168,12 +168,12 @@ class SolrConnection(object):
         settings = registry.forInterface(ISolrSettings)
         return settings.enable_updates_in_post_commit_hook
 
-    def flush(self, extract_after_commit=True):
+    def flush(self, after_commit=True):
         """Send queued update commands to Solr."""
         if self.update_commands:
             data = '{%s}' % ','.join(self.update_commands)
 
-            if self.updates_in_post_commit_enabled():
+            if self.updates_in_post_commit_enabled() and after_commit:
                 def hook(succeeded, data):
                     if not succeeded:
                         return
@@ -236,7 +236,7 @@ class SolrConnection(object):
                             'Update command failed. %s', resp.error_msg())
 
             self.filter_extract_commands()
-            if extract_after_commit:
+            if after_commit:
                 transaction.get().addAfterCommitHook(
                     hook, args=[self.extract_commands])
             else:

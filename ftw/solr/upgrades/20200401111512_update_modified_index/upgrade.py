@@ -124,7 +124,7 @@ class UpdateModifiedIndex(UpgradeStep):
 
         def commit():
             conn = self.manager.connection
-            conn.commit(soft_commit=False, extract_after_commit=False)
+            conn.commit(soft_commit=False, after_commit=False)
             self.log(
                 'Intermediate commit (%d items processed, last batch in %s)',
                 processed, next(lap))
