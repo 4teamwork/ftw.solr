@@ -99,7 +99,11 @@ class TestConnection(unittest.TestCase):
         self.assertEqual(
             conn.update_commands, ['"optimize": {"waitSearcher": true}'])
 
-    def test_flush_operation_posts_update_commands_and_clears_queue(self):
+    def test_flush_operation_posts_update_commands_and_clears_queue_if_post_commit_hook_disabled(self):
+        registry = queryUtility(IRegistry)
+        settings = registry.forInterface(ISolrSettings)
+        settings.enable_updates_in_post_commit_hook = False
+
         conn = SolrConnection(base='/solr/mycore')
         conn.post = MagicMock(name='post', return_value=SolrResponse(
             body='{"responseHeader":{"status":0}}', status=200))
@@ -110,10 +114,6 @@ class TestConnection(unittest.TestCase):
         self.assertEqual(conn.update_commands, [])
 
     def test_flush_operation_adds_updates_to_post_commit_hook_if_enabled(self):
-        registry = queryUtility(IRegistry)
-        settings = registry.forInterface(ISolrSettings)
-        settings.enable_updates_in_post_commit_hook = True
-
         hooks = list(transaction.get().getAfterCommitHooks())
         self.assertEqual(0, len(hooks))
 

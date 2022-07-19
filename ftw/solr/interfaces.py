@@ -93,5 +93,5 @@ class ISolrSettings(Interface):
         description=u'Check this to allow performing update operations in a '
                     u'post commit hook. This allows to optimize the time the '
                     u'zodb is locked.',
-        default=False,
+        default=True,
     )
