@@ -4,10 +4,12 @@ from ftw.solr.helpers import group_by_two
 from ftw.solr.helpers import http_chunked_encoder
 from ftw.solr.interfaces import ISolrConnectionConfig
 from ftw.solr.interfaces import ISolrConnectionManager
+from ftw.solr.interfaces import ISolrSettings
 from ftw.solr.schema import SolrSchema
 from httplib import HTTPConnection
 from httplib import HTTPException
 from logging import getLogger
+from plone.registry.interfaces import IRegistry
 from threading import local
 from urllib import urlencode
 from zope.component import queryUtility
@@ -129,11 +131,11 @@ class SolrConnection(object):
             '"delete": ' + json.dumps({'query': query}))
 
     def commit(self, wait_searcher=True, soft_commit=True,
-               extract_after_commit=True):
+               after_commit=True):
         self.update_commands.append(
             '"commit": ' + json.dumps(
                 {'waitSearcher': wait_searcher, 'softCommit': soft_commit}))
-        self.flush(extract_after_commit=extract_after_commit)
+        self.flush(after_commit=after_commit)
 
     def optimize(self, wait_searcher=True):
         self.update_commands.append(
@@ -161,13 +163,31 @@ class SolrConnection(object):
             added.add((uid, field))
         self.extract_commands = reversed(filtered_extract_commands)
 
-    def flush(self, extract_after_commit=True):
+    def updates_in_post_commit_enabled(self):
+        registry = queryUtility(IRegistry)
+        settings = registry.forInterface(ISolrSettings)
+        return settings.enable_updates_in_post_commit_hook
+
+    def flush(self, after_commit=True):
         """Send queued update commands to Solr."""
         if self.update_commands:
             data = '{%s}' % ','.join(self.update_commands)
-            resp = self.post('/update', data=data, log_error=False)
-            if not resp.is_ok():
-                logger.error('Update command failed. %s', resp.error_msg())
+
+            if self.updates_in_post_commit_enabled() and after_commit:
+                def hook(succeeded, data):
+                    if not succeeded:
+                        return
+                    resp = self.post('/update', data=data, log_error=False)
+                    if not resp.is_ok():
+                        logger.error('Post commit update command failed. %s',
+                                     resp.error_msg())
+                transaction.get().addAfterCommitHook(
+                    hook, args=[data])
+            else:
+                resp = self.post('/update', data=data, log_error=False)
+                if not resp.is_ok():
+                    logger.error('Update command failed. %s', resp.error_msg())
+
             self.update_commands = []
 
         if self.extract_commands:
@@ -216,7 +236,7 @@ class SolrConnection(object):
                             'Update command failed. %s', resp.error_msg())
 
             self.filter_extract_commands()
-            if extract_after_commit:
+            if after_commit:
                 transaction.get().addAfterCommitHook(
                     hook, args=[self.extract_commands])
             else:
