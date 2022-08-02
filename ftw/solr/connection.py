@@ -165,6 +165,9 @@ class SolrConnection(object):
 
     def updates_in_post_commit_enabled(self):
         registry = queryUtility(IRegistry)
+        if registry is None:
+            # Plone site might not exist yet
+            return True
         settings = registry.forInterface(ISolrSettings)
         return settings.enable_updates_in_post_commit_hook
 
