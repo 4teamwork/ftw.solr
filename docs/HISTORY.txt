@@ -4,7 +4,7 @@ Changelog
 2.12.1 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Make updates_in_post_commit_enabled() helper more robust. [lgraf]
 
 
 2.12.0 (2022-07-19)
