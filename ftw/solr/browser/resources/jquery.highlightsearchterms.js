@@ -16,7 +16,7 @@
 
     Highlighter = function (options) {
         $.extend(this, options);
-        this.terms = this.cleanTerms(this.terms.length ? this.terms : this.getSearchTerms());
+        this.terms = this.cleanTerms(this.terms.length !== 0 ? this.terms : this.getSearchTerms());
     };
     Highlighter.prototype = {
         highlight: function(startnode) {
@@ -198,7 +198,7 @@
         // Are terms matched case insensitive?
         caseInsensitive: true,
         // what terms are never to be highlighted (regexp)?
-        filterTerms: /(not|and|or)/i,
+        filterTerms: /(\bnot\b|\and\b|\bor\b)/i,
         // What class is used to mark highlighted search terms?
         highlightClass: 'highlightedSearchTerm'
     };

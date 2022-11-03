@@ -6,6 +6,9 @@ Changelog
 
 - Add missing kwarg 'realtive' to getURL (flare). [mathias.leimgruber]
 
+- Fix Highlight word feature - only match full words to ignire (nor, or, and).
+  For example: notfall got ignored before as well. [mathias.leimgruber]
+
 
 1.13.10 (2021-12-06)
 --------------------
