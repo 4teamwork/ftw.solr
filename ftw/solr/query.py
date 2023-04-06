@@ -153,7 +153,7 @@ def ensure_text(value):
     if isinstance(value, bytes):
         value = value.decode('utf8')
     elif isinstance(value, (int, float)):
-        value = unicode(value)
+        value = six.text_type(value)
     elif isinstance(value, (list, tuple)):
         value = [ensure_text(v) for v in value]
     return value
