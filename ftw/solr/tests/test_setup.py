@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
 """Setup tests for this package."""
-from plone import api
 from ftw.solr.testing import FTW_SOLR_INTEGRATION_TESTING  # noqa
+from plone import api
 
 import unittest
+
+
+try:
+    from Products.CMFPlone.utils import get_installer
+except ImportError:
+    get_installer = None
 
 
 class TestSetup(unittest.TestCase):
@@ -14,12 +20,15 @@ class TestSetup(unittest.TestCase):
     def setUp(self):
         """Custom shared utility setup for tests."""
         self.portal = self.layer['portal']
-        self.installer = api.portal.get_tool('portal_quickinstaller')
 
     def test_product_installed(self):
         """Test if ftw.solr is installed."""
-        self.assertTrue(self.installer.isProductInstalled(
-            'ftw.solr'))
+        if get_installer is None:
+            installer = api.portal.get_tool('portal_quickinstaller')
+            self.assertTrue(installer.isProductInstalled('ftw.solr'))
+        else:
+            installer = get_installer(self.portal, self.portal.REQUEST)
+            self.assertTrue(installer.is_product_installed('ftw.solr'))
 
     def test_browserlayer(self):
         """Test that IFtwSolrLayer is registered."""
@@ -37,19 +46,24 @@ class TestUninstall(unittest.TestCase):
 
     def setUp(self):
         self.portal = self.layer['portal']
-        self.installer = api.portal.get_tool('portal_quickinstaller')
-        self.installer.uninstallProducts(['ftw.solr'])
+
+        if get_installer is None:
+            self.installer = api.portal.get_tool('portal_quickinstaller')
+            self.installer.uninstallProducts(['ftw.solr'])
+        else:
+            self.installer = get_installer(self.portal, self.portal.REQUEST)
+            self.installer.uninstall_product('ftw.solr')
 
     def test_product_uninstalled(self):
         """Test if ftw.solr is cleanly uninstalled."""
-        self.assertFalse(self.installer.isProductInstalled(
-            'ftw.solr'))
+        if get_installer is None:
+            self.assertFalse(self.installer.isProductInstalled('ftw.solr'))
+        else:
+            self.assertFalse(self.installer.is_product_installed('ftw.solr'))
 
     def test_browserlayer_removed(self):
         """Test that IFtwSolrLayer is removed."""
-        from ftw.solr.interfaces import \
-            IFtwSolrLayer
+        from ftw.solr.interfaces import IFtwSolrLayer
         from plone.browserlayer import utils
-        self.assertNotIn(
-           IFtwSolrLayer,
-           utils.registered_layers())
+
+        self.assertNotIn(IFtwSolrLayer, utils.registered_layers())

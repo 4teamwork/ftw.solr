@@ -1,5 +1,5 @@
 from functools import partial
-from itertools import izip
+from six.moves import zip
 
 
 MAXCHUNKSIZE = 1 << 16
@@ -8,7 +8,7 @@ MAXCHUNKSIZE = 1 << 16
 def group_by_two(iterable):
     # group_by_two('ABCDEFG') --> AB CD EF
     args = [iter(iterable)] * 2
-    return izip(*args)
+    return zip(*args)
 
 
 def chunked_file_reader(open_file, chunk_size=MAXCHUNKSIZE):

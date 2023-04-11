@@ -1,13 +1,23 @@
 from ftw.solr.interfaces import PLONE51
 from plone.indexer.interfaces import IIndexer
-from Products.Archetypes.CatalogMultiplex import CatalogMultiplex
-from Products.Archetypes.config import TOOL_NAME
-from Products.Archetypes.utils import isFactoryContained
 from Products.CMFCore.CMFCatalogAware import CMFCatalogAware
 from Products.CMFCore.interfaces import ICatalogTool
 from Products.CMFCore.interfaces._content import ICatalogAware
 from Products.CMFCore.utils import getToolByName
 from zope.component import queryMultiAdapter
+
+import pkg_resources
+
+
+try:
+    pkg_resources.get_distribution("Products.Archetypes")
+except pkg_resources.DistributionNotFound:
+    HAS_AT = False
+else:
+    HAS_AT = True
+    from Products.Archetypes.CatalogMultiplex import CatalogMultiplex
+    from Products.Archetypes.config import TOOL_NAME
+    from Products.Archetypes.utils import isFactoryContained
 
 if not PLONE51:
     # Make sure collective.indexing patches are applied before our patches
@@ -160,22 +170,6 @@ def recursive_index_security(catalog, obj, skip_self=False):
             recursive_index_security(catalog, subobj)
 
 
-def ftw_solr_CatalogMultiplex_reindexObjectSecurity(self, skip_self=False):
-    """Update security information in all registered catalogs.
-    """
-    if isFactoryContained(self):
-        return
-    at = getToolByName(self, TOOL_NAME, None)
-    if at is None:
-        return
-
-    catalogs = [c for c in at.getCatalogsByType(self.meta_type)
-                if ICatalogTool.providedBy(c)]
-
-    for catalog in catalogs:
-        recursive_index_security(catalog, self, skip_self=skip_self)
-
-
 def ftw_solr_CatalogAware_reindexObjectSecurity(self, skip_self=False):
     """Reindex security-related indexes on the object.
     """
@@ -188,6 +182,23 @@ def ftw_solr_CatalogAware_reindexObjectSecurity(self, skip_self=False):
     if s is None:
         self._p_deactivate()
 
-
 CMFCatalogAware.reindexObjectSecurity = ftw_solr_CatalogAware_reindexObjectSecurity  # noqa
-CatalogMultiplex.reindexObjectSecurity = ftw_solr_CatalogMultiplex_reindexObjectSecurity  # noqa
+
+
+if HAS_AT:
+    def ftw_solr_CatalogMultiplex_reindexObjectSecurity(self, skip_self=False):
+        """Update security information in all registered catalogs.
+        """
+        if isFactoryContained(self):
+            return
+        at = getToolByName(self, TOOL_NAME, None)
+        if at is None:
+            return
+
+        catalogs = [c for c in at.getCatalogsByType(self.meta_type)
+                    if ICatalogTool.providedBy(c)]
+
+        for catalog in catalogs:
+            recursive_index_security(catalog, self, skip_self=skip_self)
+
+    CatalogMultiplex.reindexObjectSecurity = ftw_solr_CatalogMultiplex_reindexObjectSecurity  # noqa

@@ -6,14 +6,15 @@ from ftw.solr.interfaces import ISolrConnectionConfig
 from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrSettings
 from ftw.solr.schema import SolrSchema
-from httplib import HTTPConnection
-from httplib import HTTPException
 from logging import getLogger
 from plone.registry.interfaces import IRegistry
+from six.moves.http_client import HTTPConnection
+from six.moves.http_client import HTTPException
+from six.moves.urllib.parse import urlencode
 from threading import local
-from urllib import urlencode
 from zope.component import queryUtility
 from zope.interface import implementer
+
 import json
 import os.path
 import socket
@@ -232,7 +233,7 @@ class SolrConnection(object):
                     }
                     resp = self.post(
                         '/update',
-                        data=json.dumps(update_command),
+                        data=json.dumps(update_command, sort_keys=True),
                         log_error=False)
                     if not resp.is_ok():
                         logger.error(

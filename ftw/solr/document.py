@@ -1,14 +1,17 @@
 from ftw.solr.interfaces import ISolrDocument
+from six.moves import map
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.interface import implementer
+
+import six
 
 
 @implementer(ISolrDocument)
 class SolrDocument(object):
 
     def __init__(self, data, fields=None):
-        self.data = unicode2bytes(data)
+        self.data = text2str(data)
         self.fields = fields or list()
 
     def __getitem__(self, key):
@@ -67,12 +70,12 @@ class SolrDocument(object):
             return None
 
 
-def unicode2bytes(data):
-    if isinstance(data, unicode):
-        return data.encode('utf8')
+def text2str(data):
+    if isinstance(data, six.text_type):
+        return six.ensure_str(data)
     elif isinstance(data, dict):
-        return dict(map(unicode2bytes, data.iteritems()))
+        return dict(map(text2str, six.iteritems(data)))
     elif isinstance(data, (list, tuple)):
-        return list(map(unicode2bytes, data))
+        return list(map(text2str, data))
     else:
         return data

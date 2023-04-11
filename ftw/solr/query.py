@@ -3,10 +3,12 @@ from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrSettings
 from logging import getLogger
 from plone.registry.interfaces import IRegistry
+from six.moves import range
 from zope.component import getUtility
 from ZPublisher.HTTPRequest import record
 
 import re
+import six
 
 logger = getLogger('ftw.solr.query')
 
@@ -57,7 +59,7 @@ def split_simple_search(phrase):
 
 def make_query(phrase):
     phrase = phrase.strip()
-    if isinstance(phrase, str):
+    if isinstance(phrase, six.binary_type):
         phrase = phrase.decode('utf8')
     registry = getUtility(IRegistry)
     settings = registry.forInterface(ISolrSettings)
@@ -151,7 +153,7 @@ def ensure_text(value):
     if isinstance(value, bytes):
         value = value.decode('utf8')
     elif isinstance(value, (int, float)):
-        value = unicode(value)
+        value = six.text_type(value)
     elif isinstance(value, (list, tuple)):
         value = [ensure_text(v) for v in value]
     return value
