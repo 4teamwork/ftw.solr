@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.13.0 (unreleased)
+2.13.0 (2023-04-11)
 -------------------
 
 - Add support for Plone 5.2 and Python 3.
