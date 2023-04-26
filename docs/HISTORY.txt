@@ -4,7 +4,8 @@ Changelog
 2.13.1 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fix solr sync maintenance command not committing all batches.
+  [lgraf]
 
 
 2.13.0 (2023-04-11)
