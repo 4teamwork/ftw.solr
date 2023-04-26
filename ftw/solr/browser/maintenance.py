@@ -28,7 +28,7 @@ try:
     from time import clock
 except ImportError:
     from time import process_time as clock
-    
+
 
 import logging
 import transaction
