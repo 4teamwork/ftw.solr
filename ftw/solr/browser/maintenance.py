@@ -28,7 +28,7 @@ try:
     from time import clock
 except ImportError:
     from time import process_time as clock
-    
+
 
 import logging
 import transaction
@@ -135,7 +135,7 @@ class SolrMaintenanceView(BrowserView):
             return 'Solr indexing is disabled.'
         conn = self.manager.connection
         conn.delete_by_query('*:*')
-        conn.commit(soft_commit=False)
+        conn.commit(soft_commit=False, after_commit=False)
         return 'Solr index cleared.'
 
     def reindex(self, commit_interval=100, idxs=None, doom=True):
@@ -366,7 +366,7 @@ class SolrMaintenanceView(BrowserView):
         conn = self.manager.connection
         for uid in not_in_catalog:
             conn.delete(uid)
-        conn.commit(soft_commit=False)
+        conn.commit(soft_commit=False, after_commit=False)
 
         self.log('Solr index synced.')
         self.log(
