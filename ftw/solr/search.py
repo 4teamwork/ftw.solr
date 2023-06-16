@@ -2,9 +2,13 @@ from AccessControl.SecurityManagement import getSecurityManager
 from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
+from logging import getLogger
 from Products.CMFPlone.utils import base_hasattr
 from zope.component import queryUtility
 from zope.interface import implementer
+
+
+logger = getLogger('ftw.solr.search')
 
 
 @implementer(ISolrSearch)
@@ -22,6 +26,9 @@ class SolrSearch(object):
 
     def _search(self, request_handler=u'/select', query=u'*:*', filters=None,
                 start=0, rows=1000, sort=None, unrestricted=False, **params):
+        if rows and not params.get("fl"):
+            logger.warning("Not specifying the fl parameter can dramatically "
+                           "impact performance")
         conn = self.manager.connection
         params = {u'params': params}
         params[u'query'] = query

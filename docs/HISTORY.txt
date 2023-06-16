@@ -4,6 +4,9 @@ Changelog
 2.13.1 (unreleased)
 -------------------
 
+- Log warning when a search is performed without specifying fl.
+  [njohner]
+
 - Fix solr sync maintenance command not committing all batches.
   [lgraf]
 
