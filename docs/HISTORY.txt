@@ -4,7 +4,8 @@ Changelog
 2.13.2 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fix argument parsing of zopectl command if run with Zope2.Startup.zopectl.
+  [buchi]
 
 
 2.13.1 (2023-06-20)
