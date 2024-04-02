@@ -65,7 +65,12 @@ def solr(app, args):
                         type=bool,
                         help="Include allowedRolesAndUsers index when checking"
                              "whether a document is up to date in solr.")
-    options = parser.parse_args(args[2:])
+
+    # If run with plone.recipe.zope2instance we need to strip the first 2 args
+    if sys.argv[0] != 'solr':
+        args = args[2:]
+    options = parser.parse_args(args)
+
     app = makerequest(app)
     site = setup_site(app, options)
 
