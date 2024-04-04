@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.13.2 (unreleased)
+2.13.2 (2024-04-04)
 -------------------
 
 - Fix argument parsing of zopectl command if run with Zope2.Startup.zopectl.
