@@ -1,5 +1,4 @@
 from AccessControl.SecurityManagement import newSecurityManager
-from AccessControl.SpecialUsers import system as system_user
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.component import queryMultiAdapter
 from zope.component.hooks import setSite
@@ -24,6 +23,9 @@ def setup_site(app, options):
     if not portal:
         sys.exit("Plone site not found at %s" % options.plone_site)
 
+    # Late import because AccessControl.SpecialUsers may not have been
+    # initalized yet if imported too early.
+    from AccessControl.SpecialUsers import system as system_user
     user = system_user.__of__(app.acl_users)
     newSecurityManager(app, user)
 

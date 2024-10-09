@@ -4,6 +4,9 @@ Changelog
 2.13.3 (unreleased)
 -------------------
 
+- Fix becoming the system user in zopectl command in Docker deployments.
+  [buchi]
+
 - Fix finding Plone sites in zopectl command in Docker deployments.
   [buchi]
 
