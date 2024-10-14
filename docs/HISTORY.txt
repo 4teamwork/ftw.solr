@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.13.3 (unreleased)
+2.13.3 (2024-10-14)
 -------------------
 
 - Fix becoming the system user in zopectl command in Docker deployments.
