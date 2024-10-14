@@ -1,7 +1,5 @@
 from AccessControl.SecurityManagement import newSecurityManager
-from AccessControl.SpecialUsers import system as system_user
 from Products.CMFPlone.interfaces import IPloneSiteRoot
-from Testing.makerequest import makerequest
 from zope.component import queryMultiAdapter
 from zope.component.hooks import setSite
 
@@ -25,6 +23,9 @@ def setup_site(app, options):
     if not portal:
         sys.exit("Plone site not found at %s" % options.plone_site)
 
+    # Late import because AccessControl.SpecialUsers may not have been
+    # initalized yet if imported too early.
+    from AccessControl.SpecialUsers import system as system_user
     user = system_user.__of__(app.acl_users)
     newSecurityManager(app, user)
 
@@ -71,6 +72,10 @@ def solr(app, args):
         args = args[2:]
     options = parser.parse_args(args)
 
+    # Delay import of the Testing module
+    # Importing it before the database is opened, will result in opening a
+    # DemoStorage database instead of the one from the config file.
+    from Testing.makerequest import makerequest
     app = makerequest(app)
     site = setup_site(app, options)
 
