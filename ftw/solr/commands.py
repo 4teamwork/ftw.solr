@@ -2,6 +2,7 @@ from AccessControl.SecurityManagement import newSecurityManager
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.component import queryMultiAdapter
 from zope.component.hooks import setSite
+from zope.globalrequest import setRequest
 
 import argparse
 import sys
@@ -77,6 +78,7 @@ def solr(app, args):
     # DemoStorage database instead of the one from the config file.
     from Testing.makerequest import makerequest
     app = makerequest(app)
+    setRequest(app.REQUEST)
     site = setup_site(app, options)
 
     max_diff = options.max_diff
