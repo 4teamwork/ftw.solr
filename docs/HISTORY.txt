@@ -4,7 +4,8 @@ Changelog
 2.13.4 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fix getting global request in zopectl command.
+  [buchi]
 
 
 2.13.3 (2024-10-14)
