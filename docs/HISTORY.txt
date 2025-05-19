@@ -10,6 +10,9 @@ Changelog
 - Handle stale catalog entries when syncing.
   [buchi]
 
+- Fix retrieval of language aware fields from Solr 9 config.
+  [buchi]
+
 
 2.13.4 (2025-04-28)
 -------------------

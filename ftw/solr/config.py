@@ -24,7 +24,8 @@ class SolrConfig(object):
                     if 'langid.fl' in proc:
                         self.langid_fields = proc[u'langid.fl'].split(u',')
                         self.langid_langs = proc.get(
-                            u'langid.whitelist', u'').split(u',')
+                            u'langid.allowlist',
+                            proc.get(u'langid.whitelist', u'')).split(u',')
                         fallback = proc.get(u'langid.fallback')
                         if fallback not in self.langid_langs:
                             self.langid_langs.append(fallback)
