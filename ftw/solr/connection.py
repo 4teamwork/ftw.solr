@@ -193,11 +193,12 @@ class SolrConnection(object):
             if uid is None:
                 # This should not happen, but better safe than sorry
                 filtered_extract_commands.append(command)
+                continue
             if (uid, field) in added:
                 continue
             filtered_extract_commands.append(command)
             added.add((uid, field))
-        self.extract_commands = reversed(filtered_extract_commands)
+        self.extract_commands = list(reversed(filtered_extract_commands))
 
     def updates_in_post_commit_enabled(self):
         registry = queryUtility(IRegistry)
