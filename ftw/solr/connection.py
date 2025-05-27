@@ -11,15 +11,19 @@ from plone.registry.interfaces import IRegistry
 from six.moves.http_client import HTTPConnection
 from six.moves.http_client import HTTPException
 from six.moves.urllib.parse import urlencode
+from six.moves.urllib.parse import urlparse
 from threading import local
 from zope.component import queryUtility
 from zope.interface import implementer
 
 import json
+import os
 import os.path
 import socket
 import transaction
 
+
+TIKA_CHUNK_SIZE = 1 << 20
 
 logger = getLogger('ftw.solr.connection')
 
@@ -49,6 +53,7 @@ class SolrConnection(object):
         self.base = base
         self.upload_blobs = upload_blobs
         self.conn = HTTPConnection(self.host, self.port, timeout=self.timeout)
+        self.tika_url = urlparse(os.environ.get('SOLR_TIKA_URL', ''))
         self.update_commands = []
         self.extract_commands = []
         self.reconnect_before_request = False
@@ -108,6 +113,36 @@ class SolrConnection(object):
             else:
                 self.reconnect_before_request = False
                 return SolrResponse(exception=exc, log_error=log_error)
+
+    def tika_extract(self, blob):
+        conn = HTTPConnection(
+            self.tika_url.hostname, self.tika_url.port, timeout=self.timeout)
+
+        try:
+            conn.putrequest('PUT', self.tika_url.path)
+            conn.putheader('Accept', 'text/plain')
+            conn.putheader('Content-Length', str(os.stat(blob.committed()).st_size))
+            conn.endheaders()
+
+            with open(blob.committed(), 'rb') as file_:
+                chunk = file_.read(TIKA_CHUNK_SIZE)
+                while len(chunk) > 0:
+                    conn.send(chunk)
+                    chunk = file_.read(TIKA_CHUNK_SIZE)
+
+            resp = conn.getresponse()
+            body = resp.read()
+            status = resp.status
+            if status == 200:
+                return body
+            else:
+                logger.warning(
+                    'Text extraction with Tika failed. Status=%s, Response=%s',
+                    status, body[:200],
+                )
+                return None
+        except (socket.error, HTTPException) as exc:
+            logger.warning('Text extraction with Tika failed. %s', exc)
 
     def get(self, path, headers={}, log_error=True):
         return self.request('GET', path, headers=headers, log_error=log_error)
@@ -203,33 +238,37 @@ class SolrConnection(object):
                     params = {}
                     params['extractOnly'] = 'true'
 
-                    if self.upload_blobs:
-                        # Upload blobs to extract handler via POST
-                        resp = self.post_chunked(
-                            '/update/extract?%s' % urlencode(params, doseq=True),
-                            blob,
-                            content_type=content_type,
-                            log_error=False)
-                        extracted_fulltext_key = ''
+                    if self.tika_url.hostname:
+                        extracted_text = self.tika_extract(blob)
                     else:
-                        # Make extract handler retrieve blobs via filesystem
-                        params['stream.file'] = file_
-                        resp = self.post(
-                            '/update/extract?%s' % urlencode(params, doseq=True),
-                            headers={'Content-Type': 'application/x-www-form-urlencoded'},  # noqa
-                            log_error=False)
-                        extracted_fulltext_key = os.path.basename(file_)
+                        if self.upload_blobs:
+                            # Upload blobs to extract handler via POST
+                            resp = self.post_chunked(
+                                '/update/extract?%s' % urlencode(params, doseq=True),
+                                blob,
+                                content_type=content_type,
+                                log_error=False)
+                            extracted_text = resp.body.get('')
+                        else:
+                            # Make extract handler retrieve blobs via filesystem
+                            params['stream.file'] = file_
+                            resp = self.post(
+                                '/update/extract?%s' % urlencode(params, doseq=True),
+                                headers={'Content-Type': 'application/x-www-form-urlencoded'},  # noqa
+                                log_error=False)
+                            extracted_fulltext_key = os.path.basename(file_)
+                            extracted_text = resp.body.get(extracted_fulltext_key)
 
-                    if not resp.is_ok():
-                        logger.error(
-                            'Extract command for UID=%s with blob %s failed. '
-                            '%s',
-                            data.get(u'UID'), file_, resp.error_msg())
-                        continue
+                        if not resp.is_ok():
+                            logger.error(
+                                'Extract command for UID=%s with blob %s failed. '
+                                '%s',
+                                data.get(u'UID'), file_, resp.error_msg())
+                            continue
 
                     update_command = {"add": {"doc": data}}
                     update_command["add"]["doc"][field] = {
-                        "set": resp.body.get(extracted_fulltext_key),
+                        "set": extracted_text,
                     }
                     resp = self.post(
                         '/update',

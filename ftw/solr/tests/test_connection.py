@@ -17,6 +17,7 @@ from zope.component import provideUtility
 from zope.component import queryUtility
 
 import json
+import os
 import socket
 import transaction
 import unittest
@@ -283,6 +284,85 @@ class TestConnection(unittest.TestCase):
              'log_error': False})
 
         self.assertEqual(conn.extract_commands, [])
+
+    @patch('ftw.solr.connection.HTTPConnection', autospec=True)
+    def test_extract_with_tika(self, MockHTTPConnection):
+        tika_conn = MockHTTPConnection.return_value
+        tika_conn.getresponse.return_value = MockHTTPResponse(body='extracted by tika')
+        os.environ['SOLR_TIKA_URL'] = 'http://tikaserver:9998/tika'
+        conn = SolrConnection(base='/solr/mycore')
+        conn.post = MagicMock(name='post')
+
+        tr = transaction.begin()
+        blob = MockBlob(
+            path=os.path.join(os.path.dirname(__file__), 'data', 'file.blob'))
+        conn.extract(blob, 'SearchableText', {'UID': '1'},
+                     'application/octet-stream')
+        conn.flush()
+        tr.commit()
+
+        tika_conn.putrequest.assert_called_with('PUT', '/tika')
+        conn.post.assert_called_once_with(
+            '/update',
+            data='{"add": {"doc": {"SearchableText": {"set": "extracted by tika"}, "UID": "1"}}}',  # noqa
+            log_error=False,
+        )
+
+        self.assertEqual(conn.extract_commands, [])
+        del os.environ['SOLR_TIKA_URL']
+
+    @patch('ftw.solr.connection.HTTPConnection', autospec=True)
+    def test_extract_with_invalid_tika_response(self, MockHTTPConnection):
+        tika_conn = MockHTTPConnection.return_value
+        tika_conn.getresponse.return_value = MockHTTPResponse(status=404, body='Not Found')
+        os.environ['SOLR_TIKA_URL'] = 'http://tikaserver:9998/tika'
+        conn = SolrConnection(base='/solr/mycore')
+        conn.post = MagicMock(name='post')
+
+        tr = transaction.begin()
+        blob = MockBlob(
+            path=os.path.join(os.path.dirname(__file__), 'data', 'file.blob'))
+        conn.extract(blob, 'SearchableText', {'UID': '1'},
+                     'application/octet-stream')
+        conn.flush()
+        tr.commit()
+
+        tika_conn.putrequest.assert_called_with('PUT', '/tika')
+        conn.post.assert_called_once_with(
+            '/update',
+            data='{"add": {"doc": {"SearchableText": {"set": null}, "UID": "1"}}}',  # noqa
+            log_error=False,
+        )
+
+        self.assertEqual(conn.extract_commands, [])
+        del os.environ['SOLR_TIKA_URL']
+
+    @patch('ftw.solr.connection.HTTPConnection', autospec=True)
+    def test_extract_with_tika_exception(self, MockHTTPConnection):
+        tika_conn = MockHTTPConnection.return_value
+        exception = socket.error(61, 'Connection refused')
+        tika_conn.putrequest.side_effect = exception
+        os.environ['SOLR_TIKA_URL'] = 'http://tikaserver:9998/tika'
+        conn = SolrConnection(base='/solr/mycore')
+        conn.post = MagicMock(name='post')
+
+        tr = transaction.begin()
+        blob = MockBlob(
+            path=os.path.join(os.path.dirname(__file__), 'data', 'file.blob'))
+        conn.extract(blob, 'SearchableText', {'UID': '1'},
+                     'application/octet-stream')
+        conn.flush()
+        tr.commit()
+
+        tika_conn.putrequest.assert_called_with('PUT', '/tika')
+        conn.post.assert_called_once_with(
+            '/update',
+            data='{"add": {"doc": {"SearchableText": {"set": null}, "UID": "1"}}}',  # noqa
+            log_error=False,
+        )
+
+        self.assertEqual(conn.extract_commands, [])
+        del os.environ['SOLR_TIKA_URL']
 
     def test_abort_operation_clears_queue(self):
         conn = SolrConnection(base='/solr/mycore')
