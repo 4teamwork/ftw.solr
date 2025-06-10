@@ -4,7 +4,11 @@ Changelog
 2.13.5 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Text extraction with standalone Tika server.
+  [buchi]
+
+- Handle stale catalog entries when syncing.
+  [buchi]
 
 
 2.13.4 (2025-04-28)

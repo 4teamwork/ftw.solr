@@ -353,7 +353,11 @@ class SolrMaintenanceView(BrowserView):
         self.log('Syncing Solr...')
         for uid in not_in_sync:
             catalog_item = catalog.unrestrictedSearchResults(UID=uid)[0]
-            obj = catalog_item.getObject()
+            try:
+                obj = catalog_item._unrestrictedGetObject()
+            except KeyError:
+                logger.warning('Object in catalog with UID=%s does not exist.', uid)
+                continue
 
             handler = getMultiAdapter((obj, self.manager), ISolrIndexHandler)
             handler.add(idxs)
