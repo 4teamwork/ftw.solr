@@ -55,3 +55,34 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(config.langid_fields, [])
         self.assertEqual(config.langid_langs, [])
         self.assertEqual(config.langid_langfields, [])
+
+    def test_langid_settings_with_solr9_config(self):
+        conn = MagicMock(name='SolrConnection')
+        conn.get = MagicMock(name='get', return_value=SolrResponse(
+            body=get_data('config_solr9.json'), status=200))
+        manager = MagicMock(name='SolrConnectionManager')
+        type(manager).connection = PropertyMock(return_value=conn)
+        config = SolrConfig(manager)
+        self.assertEqual(
+            sorted(config.langid_fields),
+            [u'Description', u'SearchableText', u'Title'],
+        )
+        self.assertEqual(
+            config.langid_langs, [u'de', u'en', u'fr', u'general'])
+        self.assertEqual(
+            sorted(config.langid_langfields),
+            [
+                u'Description_de',
+                u'Description_en',
+                u'Description_fr',
+                u'Description_general',
+                u'SearchableText_de',
+                u'SearchableText_en',
+                u'SearchableText_fr',
+                u'SearchableText_general',
+                u'Title_de',
+                u'Title_en',
+                u'Title_fr',
+                u'Title_general',
+            ],
+        )
