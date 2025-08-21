@@ -243,6 +243,25 @@ class SolrMaintenanceView(BrowserView):
             'Processed %d items in %s (%s cpu time).',
             processed, next(real), next(cpu))
 
+    def fetch_all_solr_docs(self, query, fl):
+        conn = self.manager.connection
+        solr_docs = []
+        params = {
+            u'query': query,
+            u'limit': 50000,
+            u'params': {u'fl': fl, u'cursorMark': u'*'},
+            u'sort': u'UID asc',
+        }
+        while True:
+            resp = conn.search(params)
+            if params[u'params'][u'cursorMark'] == resp[u'nextCursorMark']:
+                break
+            if not resp.docs:
+                break
+            solr_docs.extend(resp.docs)
+            params[u'params'][u'cursorMark'] = resp[u'nextCursorMark']
+        return solr_docs
+
     def diff(self, max_diff=5, include_allowed_roles_and_users=False):
         """Diff with portal catalog"""
         if not self.is_enabled():
@@ -254,19 +273,15 @@ class SolrMaintenanceView(BrowserView):
         catalog_modified = set(
             [(item.UID, solr_date(item.modified)) for item in items])
 
-        conn = self.manager.connection
         fl = ['UID', 'modified']
         if include_allowed_roles_and_users:
             fl.append('allowedRolesAndUsers')
-        resp = conn.search({
-            u'query': u'*:*',
-            u'limit': 10000000,
-            u'params': {u'fl': fl},
-        })
-        solr_uids = set([doc['UID'].encode('utf8') for doc in resp.docs])
+
+        solr_docs = self.fetch_all_solr_docs(u'*:*', fl)
+        solr_uids = set([doc['UID'].encode('utf8') for doc in solr_docs])
         solr_modified = set(
             [(doc['UID'], doc.get('modified', u'2000-01-01T00:00:00.000Z'))
-             for doc in resp.docs])
+             for doc in solr_docs])
 
         self.log('Portal Catalog contains %s items.', len(catalog_uids))
         self.log('Solr contains %s items.', len(solr_uids))
@@ -299,15 +314,12 @@ class SolrMaintenanceView(BrowserView):
 
             solr_arau = set(
                 [(doc['UID'], tuple(sorted(doc.get('allowedRolesAndUsers', tuple()))))
-                 for doc in resp.docs])
+                 for doc in solr_docs])
             not_in_sync.update({item[0] for item in catalog_arau - solr_arau})
 
-        incomplete = conn.search({
-            u'query': u'-created:[* TO *]',
-            u'limit': 10000000,
-            u'params': {u'fl': 'UID'},
-        })
-        not_in_sync.update({doc['UID'] for doc in incomplete.docs})
+        incomplete_docs = self.fetch_all_solr_docs(u'-created:[* TO *]', [u'UID'])
+
+        not_in_sync.update({doc['UID'] for doc in incomplete_docs})
         not_in_sync = list(not_in_sync)
         if not_in_sync:
             self.log(
