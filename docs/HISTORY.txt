@@ -4,7 +4,8 @@ Changelog
 2.14.1 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Reduce memory consumption of Solr when fetching all Solr docs by using pagination with cursors.
+  [buchi]
 
 
 2.14.0 (2025-06-10)
